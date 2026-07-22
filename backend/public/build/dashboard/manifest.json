@@ -1,0 +1,23 @@
+{
+  "src/Pages/Dashboard/Index.tsx": {
+    "file": "assets/Index-k-vlgeVy.js",
+    "name": "Index",
+    "src": "src/Pages/Dashboard/Index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "src/app.tsx"
+    ]
+  },
+  "src/app.tsx": {
+    "file": "assets/app-JgNKg2R3.js",
+    "name": "app",
+    "src": "src/app.tsx",
+    "isEntry": true,
+    "dynamicImports": [
+      "src/Pages/Dashboard/Index.tsx"
+    ],
+    "css": [
+      "assets/app-8e7eaDwK.css"
+    ]
+  }
+}

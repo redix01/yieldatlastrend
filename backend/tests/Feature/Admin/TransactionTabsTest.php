@@ -1,0 +1,170 @@
+<?php
+
+namespace Tests\Feature\Admin;
+
+use App\Models\DepositRequest;
+use App\Models\User;
+use App\Models\Wallet;
+use App\Models\WalletTransaction;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
+use Tests\TestCase;
+
+class TransactionTabsTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_admin_can_filter_transactions_using_deposit_and_withdrawal_tabs(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $customer = User::factory()->create();
+
+        $wallet = Wallet::query()->create([
+            'user_id' => $customer->id,
+        ]);
+
+        $depositRequest = DepositRequest::query()->create([
+            'wallet_id' => $wallet->id,
+            'amount' => 120,
+            'currency' => 'USDT',
+            'network' => 'TRC20',
+            'wallet_address' => 'T111',
+            'status' => 'processing',
+        ]);
+
+        $withdrawalTransaction = WalletTransaction::query()->create([
+            'wallet_id' => $wallet->id,
+            'type' => 'withdrawal',
+            'status' => 'pending',
+            'direction' => 'debit',
+            'amount' => 40,
+            'occurred_at' => now(),
+        ]);
+
+        $this->actingAs($admin)
+            ->get('/admin/transactions?tab=deposit')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Admin/Transactions/Index')
+                ->where('activeTab', 'deposit')
+                ->has('transactions.data', 1)
+                ->where('transactions.data.0.id', $depositRequest->id)
+                ->where('transactions.data.0.type', 'deposit')
+            );
+
+        $this->actingAs($admin)
+            ->get('/admin/transactions?tab=withdrawal')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Admin/Transactions/Index')
+                ->where('activeTab', 'withdrawal')
+                ->has('transactions.data', 1)
+                ->where('transactions.data.0.id', $withdrawalTransaction->id)
+                ->where('transactions.data.0.type', 'withdrawal')
+            );
+    }
+
+    public function test_invalid_tab_defaults_to_deposit(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        $this->actingAs($admin)
+            ->get('/admin/transactions?tab=invalid-tab')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Admin/Transactions/Index')
+                ->where('activeTab', 'deposit')
+            );
+    }
+
+    public function test_transactions_payload_contains_action_urls_for_each_tab(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $customer = User::factory()->create();
+
+        $wallet = Wallet::query()->create([
+            'user_id' => $customer->id,
+        ]);
+
+        $depositRequest = DepositRequest::query()->create([
+            'wallet_id' => $wallet->id,
+            'amount' => 55,
+            'currency' => 'BTC',
+            'network' => 'BTC',
+            'wallet_address' => 'bc1abc',
+            'status' => 'processing',
+        ]);
+
+        $withdrawalTransaction = WalletTransaction::query()->create([
+            'wallet_id' => $wallet->id,
+            'type' => 'withdrawal',
+            'status' => 'pending',
+            'direction' => 'debit',
+            'amount' => 25,
+            'occurred_at' => now(),
+        ]);
+
+        $this->actingAs($admin)
+            ->get('/admin/transactions?tab=deposit')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Admin/Transactions/Index')
+                ->where('transactions.data.0.id', $depositRequest->id)
+                ->where('transactions.data.0.approve_url', route('admin.transactions.deposits.approve', $depositRequest, false))
+                ->where('transactions.data.0.decline_url', route('admin.transactions.deposits.decline', $depositRequest, false))
+                ->where('transactions.data.0.delete_url', route('admin.transactions.deposits.destroy', $depositRequest, false))
+            );
+
+        $this->actingAs($admin)
+            ->get('/admin/transactions?tab=withdrawal')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Admin/Transactions/Index')
+                ->where('transactions.data.0.id', $withdrawalTransaction->id)
+                ->where('transactions.data.0.approve_url', route('admin.transactions.withdrawals.approve', $withdrawalTransaction, false))
+                ->where('transactions.data.0.decline_url', route('admin.transactions.withdrawals.decline', $withdrawalTransaction, false))
+                ->where('transactions.data.0.delete_url', route('admin.transactions.withdrawals.destroy', $withdrawalTransaction, false))
+            );
+    }
+
+    public function test_withdrawal_transactions_include_bank_transfer_metadata_for_admin_review(): void
+    {
+        $admin = User::factory()->admin()->create();
+        $customer = User::factory()->create();
+
+        $wallet = Wallet::query()->create([
+            'user_id' => $customer->id,
+        ]);
+
+        $withdrawalTransaction = WalletTransaction::query()->create([
+            'wallet_id' => $wallet->id,
+            'type' => 'withdrawal',
+            'status' => 'pending',
+            'direction' => 'debit',
+            'amount' => 75,
+            'occurred_at' => now(),
+            'metadata' => [
+                'payout_method' => 'bank_transfer',
+                'bank_details' => [
+                    'bank_name' => 'First Test Bank',
+                    'account_name' => 'Jane Customer',
+                    'account_number' => '0123456789',
+                    'routing_number' => '110000000',
+                    'swift_code' => 'TESTUS33',
+                    'bank_address' => '123 Demo Street',
+                ],
+            ],
+        ]);
+
+        $this->actingAs($admin)
+            ->get('/admin/transactions?tab=withdrawal')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Admin/Transactions/Index')
+                ->where('transactions.data.0.id', $withdrawalTransaction->id)
+                ->where('transactions.data.0.payout_method', 'bank_transfer')
+                ->where('transactions.data.0.bank_details.bank_name', 'First Test Bank')
+                ->where('transactions.data.0.bank_details.account_number', '0123456789')
+            );
+    }
+}

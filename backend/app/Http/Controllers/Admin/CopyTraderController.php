@@ -1,0 +1,528 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Asset;
+use App\Models\CopyRelationship;
+use App\Models\CopyTrade;
+use App\Models\Trader;
+use App\Models\User;
+use App\Models\Wallet;
+use App\Models\WalletTransaction;
+use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+use Inertia\Inertia;
+use Inertia\Response;
+
+class CopyTraderController extends Controller
+{
+    public function index(Request $request): Response
+    {
+        $search = trim((string) $request->string('search'));
+        $status = (string) $request->string('status', 'all');
+        $verification = (string) $request->string('verification', 'all');
+
+        $traders = Trader::query()
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($innerQuery) use ($search) {
+                    $innerQuery
+                        ->where('display_name', 'like', "%{$search}%")
+                        ->orWhere('username', 'like', "%{$search}%")
+                        ->orWhere('strategy', 'like', "%{$search}%");
+                });
+            })
+            ->when($status === 'active', fn ($query) => $query->where('is_active', true))
+            ->when($status === 'inactive', fn ($query) => $query->where('is_active', false))
+            ->when($verification === 'verified', fn ($query) => $query->where('is_verified', true))
+            ->when($verification === 'unverified', fn ($query) => $query->where('is_verified', false))
+            ->orderByDesc('total_return')
+            ->paginate(12)
+            ->withQueryString()
+            ->through(fn (Trader $trader) => $this->traderPayload($trader));
+
+        $stats = [
+            'total' => Trader::query()->count(),
+            'active' => Trader::query()->where('is_active', true)->count(),
+            'inactive' => Trader::query()->where('is_active', false)->count(),
+            'verified' => Trader::query()->where('is_verified', true)->count(),
+        ];
+
+        return Inertia::render('Admin/CopyTraders/Index', [
+            'traders' => $traders,
+            'filters' => [
+                'search' => $search,
+                'status' => $status,
+                'verification' => $verification,
+            ],
+            'stats' => $stats,
+        ]);
+    }
+
+    public function create(): Response
+    {
+        return Inertia::render('Admin/CopyTraders/Create');
+    }
+
+    public function edit(Trader $trader): Response
+    {
+        $assets = Asset::query()
+            ->where('is_active', true)
+            ->whereIn('type', ['etf', 'stock', 'share', 'crypto'])
+            ->orderByRaw(
+                "case type
+                    when 'etf' then 0
+                    when 'stock' then 1
+                    when 'share' then 2
+                    when 'crypto' then 3
+                    else 4
+                end"
+            )
+            ->orderBy('symbol')
+            ->get(['id', 'symbol', 'name', 'type', 'current_price']);
+
+        $activeFollowers = CopyRelationship::query()
+            ->where('trader_id', $trader->id)
+            ->where('status', 'active')
+            ->count();
+
+        $followers = CopyRelationship::query()
+            ->with('user:id,name,email')
+            ->where('trader_id', $trader->id)
+            ->whereIn('status', ['active', 'paused'])
+            ->orderByRaw("CASE WHEN status = 'active' THEN 0 ELSE 1 END")
+            ->latest('created_at')
+            ->get();
+
+        $tradeHistory = CopyTrade::query()
+            ->with([
+                'asset:id,symbol,name',
+                'copyRelationship.user:id,name,email',
+            ])
+            ->whereHas('copyRelationship', fn ($query) => $query->where('trader_id', $trader->id))
+            ->latest('executed_at')
+            ->limit(120)
+            ->get();
+
+        return Inertia::render('Admin/CopyTraders/Edit', [
+            'trader' => $this->traderPayload($trader),
+            'assets' => $assets->map(fn (Asset $asset) => [
+                'id' => $asset->id,
+                'symbol' => $asset->symbol,
+                'name' => $asset->name,
+                'type' => $asset->type,
+                'price' => (float) $asset->current_price,
+            ]),
+            'active_followers' => $activeFollowers,
+            'followers' => $followers->map(fn (CopyRelationship $relationship) => [
+                'id' => $relationship->id,
+                'status' => $relationship->status,
+                'copy_ratio' => (float) $relationship->copy_ratio,
+                'user' => [
+                    'name' => $relationship->user?->name,
+                    'email' => $relationship->user?->email,
+                ],
+            ]),
+            'trade_history' => $tradeHistory->map(fn (CopyTrade $trade) => [
+                'id' => $trade->id,
+                'side' => $trade->side,
+                'quantity' => (float) $trade->quantity,
+                'price' => (float) $trade->price,
+                'pnl' => (float) $trade->pnl,
+                'executed_at' => optional($trade->executed_at)->toIso8601String(),
+                'asset' => [
+                    'symbol' => $trade->asset?->symbol,
+                    'name' => $trade->asset?->name,
+                ],
+                'follower' => [
+                    'name' => $trade->copyRelationship?->user?->name,
+                    'email' => $trade->copyRelationship?->user?->email,
+                ],
+                'metadata' => [
+                    'source' => data_get($trade->metadata, 'source'),
+                    'note' => data_get($trade->metadata, 'note'),
+                    'copy_ratio' => data_get($trade->metadata, 'copy_ratio'),
+                    'leader_quantity' => data_get($trade->metadata, 'leader_quantity'),
+                    'leader_pnl' => data_get($trade->metadata, 'leader_pnl'),
+                ],
+            ]),
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'display_name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', Rule::unique('traders', 'username')],
+            'avatar_color' => ['nullable', 'string', 'max:50'],
+            'strategy' => ['required', 'string', 'max:255'],
+            'copy_fee' => ['required', 'numeric', 'min:0'],
+            'total_return' => ['required', 'numeric'],
+            'win_rate' => ['required', 'numeric', 'min:0', 'max:100'],
+            'copiers_count' => ['required', 'integer', 'min:0'],
+            'risk_score' => ['required', 'integer', 'min:1', 'max:10'],
+            'joined_at' => ['required', 'date'],
+            'is_verified' => ['required', 'boolean'],
+            'is_active' => ['required', 'boolean'],
+        ]);
+
+        $trader = Trader::query()->create([
+            ...$validated,
+            'joined_at' => Carbon::parse($validated['joined_at']),
+        ]);
+
+        return redirect()
+            ->route('admin.copy-traders.edit', $trader)
+            ->with('success', 'Copy trader created successfully.');
+    }
+
+    public function update(Request $request, Trader $trader): RedirectResponse
+    {
+        $validated = $request->validate([
+            'display_name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', Rule::unique('traders', 'username')->ignore($trader->id)],
+            'avatar_color' => ['nullable', 'string', 'max:50'],
+            'strategy' => ['required', 'string', 'max:255'],
+            'copy_fee' => ['required', 'numeric', 'min:0'],
+            'total_return' => ['required', 'numeric'],
+            'win_rate' => ['required', 'numeric', 'min:0', 'max:100'],
+            'copiers_count' => ['required', 'integer', 'min:0'],
+            'risk_score' => ['required', 'integer', 'min:1', 'max:10'],
+            'joined_at' => ['required', 'date'],
+            'is_verified' => ['required', 'boolean'],
+            'is_active' => ['required', 'boolean'],
+        ]);
+
+        $trader->update([
+            ...$validated,
+            'joined_at' => Carbon::parse($validated['joined_at']),
+        ]);
+
+        return redirect()
+            ->route('admin.copy-traders.edit', $trader)
+            ->with('success', 'Copy trader updated successfully.');
+    }
+
+    public function updateFollowerStatus(Request $request, Trader $trader, CopyRelationship $copyRelationship): RedirectResponse
+    {
+        if ((string) $copyRelationship->trader_id !== (string) $trader->id) {
+            abort(404);
+        }
+
+        $validated = $request->validate([
+            'status' => ['required', Rule::in(['active', 'paused'])],
+        ]);
+
+        $previousStatus = (string) $copyRelationship->status;
+        $nextStatus = (string) $validated['status'];
+
+        if (! in_array($previousStatus, ['active', 'paused'], true)) {
+            return back()->with('error', 'Only active or paused followers can be updated.');
+        }
+
+        if ($previousStatus === $nextStatus) {
+            return back()->with('success', 'Follower status is already up to date.');
+        }
+
+        $copyRelationship->update([
+            'status' => $nextStatus,
+            'ended_at' => null,
+        ]);
+
+        $this->syncTraderCopiersCountForStatusTransition($trader->id, $previousStatus, $nextStatus);
+
+        return back()->with('success', "Follower status updated to {$nextStatus}.");
+    }
+
+    public function destroy(Trader $trader): RedirectResponse
+    {
+        $trader->delete();
+
+        return redirect()
+            ->route('admin.copy-traders.index')
+            ->with('success', 'Copy trader deleted successfully.');
+    }
+
+    public function storeTrade(Request $request, Trader $trader): RedirectResponse
+    {
+        $validated = $request->validate([
+            'asset_id' => ['required', 'uuid', 'exists:assets,id'],
+            'side' => ['required', Rule::in(['buy', 'sell'])],
+            'quantity' => ['required', 'numeric', 'gt:0'],
+            'price' => ['required', 'numeric', 'gt:0'],
+            'apply_to' => ['nullable', Rule::in(['all', 'single'])],
+            'copy_relationship_id' => [
+                Rule::requiredIf((string) $request->input('apply_to', 'all') === 'single'),
+                'nullable',
+                'uuid',
+                Rule::exists('copy_relationships', 'id')->where(fn ($query) => $query
+                    ->where('trader_id', $trader->id)
+                    ->whereIn('status', ['active', 'paused'])),
+            ],
+            'executed_at' => ['nullable', 'date'],
+            'pnl' => ['nullable', 'numeric'],
+            'note' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $applyTo = $validated['apply_to'] ?? 'all';
+
+        $relationships = CopyRelationship::query()
+            ->where('trader_id', $trader->id)
+            ->when(
+                $applyTo === 'single',
+                fn ($query) => $query
+                    ->whereKey($validated['copy_relationship_id'] ?? null)
+                    ->whereIn('status', ['active', 'paused']),
+                fn ($query) => $query->where('status', 'active')
+            )
+            ->get();
+
+        if ($relationships->isEmpty()) {
+            $message = $applyTo === 'single'
+                ? 'Selected follower was not found or is no longer eligible for manual trade history.'
+                : 'No active followers to receive this trade.';
+
+            return back()->with('error', $message);
+        }
+
+        $executedAt = isset($validated['executed_at'])
+            ? Carbon::parse($validated['executed_at'])
+            : now();
+
+        $quantity = (float) $validated['quantity'];
+        $price = (float) $validated['price'];
+        $leaderPnl = array_key_exists('pnl', $validated) && $validated['pnl'] !== null
+            ? (float) $validated['pnl']
+            : null;
+
+        $created = 0;
+        $skipped = 0;
+
+        DB::transaction(function () use (
+            $request,
+            $relationships,
+            $validated,
+            $applyTo,
+            $quantity,
+            $price,
+            $executedAt,
+            $leaderPnl,
+            &$created,
+            &$skipped
+        ) {
+            foreach ($relationships as $relationship) {
+                $ratio = (float) $relationship->copy_ratio;
+
+                if ($ratio <= 0) {
+                    $skipped++;
+                    continue;
+                }
+
+                $scaledQuantity = round($quantity * $ratio, 8);
+
+                if ($scaledQuantity <= 0) {
+                    $skipped++;
+                    continue;
+                }
+
+                $scaledPnl = $leaderPnl !== null ? round($leaderPnl * $ratio, 8) : 0.0;
+
+                $copyTrade = CopyTrade::query()->create([
+                    'copy_relationship_id' => $relationship->id,
+                    'asset_id' => $validated['asset_id'],
+                    'side' => $validated['side'],
+                    'quantity' => $scaledQuantity,
+                    'price' => $price,
+                    'pnl' => $scaledPnl,
+                    'executed_at' => $executedAt,
+                    'metadata' => [
+                        'source' => 'admin',
+                        'leader_quantity' => $quantity,
+                        'leader_pnl' => $leaderPnl,
+                        'copy_ratio' => $ratio,
+                        'apply_to' => $applyTo,
+                        'note' => $validated['note'] ?? null,
+                    ],
+                ]);
+
+                $relationship->trades_count = (int) $relationship->trades_count + 1;
+                $relationship->pnl = (float) $relationship->pnl + $scaledPnl;
+                $relationship->save();
+
+                $this->applyPnlDeltaToFollowerWallet(
+                    $relationship,
+                    $scaledPnl,
+                    $copyTrade,
+                    $request->user()?->id
+                );
+
+                $created++;
+            }
+        });
+
+        $message = "Trade executed for {$created} follower".($created === 1 ? '' : 's').'.';
+
+        if ($skipped > 0) {
+            $message .= " Skipped {$skipped} due to inactive copy ratios.";
+        }
+
+        return back()->with('success', $message);
+    }
+
+    public function updateTrade(Request $request, Trader $trader, CopyTrade $copyTrade): RedirectResponse
+    {
+        $validated = $request->validate([
+            'pnl' => ['required', 'numeric'],
+        ]);
+
+        DB::transaction(function () use ($request, $trader, $copyTrade, $validated): void {
+            $lockedTrade = CopyTrade::query()
+                ->whereKey($copyTrade->id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            $relationship = CopyRelationship::query()
+                ->whereKey($lockedTrade->copy_relationship_id)
+                ->with('user')
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            if ((string) $relationship->trader_id !== (string) $trader->id) {
+                abort(404);
+            }
+
+            $previousPnl = round((float) $lockedTrade->pnl, 8);
+            $nextPnl = round((float) $validated['pnl'], 8);
+            $delta = round($nextPnl - $previousPnl, 8);
+
+            $metadata = is_array($lockedTrade->metadata) ? $lockedTrade->metadata : [];
+            $copyRatio = (float) data_get($metadata, 'copy_ratio', (float) $relationship->copy_ratio);
+
+            if ($copyRatio > 0) {
+                $metadata['leader_pnl'] = round($nextPnl / $copyRatio, 8);
+            }
+
+            $metadata['pnl_edited_by_admin_id'] = $request->user()?->id;
+            $metadata['pnl_edited_at'] = now()->toIso8601String();
+            $metadata['previous_pnl'] = $previousPnl;
+
+            $lockedTrade->pnl = $nextPnl;
+            $lockedTrade->metadata = $metadata;
+            $lockedTrade->save();
+
+            $summary = CopyTrade::query()
+                ->where('copy_relationship_id', $relationship->id)
+                ->selectRaw('COALESCE(SUM(pnl), 0) as total_pnl, COUNT(*) as total_trades')
+                ->first();
+
+            $relationship->pnl = round((float) data_get($summary, 'total_pnl', 0), 8);
+            $relationship->trades_count = (int) data_get($summary, 'total_trades', 0);
+            $relationship->save();
+
+            $this->applyPnlDeltaToFollowerWallet(
+                $relationship,
+                $delta,
+                $lockedTrade,
+                $request->user()?->id
+            );
+        });
+
+        return back()->with('success', 'Trade PnL updated successfully.');
+    }
+
+    private function applyPnlDeltaToFollowerWallet(
+        CopyRelationship $relationship,
+        float $pnlDelta,
+        CopyTrade $copyTrade,
+        ?string $adminId
+    ): void {
+        if (abs($pnlDelta) < 0.00000001) {
+            return;
+        }
+
+        $lockedUser = User::query()
+            ->whereKey($relationship->user_id)
+            ->lockForUpdate()
+            ->firstOrFail();
+
+        $wallet = Wallet::query()->firstOrCreate(
+            ['user_id' => $lockedUser->id],
+            [
+                'cash_balance' => (float) $lockedUser->balance,
+                'investing_balance' => (float) $lockedUser->holding_balance,
+                'profit_loss' => (float) $lockedUser->profit_balance,
+                'currency' => 'USD',
+            ],
+        );
+
+        $wallet = Wallet::query()
+            ->whereKey($wallet->id)
+            ->lockForUpdate()
+            ->firstOrFail();
+
+        $wallet->profit_loss = round((float) $wallet->profit_loss + $pnlDelta, 8);
+        $wallet->save();
+
+        WalletTransaction::query()->create([
+            'wallet_id' => $wallet->id,
+            'asset_id' => $copyTrade->asset_id,
+            'type' => 'copy_pnl',
+            'status' => 'approved',
+            'direction' => $pnlDelta >= 0 ? 'credit' : 'debit',
+            'amount' => round(abs($pnlDelta), 8),
+            'notes' => $pnlDelta >= 0
+                ? 'Copy trade PnL credit from admin-managed bot trade.'
+                : 'Copy trade PnL debit from admin-managed bot trade.',
+            'occurred_at' => now(),
+            'metadata' => [
+                'copy_relationship_id' => $relationship->id,
+                'copy_trade_id' => $copyTrade->id,
+                'trader_id' => $relationship->trader_id,
+                'pnl_delta' => $pnlDelta,
+                'applied_by_admin_id' => $adminId,
+            ],
+        ]);
+    }
+
+    private function traderPayload(Trader $trader): array
+    {
+        return [
+            'id' => $trader->id,
+            'display_name' => $trader->display_name,
+            'username' => $trader->username,
+            'avatar_color' => $trader->avatar_color,
+            'strategy' => $trader->strategy,
+            'copy_fee' => (float) $trader->copy_fee,
+            'total_return' => (float) $trader->total_return,
+            'win_rate' => (float) $trader->win_rate,
+            'copiers_count' => (int) $trader->copiers_count,
+            'risk_score' => (int) $trader->risk_score,
+            'joined_at' => optional($trader->joined_at)->toIso8601String(),
+            'is_verified' => (bool) $trader->is_verified,
+            'is_active' => (bool) $trader->is_active,
+        ];
+    }
+
+    private function syncTraderCopiersCountForStatusTransition(string $traderId, string $previousStatus, string $nextStatus): void
+    {
+        if ($previousStatus === $nextStatus) {
+            return;
+        }
+
+        if ($previousStatus !== 'active' && $nextStatus === 'active') {
+            Trader::query()->whereKey($traderId)->increment('copiers_count');
+
+            return;
+        }
+
+        if ($previousStatus === 'active' && $nextStatus !== 'active') {
+            Trader::query()
+                ->whereKey($traderId)
+                ->where('copiers_count', '>', 0)
+                ->decrement('copiers_count');
+        }
+    }
+}

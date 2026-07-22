@@ -1,0 +1,1150 @@
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Shield, Plus, ArrowUpRight, History, X, Copy, Check, Loader2, Sparkles, ChevronDown, ChevronRight } from 'lucide-react';
+import { useMarket } from '../context/MarketContext';
+import type { DepositMethodItem, DepositRequestItem, WalletSummaryData, WalletTransactionItem } from '../types';
+import WithdrawalStatusStepper from './WithdrawalStatusStepper';
+
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function parseDepositAmount(value: string): number {
+  const normalized = value.replace(/[^0-9.]/g, '').trim();
+  const parsed = Number.parseFloat(normalized);
+
+  return Number.isFinite(parsed) ? parsed : Number.NaN;
+}
+
+function formatUsdAmount(value: number): string {
+  return value.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+function formatTransferAmount(value: number, symbol: string): string {
+  const upperSymbol = symbol.toUpperCase();
+  const maximumFractionDigits = upperSymbol === 'BTC'
+    ? 8
+    : upperSymbol === 'ETH'
+      ? 6
+      : ['USDT', 'USDC', 'USD'].includes(upperSymbol)
+        ? 2
+        : 6;
+
+  const minimumFractionDigits = value >= 1 ? 2 : Math.min(6, maximumFractionDigits);
+
+  return value.toLocaleString(undefined, {
+    minimumFractionDigits,
+    maximumFractionDigits,
+  });
+}
+
+function normalizeCurrencySymbol(value: string): string {
+  const normalized = value.replace(/[^a-z0-9]/gi, '').trim().toUpperCase();
+
+  if (normalized === '') {
+    return '';
+  }
+
+  const aliases: Record<string, string> = {
+    XBT: 'BTC',
+    BITCOIN: 'BTC',
+    ETHEREUM: 'ETH',
+    TETHER: 'USDT',
+    USDCOIN: 'USDC',
+    DOLLAR: 'USD',
+    USDOLLAR: 'USD',
+    SOLANA: 'SOL',
+    TRON: 'TRX',
+    RIPPLE: 'XRP',
+    DOGECOIN: 'DOGE',
+    CARDANO: 'ADA',
+    AVALANCHE: 'AVAX',
+    POLYGON: 'MATIC',
+    FANTOM: 'FTM',
+  };
+
+  const alias = aliases[normalized];
+  if (alias) {
+    return alias;
+  }
+
+  const knownSymbols = ['USDT', 'USDC', 'BTC', 'ETH', 'SOL', 'TRX', 'XRP', 'BNB', 'ADA', 'AVAX', 'DOGE', 'MATIC', 'FTM', 'USD'];
+  const symbolMatch = knownSymbols.find((symbol) => normalized.includes(symbol));
+
+  return symbolMatch ?? normalized;
+}
+
+function formatInstructionValue(value?: string | null): string {
+  return value && value.trim().length > 0 ? value : 'Not provided';
+}
+
+function buildBankInstructionCopyText(method: DepositMethodItem | null | undefined): string | null {
+  const bankDetails = method?.bankDetails;
+
+  if (!bankDetails) {
+    return null;
+  }
+
+  return [
+    `Bank Name: ${formatInstructionValue(bankDetails.bankName)}`,
+    `Account Name: ${formatInstructionValue(bankDetails.accountName)}`,
+    `Account Number: ${formatInstructionValue(bankDetails.accountNumber)}`,
+    `Routing Number: ${formatInstructionValue(bankDetails.routingNumber)}`,
+    `Swift Code: ${formatInstructionValue(bankDetails.swiftCode)}`,
+    `Bank Address: ${formatInstructionValue(bankDetails.bankAddress)}`,
+    `Reference Letter: ${formatInstructionValue(bankDetails.referenceLetter)}`,
+  ].join('\n');
+}
+
+const WalletPage: React.FC = () => {
+  const {
+    fetchWalletSummary,
+    fetchCopyFollowing,
+    createDeposit,
+    createWithdrawal,
+    submitDepositProof,
+    marketAssets,
+    refreshMarketAssets,
+  } = useMarket();
+  const [summary, setSummary] = useState<WalletSummaryData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [hasActiveCopyTrader, setHasActiveCopyTrader] = useState(false);
+
+  const [isDepositFormOpen, setIsDepositFormOpen] = useState(false);
+  const [isWithdrawalFormOpen, setIsWithdrawalFormOpen] = useState(false);
+  const [modalStatus, setModalStatus] = useState<'input' | 'payment' | 'processing' | 'success'>('input');
+  const [amount, setAmount] = useState('0.00');
+  const [selectedDepositMethodId, setSelectedDepositMethodId] = useState('');
+  const [timeLeft, setTimeLeft] = useState(900);
+  const [isCopied, setIsCopied] = useState(false);
+  const [proofFile, setProofFile] = useState<File | null>(null);
+  const [activeDeposit, setActiveDeposit] = useState<DepositRequestItem | null>(null);
+  const [activeDepositMethod, setActiveDepositMethod] = useState<(DepositMethodItem & { selectionKey: string }) | null>(null);
+  const [quotedTransferAmount, setQuotedTransferAmount] = useState<number | null>(null);
+  const [quotedTransferSymbol, setQuotedTransferSymbol] = useState<string>('');
+  const [activeWithdrawal, setActiveWithdrawal] = useState<WalletTransactionItem | null>(null);
+  const [withdrawalAmount, setWithdrawalAmount] = useState('0.00');
+  const [withdrawalMethod, setWithdrawalMethod] = useState<'bank_transfer'>('bank_transfer');
+  const [withdrawalDestination, setWithdrawalDestination] = useState('');
+  const [withdrawalBankName, setWithdrawalBankName] = useState('');
+  const [withdrawalAccountName, setWithdrawalAccountName] = useState('');
+  const [withdrawalAccountNumber, setWithdrawalAccountNumber] = useState('');
+  const [withdrawalRoutingNumber, setWithdrawalRoutingNumber] = useState('');
+  const [withdrawalSwiftCode, setWithdrawalSwiftCode] = useState('');
+  const [withdrawalBankAddress, setWithdrawalBankAddress] = useState('');
+  const [withdrawalStatus, setWithdrawalStatus] = useState<'input' | 'processing' | 'success'>('input');
+  const quoteRefreshSymbolRef = useRef<string>('');
+
+  const loadCopyStatus = async () => {
+    try {
+      const payload = await fetchCopyFollowing();
+      setHasActiveCopyTrader(payload.items.some((item) => item.status === 'active'));
+    } catch (exception) {
+      setHasActiveCopyTrader(false);
+    }
+  };
+
+  const loadSummary = async () => {
+    setError(null);
+
+    try {
+      const payload = await fetchWalletSummary();
+      setSummary(payload);
+    } catch (exception) {
+      const message = exception instanceof Error ? exception.message : 'Failed to load wallet summary.';
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+
+    await loadCopyStatus();
+  };
+
+  useEffect(() => {
+    void loadSummary();
+  }, []);
+
+  useEffect(() => {
+    if (modalStatus !== 'payment') {
+      return;
+    }
+
+    if (!activeDeposit?.expiresAt) {
+      setTimeLeft(900);
+      return;
+    }
+
+    const tick = () => {
+      const expires = new Date(activeDeposit.expiresAt as string).getTime();
+      const secondsLeft = Math.max(0, Math.floor((expires - Date.now()) / 1000));
+      setTimeLeft(secondsLeft);
+    };
+
+    tick();
+    const interval = setInterval(tick, 1000);
+
+    return () => clearInterval(interval);
+  }, [activeDeposit?.expiresAt, modalStatus]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const handleCopy = () => {
+    const bankDetailsText = buildBankInstructionCopyText(activeDepositMethod ?? selectedDepositMethod);
+    const address = bankDetailsText || activeDeposit?.walletAddress || selectedDepositMethod?.walletAddress;
+
+    if (!address) {
+      setError('No payment instructions are available for this payment method.');
+      return;
+    }
+
+    navigator.clipboard.writeText(address);
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  };
+
+  const handleShowPayment = async () => {
+    if (!isDepositAmountValid) {
+      setError('Please enter a valid deposit amount.');
+      return;
+    }
+
+    setError(null);
+
+    if (!selectedDepositMethod) {
+      setError('No active admin deposit wallet is configured for this account.');
+      return;
+    }
+
+    if (!selectedDepositMethod.currency) {
+      setError('Selected payment method is missing a currency.');
+      return;
+    }
+
+    const isBankTransferMethod = selectedDepositMethod.channel === 'bank_transfer';
+
+    if (!isBankTransferMethod && (!hasConversionQuote || !Number.isFinite(transferAmountInCurrency) || transferAmountInCurrency <= 0)) {
+      setError('Unable to quote live conversion for this wallet right now. Please try again.');
+      return;
+    }
+
+    try {
+      const deposit = await createDeposit({
+        amount: depositAmountValue,
+        currency: selectedDepositMethod.currency,
+        network: selectedDepositMethod.network ?? undefined,
+        paymentMethodId: selectedDepositMethod.paymentMethodId && UUID_PATTERN.test(selectedDepositMethod.paymentMethodId)
+          ? selectedDepositMethod.paymentMethodId
+          : undefined,
+      });
+
+      setActiveDeposit(deposit);
+      setActiveDepositMethod(selectedDepositMethod);
+      setQuotedTransferAmount(isBankTransferMethod ? depositAmountValue : transferAmountInCurrency);
+      setQuotedTransferSymbol(selectedCurrencySymbol || selectedDepositMethod.currency.toUpperCase());
+      setModalStatus('payment');
+      setTimeLeft(900);
+    } catch (exception) {
+      const message = exception instanceof Error ? exception.message : 'Unable to create deposit request.';
+      setError(message);
+    }
+  };
+
+  const handleSubmitProof = async () => {
+    if (!activeDeposit) {
+      return;
+    }
+
+    if (!proofFile) {
+      setError('A screenshot proof is required before you can submit this deposit.');
+      return;
+    }
+
+    setError(null);
+    setModalStatus('processing');
+
+    try {
+      await submitDepositProof(activeDeposit.id, {
+        transactionHash: `0x${Math.random().toString(16).slice(2).padEnd(40, '0').slice(0, 40)}`,
+        proofFile,
+      });
+
+      setModalStatus('success');
+      await loadSummary();
+    } catch (exception) {
+      const message = exception instanceof Error ? exception.message : 'Deposit proof submission failed.';
+      setError(message);
+      setModalStatus('payment');
+    }
+  };
+
+  const handleSubmitWithdrawal = async () => {
+    const parsedAmount = parseFloat(withdrawalAmount);
+
+    if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
+      setError('Please enter a valid withdrawal amount.');
+      return;
+    }
+
+    if (hasActiveCopyTrader && parsedAmount > 500) {
+      setError('Active copy trading accounts are limited to $500 per withdrawal request.');
+      return;
+    }
+
+    if (!withdrawalBankName.trim() || !withdrawalAccountName.trim() || !withdrawalAccountNumber.trim()) {
+      setError('Bank name, account name, and account number are required for bank withdrawals.');
+      return;
+    }
+
+    setError(null);
+    setWithdrawalStatus('processing');
+
+    try {
+      const transaction = await createWithdrawal({
+        amount: parsedAmount,
+        currency: 'USD',
+        payoutMethod: 'bank_transfer',
+        bankName: withdrawalBankName.trim(),
+        accountName: withdrawalAccountName.trim(),
+        accountNumber: withdrawalAccountNumber.trim(),
+        routingNumber: withdrawalRoutingNumber.trim(),
+        swiftCode: withdrawalSwiftCode.trim(),
+        bankAddress: withdrawalBankAddress.trim(),
+      });
+
+      setActiveWithdrawal(transaction);
+      setWithdrawalStatus('success');
+      setWithdrawalAmount('0.00');
+      setWithdrawalDestination('');
+      setWithdrawalBankName('');
+      setWithdrawalAccountName('');
+      setWithdrawalAccountNumber('');
+      setWithdrawalRoutingNumber('');
+      setWithdrawalSwiftCode('');
+      setWithdrawalBankAddress('');
+      await loadSummary();
+    } catch (exception) {
+      const message = exception instanceof Error ? exception.message : 'Unable to create withdrawal request.';
+      setError(message);
+      setWithdrawalStatus('input');
+    }
+  };
+
+  const openDepositForm = () => {
+    setError(null);
+    setIsWithdrawalFormOpen(false);
+    setIsDepositFormOpen(true);
+  };
+
+  const openWithdrawalForm = () => {
+    setError(null);
+    setIsDepositFormOpen(false);
+    setWithdrawalStatus('input');
+    setWithdrawalMethod('bank_transfer');
+    setIsWithdrawalFormOpen(true);
+  };
+
+  const resetFlow = () => {
+    setIsDepositFormOpen(false);
+    setIsWithdrawalFormOpen(false);
+    setModalStatus('input');
+    setAmount('0.00');
+    setTimeLeft(900);
+    setProofFile(null);
+    setActiveDeposit(null);
+    setActiveDepositMethod(null);
+    setQuotedTransferAmount(null);
+    setQuotedTransferSymbol('');
+    setActiveWithdrawal(null);
+    setWithdrawalMethod('bank_transfer');
+    setWithdrawalDestination('');
+    setWithdrawalBankName('');
+    setWithdrawalAccountName('');
+    setWithdrawalAccountNumber('');
+    setWithdrawalRoutingNumber('');
+    setWithdrawalSwiftCode('');
+    setWithdrawalBankAddress('');
+    setWithdrawalStatus('input');
+  };
+
+  const transactions = summary?.recentTransactions ?? [];
+
+  const deposits = useMemo(() => (
+    transactions.filter((transaction) => transaction.type === 'deposit')
+  ), [transactions]);
+  const pendingWithdrawals = useMemo(() => (
+    transactions.filter((transaction) => transaction.type === 'withdrawal' && transaction.status === 'pending')
+  ), [transactions]);
+  const pendingDeposits = summary?.pendingDeposits ?? [];
+  const depositMethods = summary?.depositMethods ?? [];
+  const keyedDepositMethods = useMemo(
+    () => depositMethods
+      .filter((method) => (method.channel ?? '').toLowerCase() !== 'crypto')
+      .map((method, index) => ({
+        ...method,
+        selectionKey: `${method.id || 'payment-method'}:${index}`,
+      })),
+    [depositMethods],
+  );
+
+  const selectedDepositMethod = useMemo<(DepositMethodItem & { selectionKey: string }) | undefined>(() => {
+    if (keyedDepositMethods.length === 0) {
+      return undefined;
+    }
+
+    return keyedDepositMethods.find((method) => method.selectionKey === selectedDepositMethodId) ?? keyedDepositMethods[0];
+  }, [keyedDepositMethods, selectedDepositMethodId]);
+  const displayedDepositMethod = activeDepositMethod ?? selectedDepositMethod;
+  const isBankTransferMethod = displayedDepositMethod?.channel === 'bank_transfer';
+  const cashBalance = summary?.wallet.cashBalance ?? 0;
+  const profitBalance = summary?.wallet.profitLoss ?? 0;
+  const buyingPowerBalance = cashBalance + profitBalance;
+
+  const depositCurrency = selectedDepositMethod?.currency ?? '';
+  const depositNetwork = selectedDepositMethod?.network ?? '';
+  const depositAmountValue = useMemo(() => parseDepositAmount(amount), [amount]);
+  const isDepositAmountValid = Number.isFinite(depositAmountValue) && depositAmountValue > 0;
+  const selectedCurrencySymbol = useMemo(
+    () => normalizeCurrencySymbol(selectedDepositMethod?.currency ?? ''),
+    [selectedDepositMethod?.currency],
+  );
+  const selectedCurrencyRateUsd = useMemo(() => {
+    if (!selectedCurrencySymbol) {
+      return Number.NaN;
+    }
+
+    if (['USD', 'USDT', 'USDC'].includes(selectedCurrencySymbol)) {
+      return 1;
+    }
+
+    const matchingAsset = marketAssets.find((asset) => {
+      const symbolMatch = normalizeCurrencySymbol(asset.symbol) === selectedCurrencySymbol;
+      const nameMatch = normalizeCurrencySymbol(asset.name) === selectedCurrencySymbol;
+      return symbolMatch || nameMatch;
+    });
+    const price = matchingAsset?.price;
+
+    return Number.isFinite(price) && (price as number) > 0 ? (price as number) : Number.NaN;
+  }, [marketAssets, selectedCurrencySymbol]);
+  const transferAmountInCurrency = useMemo(() => {
+    if (!isDepositAmountValid || !Number.isFinite(selectedCurrencyRateUsd) || selectedCurrencyRateUsd <= 0) {
+      return Number.NaN;
+    }
+
+    return depositAmountValue / selectedCurrencyRateUsd;
+  }, [depositAmountValue, isDepositAmountValid, selectedCurrencyRateUsd]);
+  const hasConversionQuote = Number.isFinite(transferAmountInCurrency) && transferAmountInCurrency > 0;
+  const canProceedToPayment = Boolean(selectedDepositMethod) && isDepositAmountValid && (selectedDepositMethod?.channel === 'bank_transfer' || hasConversionQuote);
+  const displayTransferSymbol = quotedTransferSymbol || selectedCurrencySymbol || activeDeposit?.currency || 'N/A';
+  const displayTransferAmount = quotedTransferAmount
+    ?? (selectedDepositMethod?.channel === 'bank_transfer' ? depositAmountValue : transferAmountInCurrency);
+  const displayUsdAmountText = isDepositAmountValid ? formatUsdAmount(depositAmountValue) : amount;
+  const displayTransferAmountText = Number.isFinite(displayTransferAmount) && displayTransferAmount > 0
+    ? formatTransferAmount(displayTransferAmount, displayTransferSymbol)
+    : '--';
+
+  useEffect(() => {
+    if (keyedDepositMethods.length === 0) {
+      if (selectedDepositMethodId !== '') {
+        setSelectedDepositMethodId('');
+      }
+      return;
+    }
+
+    if (!keyedDepositMethods.some((method) => method.selectionKey === selectedDepositMethodId)) {
+      setSelectedDepositMethodId(keyedDepositMethods[0].selectionKey);
+    }
+  }, [keyedDepositMethods, selectedDepositMethodId]);
+
+  useEffect(() => {
+    if (!isDepositFormOpen || marketAssets.length > 0) {
+      return;
+    }
+
+    void refreshMarketAssets().catch(() => {
+      // Leave conversion disabled until prices are available.
+    });
+  }, [isDepositFormOpen, marketAssets.length, refreshMarketAssets]);
+
+  useEffect(() => {
+    if (!isDepositFormOpen || !selectedCurrencySymbol) {
+      return;
+    }
+
+    if (['USD', 'USDT', 'USDC'].includes(selectedCurrencySymbol)) {
+      return;
+    }
+
+    if (Number.isFinite(selectedCurrencyRateUsd) && selectedCurrencyRateUsd > 0) {
+      return;
+    }
+
+    if (quoteRefreshSymbolRef.current === selectedCurrencySymbol) {
+      return;
+    }
+
+    quoteRefreshSymbolRef.current = selectedCurrencySymbol;
+    void refreshMarketAssets().catch(() => {
+      // Keep the warning message visible if refresh fails.
+    });
+  }, [isDepositFormOpen, refreshMarketAssets, selectedCurrencyRateUsd, selectedCurrencySymbol]);
+
+  if (isLoading) {
+    return (
+      <div className="px-4 py-12 flex items-center justify-center">
+        <Loader2 className="text-emerald-500 animate-spin" size={32} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="px-4 py-6 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <header>
+        <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mb-1">Wallet Center</p>
+        <h2 className="text-3xl font-black text-white tracking-tight mb-2">Manage your funds</h2>
+        <p className="text-sm text-zinc-500 font-medium">Deposit, withdraw, and monitor balances.</p>
+      </header>
+
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/20 text-red-300 px-4 py-3 rounded-xl text-sm font-bold">
+          {error}
+        </div>
+      )}
+
+      <div className="bg-[#121212] border border-white/5 rounded-2xl p-4 flex flex-wrap justify-center gap-4">
+        <div className="flex items-center gap-2 text-[11px] font-bold text-zinc-400">
+          <Shield size={14} className="text-emerald-500" />
+          SEC Registered
+        </div>
+        <div className="flex items-center gap-2 text-[11px] font-bold text-zinc-400">
+          <Shield size={14} className="text-emerald-500" />
+          Investment Adviser
+        </div>
+        <div className="flex items-center gap-2 text-[11px] font-bold text-zinc-400">
+          <Shield size={14} className="text-emerald-500" />
+          Secure Connection
+        </div>
+      </div>
+
+      {!isDepositFormOpen && !isWithdrawalFormOpen && (
+        <>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="bg-[#121212] border border-white/5 rounded-[24px] p-6">
+              <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Wallet Balance</p>
+              <h3 className="text-3xl font-black text-white mb-1 tabular-nums">
+                ${formatUsdAmount(cashBalance)}
+              </h3>
+              <p className="text-xs font-black text-emerald-500">+${formatUsdAmount(profitBalance)} profit</p>
+              <p className="mt-1 text-xs text-zinc-500 font-bold">Main wallet cash balance after purchases and withdrawals</p>
+            </div>
+
+            <div className="bg-[#121212] border border-white/5 rounded-[24px] p-6">
+              <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Buying Power</p>
+              <h3 className="text-3xl font-black text-white mb-1 tabular-nums">
+                ${formatUsdAmount(buyingPowerBalance)}
+              </h3>
+              <p className="text-xs text-zinc-500 font-bold">Available for asset purchases using cash first, then profit</p>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <button
+              onClick={openDepositForm}
+              className="w-full cursor-pointer bg-[#0c1a12] border border-emerald-500/20 rounded-[24px] p-6 flex items-center justify-between group active:scale-[0.98] hover:-translate-y-0.5 hover:border-emerald-400/40 hover:bg-[#102118] hover:shadow-lg hover:shadow-emerald-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/40 transition-all"
+            >
+              <div className="text-left">
+                <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mb-1">Deposit</p>
+                <h4 className="text-lg font-black text-white">Add funds quickly</h4>
+                <p className="text-xs text-zinc-500 font-bold">Fiat methods</p>
+                <p className="mt-2 inline-flex items-center gap-1 text-[11px] font-black text-emerald-300">
+                  Tap to deposit
+                  <ChevronRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                </p>
+              </div>
+              <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-black group-hover:scale-110 group-hover:rotate-6 transition-all">
+                <Plus size={24} strokeWidth={3} />
+              </div>
+            </button>
+
+            <button
+              onClick={openWithdrawalForm}
+              className="w-full cursor-pointer bg-[#1a120c] border border-orange-500/20 rounded-[24px] p-6 flex items-center justify-between group active:scale-[0.98] hover:-translate-y-0.5 hover:border-orange-400/40 hover:bg-[#24170f] hover:shadow-lg hover:shadow-orange-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/40 transition-all"
+            >
+              <div className="text-left">
+                <p className="text-[10px] font-black text-orange-500 uppercase tracking-widest mb-1">Withdraw</p>
+                <h4 className="text-lg font-black text-white">Cash out securely</h4>
+                <p className="text-xs text-zinc-500 font-bold">Submit withdrawal for admin approval</p>
+                <p className="mt-2 inline-flex items-center gap-1 text-[11px] font-black text-orange-300">
+                  Tap to withdraw
+                  <ChevronRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+                </p>
+              </div>
+              <div className="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center text-white group-hover:scale-110 group-hover:rotate-6 transition-all">
+                <ArrowUpRight size={24} strokeWidth={3} />
+              </div>
+            </button>
+          </div>
+        </>
+      )}
+
+      {isDepositFormOpen && (
+        <div className="animate-in slide-in-from-right-4 duration-500 bg-[#0a0a0a] border border-white/5 rounded-[32px] p-6 space-y-6 relative overflow-hidden">
+          <button
+            onClick={() => setIsDepositFormOpen(false)}
+            className="absolute top-6 right-6 p-2 text-zinc-600 hover:text-white transition-colors"
+          >
+            <X size={20} />
+          </button>
+
+          <header>
+            <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Instant Funding</p>
+            <h3 className="text-xl font-black text-white mb-2 leading-snug">Submit your deposit proof for admin approval.</h3>
+            <p className="text-sm text-zinc-600 font-bold">Select wallet, method, and upload a screenshot of your transfer.</p>
+          </header>
+
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Amount</label>
+                <input
+                  type="text"
+                  value={amount}
+                  onChange={(event) => setAmount(event.target.value)}
+                  className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-lg font-black text-white focus:outline-none focus:border-emerald-500/50 transition-all placeholder:text-zinc-800"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Payment Method</label>
+                <div className="relative">
+                  <select
+                    value={selectedDepositMethodId}
+                    onChange={(event) => setSelectedDepositMethodId(event.target.value)}
+                    disabled={keyedDepositMethods.length === 0}
+                    className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white appearance-none focus:outline-none focus:border-emerald-500/50 transition-all"
+                  >
+                    {keyedDepositMethods.length === 0 && (
+                      <option value="">No active admin payment method</option>
+                    )}
+                    {keyedDepositMethods.map((method) => (
+                      <option key={method.selectionKey} value={method.selectionKey}>
+                        {method.name} · {method.currency}{method.network ? ` (${method.network})` : ''}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">
+                  {selectedDepositMethod?.channel === 'bank_transfer' ? 'Transfer Rail' : 'Network'}
+                </label>
+                <input
+                  type="text"
+                  value={depositNetwork || (selectedDepositMethod?.channel === 'bank_transfer' ? 'Bank transfer' : 'Default')}
+                  disabled
+                  className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white/80 focus:outline-none"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Currency</label>
+                <input
+                  type="text"
+                  value={depositCurrency || 'N/A'}
+                  disabled
+                  className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white/80 focus:outline-none"
+                />
+              </div>
+
+              {selectedCurrencySymbol && (
+                <p className="text-xs font-bold text-zinc-500">
+                  {selectedDepositMethod?.channel === 'bank_transfer'
+                    ? (!isDepositAmountValid
+                      ? 'Enter deposit amount to prepare your bank transfer instructions.'
+                      : `You will transfer ${displayTransferAmountText} ${displayTransferSymbol} using the bank details shown in the next step.`)
+                    : (!isDepositAmountValid
+                      ? 'Enter USD amount to see conversion.'
+                      : hasConversionQuote
+                        ? `You will send approximately ${displayTransferAmountText} ${displayTransferSymbol} (for $${formatUsdAmount(depositAmountValue)} USD).`
+                        : `Live ${selectedCurrencySymbol} conversion is unavailable right now.`)
+                  }
+                </p>
+              )}
+            </div>
+
+            <button
+              onClick={() => void handleShowPayment()}
+              disabled={!canProceedToPayment}
+              className="w-full py-4 bg-emerald-500 text-black font-black rounded-xl uppercase tracking-widest text-sm hover:bg-emerald-400 disabled:bg-zinc-700 disabled:text-zinc-400 disabled:cursor-not-allowed transition-all shadow-xl shadow-emerald-500/20 active:scale-[0.98]"
+            >
+              Show Payment Window
+            </button>
+          </div>
+        </div>
+      )}
+
+      {isWithdrawalFormOpen && (
+        <div className="animate-in slide-in-from-right-4 duration-500 bg-[#0a0a0a] border border-white/5 rounded-[32px] p-6 space-y-6 relative overflow-hidden">
+          <button
+            onClick={() => setIsWithdrawalFormOpen(false)}
+            className="absolute top-6 right-6 p-2 text-zinc-600 hover:text-white transition-colors"
+          >
+            <X size={20} />
+          </button>
+
+          {withdrawalStatus === 'processing' && (
+            <div className="py-10 flex flex-col items-center text-center gap-4">
+              <Loader2 className="text-orange-400 animate-spin" size={40} />
+              <div>
+                <p className="text-sm font-black text-white">Submitting withdrawal</p>
+                <p className="text-xs text-zinc-500 font-bold">We&apos;re sending your request for approval.</p>
+              </div>
+            </div>
+          )}
+
+          {withdrawalStatus === 'success' && activeWithdrawal && (
+            <div className="py-2">
+              <WithdrawalStatusStepper transaction={activeWithdrawal} />
+              <button
+                onClick={() => setIsWithdrawalFormOpen(false)}
+                className="w-full py-4 mt-6 bg-white text-black font-black rounded-full uppercase tracking-widest text-sm transition-all shadow-xl active:scale-[0.98]"
+              >
+                Done
+              </button>
+            </div>
+          )}
+
+          {withdrawalStatus === 'input' && (
+            <>
+              <header>
+                <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Withdrawal Request</p>
+                <h3 className="text-xl font-black text-white mb-2 leading-snug">Withdraw from your available balance.</h3>
+                <p className="text-sm text-zinc-600 font-bold">
+                  Profit is applied first, then your main balance. Receive your payout by bank transfer.
+                </p>
+              </header>
+
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Amount</label>
+                  <input
+                    type="text"
+                    value={withdrawalAmount}
+                    onChange={(event) => {
+                      const rawValue = event.target.value;
+
+                      if (!hasActiveCopyTrader) {
+                        setWithdrawalAmount(rawValue);
+                        return;
+                      }
+
+                      if (rawValue.trim() === '') {
+                        setWithdrawalAmount(rawValue);
+                        return;
+                      }
+
+                      const numericValue = parseFloat(rawValue.replace(/[^0-9.]/g, ''));
+
+                      if (Number.isFinite(numericValue) && numericValue > 500) {
+                        setWithdrawalAmount('500');
+                        return;
+                      }
+
+                      setWithdrawalAmount(rawValue);
+                    }}
+                    className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-lg font-black text-white focus:outline-none focus:border-orange-500/50 transition-all placeholder:text-zinc-800"
+                  />
+                  {hasActiveCopyTrader && (
+                    <p className="text-[11px] font-bold text-orange-300/80 ml-1">
+                      Copy trading is active: withdrawals are capped at $500 per request (first two approvals only).
+                    </p>
+                  )}
+                </div>
+
+                <>
+                    <div className="rounded-2xl border border-yellow-500/20 bg-yellow-500/8 p-4">
+                      <p className="text-xs font-bold leading-relaxed text-yellow-100">
+                        Submit your bank payout details below. Admin will review and process the withdrawal to the account you provide.
+                      </p>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Bank Name</label>
+                      <input
+                        type="text"
+                        value={withdrawalBankName}
+                        onChange={(event) => setWithdrawalBankName(event.target.value)}
+                        placeholder="Enter receiving bank name"
+                        className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white focus:outline-none focus:border-orange-500/50 transition-all placeholder:text-zinc-700"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Account Name</label>
+                      <input
+                        type="text"
+                        value={withdrawalAccountName}
+                        onChange={(event) => setWithdrawalAccountName(event.target.value)}
+                        placeholder="Enter account holder name"
+                        className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white focus:outline-none focus:border-orange-500/50 transition-all placeholder:text-zinc-700"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Account Number</label>
+                      <input
+                        type="text"
+                        value={withdrawalAccountNumber}
+                        onChange={(event) => setWithdrawalAccountNumber(event.target.value)}
+                        placeholder="Enter account number"
+                        className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white focus:outline-none focus:border-orange-500/50 transition-all placeholder:text-zinc-700"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Routing Number</label>
+                        <input
+                          type="text"
+                          value={withdrawalRoutingNumber}
+                          onChange={(event) => setWithdrawalRoutingNumber(event.target.value)}
+                          placeholder="Optional"
+                          className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white focus:outline-none focus:border-orange-500/50 transition-all placeholder:text-zinc-700"
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Swift Code</label>
+                        <input
+                          type="text"
+                          value={withdrawalSwiftCode}
+                          onChange={(event) => setWithdrawalSwiftCode(event.target.value)}
+                          placeholder="Optional"
+                          className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white focus:outline-none focus:border-orange-500/50 transition-all placeholder:text-zinc-700"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Bank Address</label>
+                      <input
+                        type="text"
+                        value={withdrawalBankAddress}
+                        onChange={(event) => setWithdrawalBankAddress(event.target.value)}
+                        placeholder="Optional"
+                        className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white focus:outline-none focus:border-orange-500/50 transition-all placeholder:text-zinc-700"
+                      />
+                    </div>
+                </>
+              </div>
+
+              <div className="space-y-3">
+                <button
+                  onClick={() => void handleSubmitWithdrawal()}
+                  className="w-full py-4 bg-orange-500 hover:bg-orange-400 text-black font-black rounded-xl uppercase tracking-widest text-sm transition-all shadow-xl shadow-orange-500/20 active:scale-[0.98]"
+                >
+                  Submit Withdrawal Request
+                </button>
+                <button
+                  onClick={() => setIsWithdrawalFormOpen(false)}
+                  className="w-full py-4 border border-zinc-800 hover:border-zinc-700 text-zinc-400 font-black rounded-xl uppercase tracking-widest text-sm transition-all"
+                >
+                  Cancel
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
+      {modalStatus !== 'input' && (
+        <div className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4 animate-in fade-in duration-300">
+          <div className="bg-[#121212] w-full max-w-md rounded-[32px] p-6 border border-white/5 animate-in slide-in-from-bottom-8 shadow-2xl relative overflow-hidden">
+            <button
+              type="button"
+              aria-label="Close payment modal"
+              onClick={() => setModalStatus('input')}
+              className="absolute top-4 right-4 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/40 text-zinc-300 transition-colors hover:border-white/20 hover:bg-black/60 hover:text-white"
+            >
+              <X size={18} />
+            </button>
+
+            {modalStatus === 'payment' && (
+              <div className="space-y-8 animate-in zoom-in-95 duration-300">
+                <div className="text-center pt-2">
+                  <h3 className="text-2xl font-black text-white mb-2 tracking-tight">Send {displayTransferAmountText} {displayTransferSymbol}</h3>
+                  <p className="text-zinc-500 text-sm font-bold">Complete payment and upload proof</p>
+                </div>
+
+                {isBankTransferMethod && displayedDepositMethod?.bankDetails ? (
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Bank Instructions</label>
+                    <div className="rounded-2xl border border-yellow-500/30 bg-yellow-500/12 p-4">
+                      <p className="text-sm font-bold leading-relaxed text-yellow-100">
+                        Kindly transfer the funds you wish to deposit into your Prologezprime account to our segregated account or through our designated funding agent using the details provided below. Once this is done, your Prologezprime account will be credited with the deposited funds.
+                      </p>
+                    </div>
+                    <div className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-4 space-y-3">
+                      <InstructionRow label="Bank Name" value={displayedDepositMethod.bankDetails.bankName} />
+                      <InstructionRow label="Account Name" value={displayedDepositMethod.bankDetails.accountName} />
+                      <InstructionRow label="Account Number" value={displayedDepositMethod.bankDetails.accountNumber} mono />
+                      <InstructionRow label="Routing Number" value={displayedDepositMethod.bankDetails.routingNumber} mono />
+                      <InstructionRow label="Swift Code" value={displayedDepositMethod.bankDetails.swiftCode} mono />
+                      <InstructionRow label="Bank Address" value={displayedDepositMethod.bankDetails.bankAddress} />
+                      <InstructionRow label="Reference Letter" value={displayedDepositMethod.bankDetails.referenceLetter} />
+                    </div>
+                    <button
+                      onClick={handleCopy}
+                      className="w-full py-3.5 border border-zinc-800 hover:border-zinc-700 text-zinc-300 font-black rounded-xl uppercase tracking-widest text-[11px] transition-all flex items-center justify-center gap-2"
+                    >
+                      {isCopied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                      {isCopied ? 'Instructions Copied' : 'Copy Bank Details'}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Wallet Address</label>
+                    <div className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-4 break-all">
+                      <p className="text-xs font-black text-white leading-relaxed font-mono">
+                        {activeDeposit?.walletAddress ?? selectedDepositMethod?.walletAddress ?? 'Unavailable'}
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleCopy}
+                      className="w-full py-3.5 border border-zinc-800 hover:border-zinc-700 text-zinc-300 font-black rounded-xl uppercase tracking-widest text-[11px] transition-all flex items-center justify-center gap-2"
+                    >
+                      {isCopied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                      {isCopied ? 'Address Copied' : 'Copy Address'}
+                    </button>
+                  </div>
+                )}
+
+                <div className="bg-[#0a0a0a] border border-white/5 rounded-3xl p-6 text-center">
+                  <p className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-2">Timer</p>
+                  <div className="flex items-center justify-center gap-3 text-4xl font-black text-emerald-500 tabular-nums">
+                    {formatTime(timeLeft)}
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Upload Payment Proof</label>
+                  <div className="flex items-center gap-4">
+                    <label className="cursor-pointer bg-zinc-900 border border-zinc-800 px-4 py-2.5 rounded-xl text-[11px] font-black text-white hover:bg-zinc-800 transition-colors uppercase tracking-widest">
+                      Choose File
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(event) => setProofFile(event.target.files?.[0] || null)}
+                      />
+                    </label>
+                    <span className="text-xs text-zinc-600 font-bold truncate flex-1">
+                      {proofFile ? proofFile.name : 'No file selected'}
+                    </span>
+                  </div>
+                  <p className="text-[10px] font-bold text-zinc-600">Screenshot image required (PNG/JPG/WEBP), up to 10MB</p>
+                </div>
+
+                <button
+                  onClick={() => void handleSubmitProof()}
+                  disabled={!proofFile}
+                  className="w-full py-4 bg-[#10b981]/90 hover:bg-[#10b981] disabled:bg-zinc-700 disabled:text-zinc-400 disabled:cursor-not-allowed text-black font-black rounded-xl uppercase tracking-widest text-sm transition-all shadow-xl active:scale-[0.98]"
+                >
+                  Confirm & Submit
+                </button>
+              </div>
+            )}
+
+            {modalStatus === 'processing' && (
+              <div className="py-20 flex flex-col items-center justify-center text-center">
+                <div className="relative mb-8">
+                  <Loader2 size={48} className="text-emerald-500 animate-spin" strokeWidth={3} />
+                  <div className="absolute inset-0 bg-emerald-500/20 blur-2xl animate-pulse" />
+                </div>
+                <h3 className="text-xl font-black text-white mb-2 uppercase tracking-widest">Processing Deposit</h3>
+                <p className="text-zinc-500 text-sm font-bold">Verifying your payment proof...</p>
+              </div>
+            )}
+
+            {modalStatus === 'success' && (
+              <div className="animate-in zoom-in-95 duration-500 text-center pb-4">
+                <div className="flex flex-col items-center mb-8 mt-6">
+                  <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mb-6 relative">
+                    <Check size={40} className="text-emerald-500" strokeWidth={3} />
+                    <div className="absolute inset-0 bg-emerald-500 blur-2xl opacity-20" />
+                    <Sparkles className="absolute -top-1 -right-1 text-yellow-400 animate-bounce" size={24} />
+                  </div>
+                  <h3 className="text-2xl font-black text-white mb-2">Deposit Submitted</h3>
+                  <p className="text-zinc-500 text-sm font-bold max-w-[280px]">
+                    Your request for <span className="text-white">${displayUsdAmountText} USD</span> (sending {displayTransferAmountText} {displayTransferSymbol}) is being processed.
+                  </p>
+                </div>
+
+                <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-6 text-left mb-10">
+                  <p className="text-[11px] font-bold text-zinc-500 leading-relaxed italic">
+                    Funds will appear in your wallet balance once confirmed by our financial desk. This usually takes 5-15 minutes.
+                  </p>
+                </div>
+
+                <button
+                  onClick={resetFlow}
+                  className="w-full py-4 bg-white text-black font-black rounded-full uppercase tracking-widest text-sm transition-all shadow-xl active:scale-[0.98]"
+                >
+                  Return to Wallet
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {!isDepositFormOpen && !isWithdrawalFormOpen && (
+        <>
+          {pendingDeposits.length > 0 && (
+            <div className="bg-[#121212] border border-amber-500/20 rounded-[24px] p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="text-sm font-black text-amber-400 uppercase tracking-widest">Pending Deposits</h4>
+                <span className="text-xs font-black text-zinc-500">{pendingDeposits.length} in review</span>
+              </div>
+
+              <div className="space-y-4">
+                {pendingDeposits.map((deposit) => (
+                  <div key={deposit.id} className="flex items-center justify-between">
+                    <div>
+                      <p className="text-base font-black text-white tabular-nums">
+                        ${deposit.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      </p>
+                      <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mt-0.5">
+                        {deposit.currency}{deposit.network ? ` • ${deposit.network}` : ''}
+                      </p>
+                    </div>
+                    <span className="bg-amber-500/10 text-amber-300 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-amber-500/25">
+                      {deposit.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {pendingWithdrawals.length > 0 && (
+            <div className="bg-[#121212] border border-orange-500/20 rounded-[24px] p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="text-sm font-black text-orange-400 uppercase tracking-widest">Pending Withdrawals</h4>
+                <span className="text-xs font-black text-zinc-500">{pendingWithdrawals.length} awaiting review</span>
+              </div>
+
+              <div className="space-y-4">
+                {pendingWithdrawals.map((withdrawal) => (
+                  <div
+                    key={withdrawal.id}
+                    onClick={() => {
+                      setActiveWithdrawal(withdrawal);
+                      setWithdrawalStatus('success');
+                      setIsWithdrawalFormOpen(true);
+                    }}
+                    className="flex items-center justify-between p-2 -mx-2 rounded-xl hover:bg-white/5 cursor-pointer transition-colors group"
+                  >
+                    <div>
+                      <p className="text-base font-black text-white tabular-nums group-hover:text-emerald-400 transition-colors">
+                        ${Math.abs(withdrawal.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      </p>
+                      <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mt-0.5">
+                        {withdrawal.symbol ?? 'Asset'} • {withdrawal.type}
+                      </p>
+                    </div>
+                    <span className="bg-orange-500/10 text-orange-300 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-orange-500/25">
+                      {withdrawal.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="bg-[#121212] border border-white/5 rounded-[24px] p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <History size={16} className="text-zinc-500" />
+                <div>
+                  <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">History</p>
+                  <h4 className="text-lg font-black text-white">Deposits timeline</h4>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              {deposits.slice(0, 3).map((transaction) => (
+                <div key={transaction.id} className="flex items-center justify-between">
+                  <div>
+                    <p className="text-lg font-black text-white tabular-nums">
+                      ${transaction.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                    </p>
+                    <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mt-0.5">
+                      {transaction.symbol ?? 'Asset'} • {transaction.type}
+                    </p>
+                  </div>
+                  <div className="bg-emerald-500/10 text-emerald-500 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-500/20">
+                    {transaction.status}
+                  </div>
+                </div>
+              ))}
+              {deposits.length === 0 && (
+                <p className="text-zinc-500 text-sm">No deposit history yet.</p>
+              )}
+            </div>
+          </div>
+
+          <div className="bg-[#121212] border border-white/5 rounded-[24px] p-6 pb-2">
+            <div className="flex items-center justify-between mb-8">
+              <h4 className="text-sm font-black text-zinc-500 uppercase tracking-widest">Recent Movement</h4>
+            </div>
+
+            <div className="space-y-8">
+              {transactions.slice(0, 5).map((transaction) => (
+                <div key={transaction.id} className="flex items-center justify-between pb-6 border-b border-white/5 last:border-0">
+                  <div>
+                    <p className="text-base font-black text-white">{transaction.type}</p>
+                    <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mt-1">
+                      {transaction.occurredAt ? new Date(transaction.occurredAt).toLocaleString() : 'N/A'}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className={`text-base font-black tabular-nums ${transaction.direction === 'credit' ? 'text-white' : 'text-zinc-400'}`}>
+                      {transaction.direction === 'credit' ? '+' : '-'}
+                      ${Math.abs(transaction.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                    </p>
+                    <div className="flex items-center justify-end gap-1 mt-1">
+                      <span className="w-1 h-1 bg-emerald-500 rounded-full" />
+                      <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">{transaction.status}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {transactions.length === 0 && (
+                <p className="text-zinc-500 text-sm pb-6">No recent transactions yet.</p>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+const InstructionRow: React.FC<{ label: string; value?: string | null; mono?: boolean }> = ({ label, value, mono = false }) => (
+  <div className="flex items-start justify-between gap-4 border-b border-white/5 pb-3 last:border-b-0 last:pb-0">
+    <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">{label}</span>
+    <span className={`max-w-[60%] text-right text-sm font-bold text-white ${mono ? 'font-mono' : ''}`}>
+      {formatInstructionValue(value)}
+    </span>
+  </div>
+);
+
+export default WalletPage;

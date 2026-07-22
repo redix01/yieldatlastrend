@@ -1,0 +1,607 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\DepositRequest;
+use App\Models\Wallet;
+use App\Models\WalletTransaction;
+use App\Notifications\UserEventNotification;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
+use Inertia\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
+class TransactionController extends Controller
+{
+    public function index(Request $request): Response
+    {
+        $tab = (string) $request->string('tab', 'deposit');
+
+        if (! in_array($tab, ['deposit', 'withdrawal'], true)) {
+            $tab = 'deposit';
+        }
+
+        $transactions = $tab === 'withdrawal'
+            ? WalletTransaction::query()
+                ->with(['wallet.user:id,name,email', 'asset:id,symbol'])
+                ->where('type', 'withdrawal')
+                ->latest('occurred_at')
+                ->paginate(15)
+                ->withQueryString()
+                ->through(fn (WalletTransaction $walletTransaction) => $this->withdrawalTransactionPayload($walletTransaction))
+            : DepositRequest::query()
+                ->with(['wallet.user:id,name,email', 'asset:id,symbol'])
+                ->latest('created_at')
+                ->paginate(15)
+                ->withQueryString()
+                ->through(fn (DepositRequest $depositRequest) => $this->depositRequestPayload($depositRequest));
+
+        $stats = $tab === 'withdrawal'
+            ? [
+                'total' => WalletTransaction::query()->where('type', 'withdrawal')->count(),
+                'pending' => WalletTransaction::query()->where('type', 'withdrawal')->where('status', 'pending')->count(),
+                'approved' => WalletTransaction::query()->where('type', 'withdrawal')->where('status', 'approved')->count(),
+                'rejected' => WalletTransaction::query()->where('type', 'withdrawal')->where('status', 'rejected')->count(),
+            ]
+            : [
+                'total' => DepositRequest::query()->count(),
+                'pending' => DepositRequest::query()->whereIn('status', ['input', 'payment', 'processing'])->count(),
+                'approved' => DepositRequest::query()->where('status', 'approved')->count(),
+                'rejected' => DepositRequest::query()->where('status', 'rejected')->count(),
+            ];
+
+        return Inertia::render('Admin/Transactions/Index', [
+            'activeTab' => $tab,
+            'transactions' => $transactions,
+            'stats' => $stats,
+        ]);
+    }
+
+    public function showDepositReceipt(DepositRequest $depositRequest): StreamedResponse|RedirectResponse|HttpResponse
+    {
+        $proofPath = trim((string) $depositRequest->proof_path);
+
+        if ($proofPath === '') {
+            return $this->missingReceiptPage($depositRequest, 'No receipt path was saved for this transaction.');
+        }
+
+        if (filter_var($proofPath, FILTER_VALIDATE_URL)) {
+            return redirect()->away($proofPath);
+        }
+
+        $normalizedPath = ltrim($proofPath, '/');
+
+        foreach ($this->receiptDisks() as $disk) {
+            $storage = Storage::disk($disk);
+
+            foreach ($this->storageProofPathCandidates($normalizedPath) as $candidate) {
+                if (! $storage->exists($candidate)) {
+                    continue;
+                }
+
+                return $storage->response($candidate);
+            }
+        }
+
+        foreach ($this->publicProofPathCandidates($normalizedPath) as $absolutePath) {
+            if (is_file($absolutePath)) {
+                return response()->file($absolutePath);
+            }
+        }
+
+        return $this->missingReceiptPage(
+            $depositRequest,
+            'Receipt file was not found in storage. Please upload a new proof image for this transaction.',
+        );
+    }
+
+    public function approveDepositRequest(DepositRequest $depositRequest): RedirectResponse
+    {
+        if ($depositRequest->status === 'approved') {
+            return back()->with('error', 'Deposit request has already been approved.');
+        }
+
+        if ($depositRequest->status === 'rejected') {
+            return back()->with('error', 'Rejected deposit requests cannot be approved.');
+        }
+
+        DB::transaction(function () use ($depositRequest) {
+            $lockedRequest = DepositRequest::query()
+                ->whereKey($depositRequest->id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            if (in_array($lockedRequest->status, ['approved', 'rejected'], true)) {
+                return;
+            }
+
+            $wallet = Wallet::query()->whereKey($lockedRequest->wallet_id)->lockForUpdate()->firstOrFail();
+
+            $lockedRequest->update([
+                'status' => 'approved',
+                'submitted_at' => $lockedRequest->submitted_at ?? now(),
+                'processed_at' => now(),
+            ]);
+
+            $wallet->cash_balance = (float) $wallet->cash_balance + (float) $lockedRequest->amount;
+            $wallet->save();
+
+            WalletTransaction::query()->create([
+                'wallet_id' => $wallet->id,
+                'asset_id' => $lockedRequest->asset_id,
+                'type' => 'deposit',
+                'status' => 'approved',
+                'direction' => 'credit',
+                'amount' => $lockedRequest->amount,
+                'network' => $lockedRequest->network,
+                'notes' => 'Deposit approved by admin panel',
+                'occurred_at' => now(),
+                'metadata' => [
+                    'deposit_request_id' => $lockedRequest->id,
+                    'transaction_hash' => $lockedRequest->transaction_hash,
+                    'proof_path' => $lockedRequest->proof_path,
+                ],
+            ]);
+        });
+
+        $depositRequest->refresh()->loadMissing('wallet.user');
+        $customer = $depositRequest->wallet?->user;
+
+        if ($customer !== null) {
+            $customer->notify(new UserEventNotification(
+                eventType: 'wallet.deposit_approved',
+                title: 'Deposit approved',
+                message: sprintf(
+                    'Your deposit of %s %s has been approved and credited to your wallet.',
+                    $this->formatNumber((float) $depositRequest->amount),
+                    (string) $depositRequest->currency
+                ),
+                metadata: [
+                    'deposit_request_id' => $depositRequest->id,
+                    'amount' => (float) $depositRequest->amount,
+                    'currency' => $depositRequest->currency,
+                    'status' => 'approved',
+                ],
+                actionUrl: '/dashboard/wallet',
+                sendEmail: true,
+            ));
+        }
+
+        return back()->with('success', 'Deposit request approved.');
+    }
+
+    public function declineDepositRequest(DepositRequest $depositRequest): RedirectResponse
+    {
+        if ($depositRequest->status === 'approved') {
+            return back()->with('error', 'Approved deposit requests cannot be declined.');
+        }
+
+        if ($depositRequest->status === 'rejected') {
+            return back()->with('error', 'Deposit request has already been declined.');
+        }
+
+        $depositRequest->update([
+            'status' => 'rejected',
+            'submitted_at' => $depositRequest->submitted_at ?? now(),
+            'processed_at' => now(),
+        ]);
+
+        $depositRequest->loadMissing('wallet.user');
+        $customer = $depositRequest->wallet?->user;
+
+        if ($customer !== null) {
+            $customer->notify(new UserEventNotification(
+                eventType: 'wallet.deposit_rejected',
+                title: 'Deposit declined',
+                message: sprintf(
+                    'Your deposit of %s %s was declined by admin review.',
+                    $this->formatNumber((float) $depositRequest->amount),
+                    (string) $depositRequest->currency
+                ),
+                metadata: [
+                    'deposit_request_id' => $depositRequest->id,
+                    'amount' => (float) $depositRequest->amount,
+                    'currency' => $depositRequest->currency,
+                    'status' => 'rejected',
+                ],
+                actionUrl: '/dashboard/wallet',
+                sendEmail: true,
+            ));
+        }
+
+        return back()->with('success', 'Deposit request declined.');
+    }
+
+    public function destroyDepositRequest(DepositRequest $depositRequest): RedirectResponse
+    {
+        if ($depositRequest->status === 'approved') {
+            return back()->with('error', 'Approved deposit requests cannot be deleted.');
+        }
+
+        $proofPath = trim((string) $depositRequest->proof_path);
+
+        $depositRequest->delete();
+
+        if ($proofPath !== '' && ! filter_var($proofPath, FILTER_VALIDATE_URL)) {
+            foreach ($this->receiptDisks() as $disk) {
+                $storage = Storage::disk($disk);
+
+                if ($storage->exists($proofPath)) {
+                    $storage->delete($proofPath);
+                }
+            }
+        }
+
+        return back()->with('success', 'Deposit request deleted.');
+    }
+
+    public function approveWithdrawalTransaction(WalletTransaction $walletTransaction): RedirectResponse
+    {
+        if ($walletTransaction->type !== 'withdrawal') {
+            return back()->with('error', 'Invalid withdrawal transaction.');
+        }
+
+        if ($walletTransaction->status === 'approved') {
+            return back()->with('error', 'Withdrawal transaction is already approved.');
+        }
+
+        if ($walletTransaction->status === 'rejected') {
+            return back()->with('error', 'Rejected withdrawal transaction cannot be approved.');
+        }
+
+        $approvalResult = 'approved';
+
+        DB::transaction(function () use ($walletTransaction, &$approvalResult): void {
+            $lockedWithdrawal = WalletTransaction::query()
+                ->whereKey($walletTransaction->id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            if ($lockedWithdrawal->status !== 'pending') {
+                $approvalResult = 'already_finalized';
+                return;
+            }
+
+            $wallet = Wallet::query()
+                ->whereKey($lockedWithdrawal->wallet_id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            $withdrawalAmount = (float) $lockedWithdrawal->amount;
+            $allocation = $this->allocateWithdrawal(
+                (float) $wallet->cash_balance,
+                (float) $wallet->profit_loss,
+                $withdrawalAmount
+            );
+
+            if ($allocation['remaining'] > 0) {
+                $approvalResult = 'insufficient_funds';
+                return;
+            }
+
+            $wallet->cash_balance = $allocation['cash_balance'];
+            $wallet->profit_loss = $allocation['profit_balance'];
+            $wallet->save();
+
+            $lockedWithdrawal->update([
+                'status' => 'approved',
+                'notes' => $lockedWithdrawal->notes ?? 'Withdrawal approved by admin panel',
+                'metadata' => [
+                    ...($lockedWithdrawal->metadata ?? []),
+                    'cash_debit' => $allocation['cash_debit'],
+                    'profit_debit' => $allocation['profit_debit'],
+                ],
+            ]);
+        });
+
+        if ($approvalResult === 'already_finalized') {
+            return back()->with('error', 'Withdrawal transaction is no longer pending.');
+        }
+
+        if ($approvalResult === 'insufficient_funds') {
+            return back()->with('error', 'Wallet balance is insufficient to approve this withdrawal.');
+        }
+
+        $walletTransaction->refresh()->loadMissing(['wallet.user', 'asset']);
+        $customer = $walletTransaction->wallet?->user;
+
+        if ($customer !== null) {
+            $customer->notify(new UserEventNotification(
+                eventType: 'wallet.withdrawal_approved',
+                title: 'Withdrawal approved',
+                message: sprintf(
+                    'Your withdrawal of %s %s has been approved.',
+                    $this->formatNumber((float) $walletTransaction->amount),
+                    $this->transactionCurrency($walletTransaction)
+                ),
+                metadata: [
+                    'wallet_transaction_id' => $walletTransaction->id,
+                    'amount' => (float) $walletTransaction->amount,
+                    'currency' => $this->transactionCurrency($walletTransaction),
+                    'status' => 'approved',
+                ],
+                actionUrl: '/dashboard/wallet',
+                sendEmail: true,
+            ));
+        }
+
+        return back()->with('success', 'Withdrawal transaction approved.');
+    }
+
+    /**
+     * @return array{cash_balance: float, profit_balance: float, cash_debit: float, profit_debit: float, remaining: float}
+     */
+    private function allocateWithdrawal(float $cashBalance, float $profitBalance, float $amount): array
+    {
+        $availableProfit = max(0.0, $profitBalance);
+        $profitDebit = min($availableProfit, $amount);
+        $remaining = $amount - $profitDebit;
+
+        $availableCash = max(0.0, $cashBalance);
+        $cashDebit = min($availableCash, $remaining);
+        $remaining -= $cashDebit;
+
+        return [
+            'cash_balance' => round($cashBalance - $cashDebit, 8),
+            'profit_balance' => round($profitBalance - $profitDebit, 8),
+            'cash_debit' => round($cashDebit, 8),
+            'profit_debit' => round($profitDebit, 8),
+            'remaining' => round($remaining, 8),
+        ];
+    }
+
+    public function declineWithdrawalTransaction(WalletTransaction $walletTransaction): RedirectResponse
+    {
+        if ($walletTransaction->type !== 'withdrawal') {
+            return back()->with('error', 'Invalid withdrawal transaction.');
+        }
+
+        if ($walletTransaction->status === 'approved') {
+            return back()->with('error', 'Approved withdrawal transaction cannot be declined.');
+        }
+
+        if ($walletTransaction->status === 'rejected') {
+            return back()->with('error', 'Withdrawal transaction is already rejected.');
+        }
+
+        $walletTransaction->update([
+            'status' => 'rejected',
+        ]);
+
+        $walletTransaction->loadMissing(['wallet.user', 'asset']);
+        $customer = $walletTransaction->wallet?->user;
+
+        if ($customer !== null) {
+            $customer->notify(new UserEventNotification(
+                eventType: 'wallet.withdrawal_rejected',
+                title: 'Withdrawal declined',
+                message: sprintf(
+                    'Your withdrawal of %s %s was declined by admin review.',
+                    $this->formatNumber((float) $walletTransaction->amount),
+                    $this->transactionCurrency($walletTransaction)
+                ),
+                metadata: [
+                    'wallet_transaction_id' => $walletTransaction->id,
+                    'amount' => (float) $walletTransaction->amount,
+                    'currency' => $this->transactionCurrency($walletTransaction),
+                    'status' => 'rejected',
+                ],
+                actionUrl: '/dashboard/wallet',
+                sendEmail: true,
+            ));
+        }
+
+        return back()->with('success', 'Withdrawal transaction declined.');
+    }
+
+    public function destroyWithdrawalTransaction(WalletTransaction $walletTransaction): RedirectResponse
+    {
+        if ($walletTransaction->type !== 'withdrawal') {
+            return back()->with('error', 'Invalid withdrawal transaction.');
+        }
+
+        if ($walletTransaction->status === 'approved') {
+            return back()->with('error', 'Approved withdrawal transaction cannot be deleted.');
+        }
+
+        $walletTransaction->delete();
+
+        return back()->with('success', 'Withdrawal transaction deleted.');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function depositRequestPayload(DepositRequest $depositRequest): array
+    {
+        $receiptUrl = $this->receiptUrl($depositRequest);
+        $canAct = in_array($depositRequest->status, ['input', 'payment', 'processing'], true);
+
+        return [
+            'id' => $depositRequest->id,
+            'type' => 'deposit',
+            'status' => $depositRequest->status,
+            'amount' => (float) $depositRequest->amount,
+            'currency' => $depositRequest->currency,
+            'network' => $depositRequest->network,
+            'asset_symbol' => $depositRequest->asset?->symbol,
+            'user_name' => $depositRequest->wallet?->user?->name,
+            'user_email' => $depositRequest->wallet?->user?->email,
+            'transaction_hash' => $depositRequest->transaction_hash,
+            'receipt_url' => $receiptUrl,
+            'has_receipt' => $receiptUrl !== null,
+            'submitted_at' => $depositRequest->submitted_at?->toIso8601String(),
+            'processed_at' => $depositRequest->processed_at?->toIso8601String(),
+            'created_at' => $depositRequest->created_at?->toIso8601String(),
+            'can_approve' => $canAct,
+            'can_decline' => $canAct,
+            'can_delete' => $depositRequest->status !== 'approved',
+            'approve_url' => $this->namedRouteOrPath(
+                name: 'admin.transactions.deposits.approve',
+                fallbackPath: "/admin/transactions/deposits/{$depositRequest->getKey()}/approve",
+                parameters: $depositRequest,
+            ),
+            'decline_url' => $this->namedRouteOrPath(
+                name: 'admin.transactions.deposits.decline',
+                fallbackPath: "/admin/transactions/deposits/{$depositRequest->getKey()}/decline",
+                parameters: $depositRequest,
+            ),
+            'delete_url' => $this->namedRouteOrPath(
+                name: 'admin.transactions.deposits.destroy',
+                fallbackPath: "/admin/transactions/deposits/{$depositRequest->getKey()}",
+                parameters: $depositRequest,
+            ),
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function withdrawalTransactionPayload(WalletTransaction $walletTransaction): array
+    {
+        $canAct = $walletTransaction->status === 'pending';
+
+        return [
+            'id' => $walletTransaction->id,
+            'type' => $walletTransaction->type,
+            'status' => $walletTransaction->status,
+            'amount' => (float) $walletTransaction->amount,
+            'currency' => $walletTransaction->asset?->symbol ?? data_get($walletTransaction->metadata, 'currency', 'USD'),
+            'network' => $walletTransaction->network,
+            'payout_method' => data_get($walletTransaction->metadata, 'payout_method', 'crypto'),
+            'bank_details' => data_get($walletTransaction->metadata, 'bank_details'),
+            'asset_symbol' => $walletTransaction->asset?->symbol,
+            'user_name' => $walletTransaction->wallet?->user?->name,
+            'user_email' => $walletTransaction->wallet?->user?->email,
+            'transaction_hash' => data_get($walletTransaction->metadata, 'transaction_hash'),
+            'destination' => data_get($walletTransaction->metadata, 'destination'),
+            'receipt_url' => null,
+            'has_receipt' => false,
+            'submitted_at' => $walletTransaction->occurred_at?->toIso8601String(),
+            'processed_at' => $walletTransaction->status !== 'pending'
+                ? $walletTransaction->updated_at?->toIso8601String()
+                : null,
+            'created_at' => $walletTransaction->created_at?->toIso8601String(),
+            'can_approve' => $canAct,
+            'can_decline' => $canAct,
+            'can_delete' => $walletTransaction->status !== 'approved',
+            'approve_url' => $this->namedRouteOrPath(
+                name: 'admin.transactions.withdrawals.approve',
+                fallbackPath: "/admin/transactions/withdrawals/{$walletTransaction->getKey()}/approve",
+                parameters: $walletTransaction,
+            ),
+            'decline_url' => $this->namedRouteOrPath(
+                name: 'admin.transactions.withdrawals.decline',
+                fallbackPath: "/admin/transactions/withdrawals/{$walletTransaction->getKey()}/decline",
+                parameters: $walletTransaction,
+            ),
+            'delete_url' => $this->namedRouteOrPath(
+                name: 'admin.transactions.withdrawals.destroy',
+                fallbackPath: "/admin/transactions/withdrawals/{$walletTransaction->getKey()}",
+                parameters: $walletTransaction,
+            ),
+        ];
+    }
+
+    private function receiptUrl(DepositRequest $depositRequest): ?string
+    {
+        $proofPath = trim((string) $depositRequest->proof_path);
+
+        if ($proofPath === '') {
+            return null;
+        }
+
+        if (filter_var($proofPath, FILTER_VALIDATE_URL)) {
+            return $proofPath;
+        }
+
+        return $this->namedRouteOrPath(
+            name: 'admin.transactions.deposits.receipt',
+            fallbackPath: "/admin/transactions/deposits/{$depositRequest->getKey()}/receipt",
+            parameters: $depositRequest,
+        );
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function receiptDisks(): array
+    {
+        return ['local', 'public'];
+    }
+
+    private function namedRouteOrPath(string $name, string $fallbackPath, mixed $parameters = null): string
+    {
+        if (Route::has($name)) {
+            $path = $parameters !== null
+                ? route($name, $parameters, false)
+                : route($name, absolute: false);
+
+            return $this->withBaseUrl($path);
+        }
+
+        return $this->withBaseUrl($fallbackPath);
+    }
+
+    private function withBaseUrl(string $path): string
+    {
+        $baseUrl = request()->getBaseUrl();
+
+        if ($baseUrl === '') {
+            return $path;
+        }
+
+        return rtrim($baseUrl, '/') . '/' . ltrim($path, '/');
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function storageProofPathCandidates(string $normalizedPath): array
+    {
+        return array_values(array_unique([
+            $normalizedPath,
+            preg_replace('/^storage\//', '', $normalizedPath),
+            preg_replace('/^public\//', '', $normalizedPath),
+        ]));
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function publicProofPathCandidates(string $normalizedPath): array
+    {
+        $withoutStoragePrefix = preg_replace('/^storage\//', '', $normalizedPath);
+        $withoutPublicPrefix = preg_replace('/^public\//', '', $normalizedPath);
+
+        return array_values(array_unique([
+            public_path($normalizedPath),
+            public_path("storage/{$withoutStoragePrefix}"),
+            public_path($withoutPublicPrefix),
+        ]));
+    }
+
+    private function missingReceiptPage(DepositRequest $depositRequest, string $message): HttpResponse
+    {
+        return response()->view('admin.receipt-missing', [
+            'depositRequest' => $depositRequest,
+            'message' => $message,
+        ], 200);
+    }
+
+    private function formatNumber(float $value): string
+    {
+        return number_format($value, 2, '.', ',');
+    }
+
+    private function transactionCurrency(WalletTransaction $walletTransaction): string
+    {
+        return (string) ($walletTransaction->asset?->symbol ?? 'USD');
+    }
+}
