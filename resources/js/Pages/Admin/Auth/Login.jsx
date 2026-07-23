@@ -4,10 +4,10 @@ import { useEffect } from 'react';
 export default function Login() {
     const { props } = usePage();
     const siteBrandName = String(
-        props.site?.brand_name || document.documentElement?.dataset?.brand || 'PrologezPrime',
+        props.site?.brand_name || document.documentElement?.dataset?.brand || 'App',
     )
         .trim()
-        || 'PrologezPrime';
+        || 'App';
     const form = useForm({
         email: '',
         password: '',

@@ -20,7 +20,7 @@ export default function Index({ settings }) {
     const authUser = props?.auth?.user;
     const [activeTab, setActiveTab] = useState('site');
     const form = useForm({
-        brand_name: settings.brand_name || 'PrologezPrime',
+        brand_name: settings.brand_name || 'App',
         site_mode: settings.site_mode,
         deposits_enabled: Boolean(settings.deposits_enabled),
         withdrawals_enabled: Boolean(settings.withdrawals_enabled),

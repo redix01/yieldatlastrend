@@ -14,6 +14,9 @@
 /auth.json
 /node_modules
 /dashboard/node_modules
+
+# Source HTML theme (converted to Blade views; production assets live in public/tradez)
+/tradez/main
 # public/build
 /public/hot
 /public/storage

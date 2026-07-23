@@ -5,10 +5,10 @@ import { adminBasePath, adminPath } from '@/lib/adminPath';
 export default function AdminLayout({ title, children }) {
     const { url, props } = usePage();
     const siteBrandName = String(
-        props.site?.brand_name || document.documentElement?.dataset?.brand || 'PrologezPrime',
+        props.site?.brand_name || document.documentElement?.dataset?.brand || 'App',
     )
         .trim()
-        || 'PrologezPrime';
+        || 'App';
     const [menuOpen, setMenuOpen] = useState(false);
     const baseUrl = adminBasePath(url);
     const navigation = [

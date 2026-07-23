@@ -27,14 +27,14 @@ HTML;
     public static function defaults(): array
     {
         return [
-            'brand_name' => 'PrologezPrime',
+            'brand_name' => env('APP_NAME', 'Yield At Last Trend'),
             'site_mode' => 'live',
             'deposits_enabled' => true,
             'withdrawals_enabled' => true,
             'require_kyc_for_deposits' => false,
             'require_kyc_for_withdrawals' => true,
             'session_timeout_minutes' => 60,
-            'support_email' => 'support@prologezprime.com',
+            'support_email' => env('SUPPORT_EMAIL', 'support@' . strtolower(preg_replace('/[^a-zA-Z0-9]/', '', env('APP_NAME', 'yieldatlastrend'))) . '.com'),
             'admin_notification_email' => null,
             'livechat_enabled' => false,
             'livechat_provider' => self::DEFAULT_LIVECHAT_PROVIDER,

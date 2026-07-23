@@ -72,6 +72,27 @@ Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
+// Tradez-themed public pages
+Route::view('/about', 'about')->name('about');
+Route::view('/team', 'team')->name('team');
+Route::view('/blog', 'blog')->name('blog');
+Route::view('/careers', 'careers')->name('careers');
+Route::view('/contact', 'contact')->name('contact');
+Route::view('/education', 'education')->name('education');
+Route::view('/support', 'support')->name('support');
+Route::view('/terms-conditions', 'terms-conditions')->name('terms-conditions');
+Route::view('/privacy-policy', 'privacy-policy')->name('privacy-policy');
+Route::view('/legal-docs', 'legal-docs')->name('legal-docs');
+Route::view('/customers', 'customers')->name('customers');
+Route::view('/market', 'market')->name('market');
+
+// Legacy redirects
+Route::redirect('/terms-of-service', '/terms-conditions', 301);
+Route::redirect('/about-us', '/about', 301);
+Route::redirect('/products', '/market', 301);
+Route::redirect('/privacy', '/privacy-policy', 301);
+Route::redirect('/terms', '/terms-conditions', 301);
+
 Route::middleware([HandleDashboardInertiaRequests::class])->group(function () {
     Route::get('/dashboard/{any?}', [WebDashboardController::class, 'index'])
         ->where('any', '.*')
@@ -84,15 +105,8 @@ Route::middleware([HandleDashboardInertiaRequests::class])->group(function () {
         'verify',
         'forgot',
         'reset',
-        'about',
-        'products',
-        'privacy',
-        'terms',
         'risk',
-        'about-us',
         'risk-disclosure',
-        'privacy-policy',
-        'terms-of-service',
     ] as $reactRoute) {
         Route::get($reactRoute, [WebDashboardController::class, 'index']);
     }

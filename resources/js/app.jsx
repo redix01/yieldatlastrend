@@ -4,7 +4,7 @@ import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 
-const defaultBrandName = 'PrologezPrime';
+const defaultBrandName = 'App';
 
 const getBrandName = () => {
     if (typeof document === 'undefined') {
