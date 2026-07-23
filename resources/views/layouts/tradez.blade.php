@@ -1,6 +1,7 @@
 @php
     $siteSettings = \App\Support\SiteSettings::get();
     $brandName = (string) ($siteSettings['brand_name'] ?? \App\Support\SiteSettings::defaults()['brand_name']);
+    $brandNameCompact = preg_replace('/\s+/', '', $brandName);
     $supportEmail = (string) ($siteSettings['support_email'] ?? 'support@example.com');
     $supportPhone = (string) ($siteSettings['support_phone'] ?? '+0123 456 789');
     $pageTitle = $pageTitle ?? $brandName;
@@ -39,7 +40,7 @@
                     </button>
                     <a href="/" class="navbar-brand m-0 p-0 d-flex align-items-center gap-3 gap-xl-4 me-2">
                         <img src="/tradez/assets/images/fav.png" class="logo" alt="{{ $brandName }}" style="height: 40px;">
-                        <span class="fw-bold text-white fs-4 d-none d-sm-flex">{{ $brandName }}</span>
+                        <span class="fw-bold text-white fs-4 d-none d-sm-flex">{{ $brandNameCompact }}</span>
                     </a>
                 </div>
                 <div class="nav_alt">
@@ -54,12 +55,8 @@
                 </div>
                 <div class="collapse navbar-collapse justify-content-center" id="navbar-content">
                     <ul class="navbar-nav gap-2 gap-lg-3 gap-xxl-8 align-self-center mx-auto mt-4 mt-lg-0">
-                        <li class="dropdown show-dropdown">
-                            <button type="button" aria-label="Navbar Dropdown Button"
-                                class="dropdown-toggle dropdown-nav @yield('active-home', '')">Home</button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/">Home</a></li>
-                            </ul>
+                        <li>
+                            <a class="dropdown-item @yield('active-home', '')" href="/">Home</a>
                         </li>
                         <li class="dropdown show-dropdown">
                             <button type="button" aria-label="Navbar Dropdown Button"
