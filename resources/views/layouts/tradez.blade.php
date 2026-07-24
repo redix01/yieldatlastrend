@@ -70,9 +70,6 @@
                                 class="dropdown-toggle dropdown-nav @yield('active-company', '')">Company</button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/about">About</a></li>
-                                <li><a class="dropdown-item" href="/team">Team</a></li>
-                                <li><a class="dropdown-item" href="/blog">Blog</a></li>
-                                <li><a class="dropdown-item" href="/careers">Careers</a></li>
                                 <li><a class="dropdown-item" href="/contact">Contact</a></li>
                             </ul>
                         </li>
@@ -146,8 +143,7 @@
                         <h4 class="mb-6 mb-lg-8">Company</h4>
                         <ul class="footer_list d-flex flex-column gap-2 gap-sm-3 gap-md-4">
                             <li><a class="n2-color" href="/about">About</a></li>
-                            <li><a class="n2-color" href="/blog">Blog</a></li>
-                            <li><a class="n2-color" href="/careers">Careers</a></li>
+                            <li><a class="n2-color" href="/contact">Contact</a></li>
                         </ul>
                     </div>
                 </div>
