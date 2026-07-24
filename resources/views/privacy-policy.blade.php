@@ -13,14 +13,14 @@
                         <div class="privacy-policy__card d-flex flex-column gap-8 gap-lg-10">
                             <div class="privacy-policy__part">
                                 <h5 class="mb-4" >General Information</h5>
-                                <p>This includes information such as your name, email address, contact details, and other identifying information you provide when signing up for our services. We may collect financial information necessary for processing transactions, such as payment details account information, and trading history.</p>
+                                <p>This includes information such as your name, email address, contact details, and other identifying information you provide when signing up for our services. We may collect financial information necessary for processing transactions, such as payment details, account information, and investment history.</p>
                             </div>
                             <div class="privacy-policy__part">
                                 <h5 class="mb-4" >How We Use Your Information</h5>
                                 <p class="mt-4 mb-5">We use cookies and similar tracking technologies to enhance your experience on our platform and gather information about your interactions with our services.</p>
                                 <ul class="ul-dots mt-5 d-flex gap-3 flex-column">
-                                    <li>To provide and maintain our forex trading services.</li>
-                                    <li>To process transactions and execute trades</li>
+                                    <li>To provide and maintain our investment services.</li>
+                                    <li>To process transactions and manage investments</li>
                                     <li>To communicate with you, including sending updates, alerts, and notifications.</li>
                                     <li>To personalize and improve your experience on our platform.</li>
                                     <li>To comply with legal and regulatory requirements</li>
@@ -36,7 +36,7 @@
                             </div>
                             <div class="privacy-policy__part">
                                 <h5 class="mb-4">General Information</h5>
-                                <p>This includes information such as your name, email address, contact details, and other identifying information you provide when signing up for our services. We may collect financial information necessary for processing transactions, such as payment details account information, and trading history.</p>
+                                <p>This includes information such as your name, email address, contact details, and other identifying information you provide when signing up for our services. We may collect financial information necessary for processing transactions, such as payment details, account information, and investment history.</p>
                                 <ul class="ul-dots mt-5 d-flex gap-3 flex-column">
                                     <li>Service providers and partners who assist in providing our services</li>
                                     <li>Regulatory authorities when required by law.</li>
@@ -58,7 +58,7 @@
                             <div class="privacy-policy__part">
                                 <h5 class="mb-4" >Contact Us</h5>
                                 <p>If you have any questions or concerns about our Privacy & Policy, please contact us at [Contact Email].</p>
-                                <p class="mt-3">By using our forex trading platform or website, you acknowledge that you have read, understood, and agreed to this Privacy & Policy. Your continued use of our services constitutes your acceptance of any changes made to this policy.</p>
+                                <p class="mt-3">By using our investment platform or website, you acknowledge that you have read, understood, and agreed to this Privacy & Policy. Your continued use of our services constitutes your acceptance of any changes made to this policy.</p>
                             </div>
                         </div>
                     </div>

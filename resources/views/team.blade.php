@@ -32,7 +32,7 @@
                         </div>
                         <div class="team__content pseudo_element_after transition text-center py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
                             <a href="/team-details"> <h5 class="team__title d-center pb-4 mb-4 pseudo_element_after">Wade Warren</h5></a>
-                            <p class="mb-3">When I first started trading But with time and experience.</p>
+                            <p class="mb-3">Passionate about helping clients build diversified, long-term portfolios.</p>
                             <div class="social-area alt">
                                 <ul class="d-flex align-items-center justify-content-center gap-2 gap-md-3">
                                     <li>
@@ -59,7 +59,7 @@
                         </div>
                         <div class="team__content pseudo_element_after transition text-center py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
                            <a href="/team-details"> <h5 class="team__title d-center pb-4 mb-4 pseudo_element_after">Alice Stone</h5></a>
-                            <p class="mb-3">When I first started trading But with time and experience.</p>
+                            <p class="mb-3">Passionate about helping clients build diversified, long-term portfolios.</p>
                             <div class="social-area alt">
                                 <ul class="d-flex align-items-center justify-content-center gap-2 gap-md-3">
                                     <li>
@@ -86,7 +86,7 @@
                         </div>
                         <div class="team__content pseudo_element_after transition text-center py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
                             <a href="/team-details"> <h5 class="team__title d-center pb-4 mb-4 pseudo_element_after">Jessica Jones</h5></a>
-                            <p class="mb-3">When I first started trading But with time and experience.</p>
+                            <p class="mb-3">Passionate about helping clients build diversified, long-term portfolios.</p>
                             <div class="social-area alt">
                                 <ul class="d-flex align-items-center justify-content-center gap-2 gap-md-3">
                                     <li>
@@ -113,7 +113,7 @@
                         </div>
                         <div class="team__content pseudo_element_after transition text-center py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
                             <a href="/team-details"> <h5 class="team__title d-center pb-4 mb-4 pseudo_element_after">Chris Moore</h5></a>
-                            <p class="mb-3">When I first started trading But with time and experience.</p>
+                            <p class="mb-3">Passionate about helping clients build diversified, long-term portfolios.</p>
                             <div class="social-area alt">
                                 <ul class="d-flex align-items-center justify-content-center gap-2 gap-md-3">
                                     <li>
@@ -140,7 +140,7 @@
                         </div>
                         <div class="team__content pseudo_element_after transition text-center py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
                            <a href="/team-details">  <h5 class="team__title d-center pb-4 mb-4 pseudo_element_after">Alice Stone</h5></a>
-                            <p class="mb-3">When I first started trading But with time and experience.</p>
+                            <p class="mb-3">Passionate about helping clients build diversified, long-term portfolios.</p>
                             <div class="social-area alt">
                                 <ul class="d-flex align-items-center justify-content-center gap-2 gap-md-3">
                                     <li>
@@ -168,7 +168,7 @@
                         </div>
                         <div class="team__content pseudo_element_after transition text-center py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
                             <a href="/team-details"> <h5 class="team__title d-center pb-4 mb-4 pseudo_element_after">Wade Warren</h5></a>
-                            <p class="mb-3">When I first started trading But with time and experience.</p>
+                            <p class="mb-3">Passionate about helping clients build diversified, long-term portfolios.</p>
                             <div class="social-area alt">
                                 <ul class="d-flex align-items-center justify-content-center gap-2 gap-md-3">
                                     <li>
@@ -195,7 +195,7 @@
                         </div>
                         <div class="team__content pseudo_element_after transition text-center py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
                             <a href="/team-details"> <h5 class="team__title d-center pb-4 mb-4 pseudo_element_after">Esther Howard</h5></a>
-                            <p class="mb-3">When I first started trading But with time and experience.</p>
+                            <p class="mb-3">Passionate about helping clients build diversified, long-term portfolios.</p>
                             <div class="social-area alt">
                                 <ul class="d-flex align-items-center justify-content-center gap-2 gap-md-3">
                                     <li>
@@ -222,7 +222,7 @@
                         </div>
                         <div class="team__content pseudo_element_after transition text-center py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
                             <a href="/team-details"> <h5 class="team__title d-center pb-4 mb-4 pseudo_element_after">Cody Fisher</h5></a>
-                            <p class="mb-3">When I first started trading But with time and experience.</p>
+                            <p class="mb-3">Passionate about helping clients build diversified, long-term portfolios.</p>
                             <div class="social-area alt">
                                 <ul class="d-flex align-items-center justify-content-center gap-2 gap-md-3">
                                     <li>

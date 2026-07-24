@@ -39,8 +39,8 @@
                                     <img src="/tradez/assets/images/market.png" alt="Image" class="max-auto max-lg-un cus-rounded-1">
                                 </div>
                                 <div class="market_news__content">
-                                    <a href="/market"> <h4>Chart Analysis Mastery: Reading the Language of the Markets</h4></a>
-                                    <p class="mt-3">The dollar index extended gains to above 107, its strongest level since November and tracking Treasury yields higher hawkish extended period. </p>
+                                    <a href="/market"> <h4>Fundamental Analysis: Reading the Story Behind the Stocks</h4></a>
+                                    <p class="mt-3">Understanding company earnings, growth potential, and valuation metrics is essential for making informed long-term investment decisions.</p>
                                     <span class="mt-3">15 hours ago</span>
                                 </div>
                             </div>
@@ -51,8 +51,8 @@
                                     <img src="/tradez/assets/images/market2.png" alt="Image" class="max-auto max-lg-un cus-rounded-1">
                                 </div>
                                 <div class="market_news__content">
-                                    <a href="/market"> <h4>Trading Pitfalls: Common Mistakes and How to Avoid Them</h4></a>
-                                    <p class="mt-3">The dollar index extended gains to above 107, its strongest level since November and tracking Treasury yields higher hawkish extended period. </p>
+                                    <a href="/market"> <h4>Investment Pitfalls: Common Mistakes and How to Avoid Them</h4></a>
+                                    <p class="mt-3">Avoid emotional decisions, chasing trends, and neglecting diversification to stay on track toward your financial goals.</p>
                                     <span class="mt-3">15 hours ago</span>
                                 </div>
                             </div>
@@ -63,8 +63,8 @@
                                     <img src="/tradez/assets/images/market3.png" alt="Image" class="max-auto max-lg-un cus-rounded-1">
                                 </div>
                                 <div class="market_news__content">
-                                    <a href="/market"> <h4>Crypto Craze: A Comprehensive Guide to Cryptocurrency Trading</h4></a>
-                                    <p class="mt-3">The dollar index extended gains to above 107, its strongest level since November and tracking Treasury yields higher hawkish extended period. </p>
+                                    <a href="/market"> <h4>ETF Essentials: A Comprehensive Guide to Exchange-Traded Funds</h4></a>
+                                    <p class="mt-3">ETFs offer a simple way to diversify across sectors, asset classes, and geographies with a single investment.</p>
                                     <span class="mt-3">15 hours ago</span>
                                 </div>
                             </div>
@@ -75,8 +75,8 @@
                                     <img src="/tradez/assets/images/market4.png" alt="Image" class="max-auto max-lg-un cus-rounded-1">
                                 </div>
                                 <div class="market_news__content">
-                                    <a href="/market"> <h4>Risk Management 101: Protecting Your Capital in Trading</h4></a>
-                                    <p class="mt-3">The dollar index extended gains to above 107, its strongest level since November and tracking Treasury yields higher hawkish extended period. </p>
+                                    <a href="/market"> <h4>Risk Management 101: Protecting Your Capital While Investing</h4></a>
+                                    <p class="mt-3">Diversification, position sizing, and a long-term perspective help protect your portfolio from market volatility.</p>
                                     <span class="mt-3">15 hours ago</span>
                                 </div>
                             </div>
@@ -87,8 +87,8 @@
                                     <img src="/tradez/assets/images/market5.png" alt="Image" class="max-auto max-lg-un cus-rounded-1">
                                 </div>
                                 <div class="market_news__content">
-                                    <a href="/market"> <h4>Building Your Trading Plan: A Roadmap to Profitability</h4></a>
-                                    <p class="mt-3">The dollar index extended gains to above 107, its strongest level since November and tracking Treasury yields higher hawkish extended period. </p>
+                                    <a href="/market"> <h4>Building Your Investment Plan: A Roadmap to Long-Term Growth</h4></a>
+                                    <p class="mt-3">A clear investment plan aligned with your goals, time horizon, and risk tolerance is the foundation of financial success.</p>
                                     <span class="mt-3">15 hours ago</span>
                                 </div>
                             </div>
@@ -99,8 +99,8 @@
                                     <img src="/tradez/assets/images/market6.png" alt="Image" class="max-auto max-lg-un cus-rounded-1">
                                 </div>
                                 <div class="market_news__content">
-                                    <a href="/market"> <h4>The Day Trader's Lifestyle: Freedom and Flexibility</h4></a>
-                                    <p class="mt-3">The dollar index extended gains to above 107, its strongest level since November and tracking Treasury yields higher hawkish extended period. </p>
+                                    <a href="/market"> <h4>The Long-Term Investor's Mindset: Patience and Discipline</h4></a>
+                                    <p class="mt-3">Successful investing is not about timing the market. It is about time in the market, consistency, and staying the course.</p>
                                     <span class="mt-3">15 hours ago</span>
                                 </div>
                             </div>
@@ -114,22 +114,11 @@
                     <div class="sidebar cus-scrollbar sidebar-xl-section d-flex flex-column gap-5 gap-lg-6">
                         <div class="nb3-bg cus-rounded-1 p-4 p-lg-6">
                             <h5 class="pb-5 mb-5 border-bottom border-color four">Market Summary</h5>
-                            <!-- TradingView Widget BEGIN -->
+                            <!-- Market Widget BEGIN -->
                             <div class="tradingview-widget-container">
-                                <!-- <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
-                                  {
-                                    "symbols":[{"description":"EUR/USD","proName":"FX:EURUSD"},{"description":"GBP/USD","proName":"FX:GBPUSD"},{"description":"USD/JPY","proName":"FX:USDJPY"},{"description":"USD/CHF","proName":"FX:USDCHF"},{"description":"USD/CAD","proName":"FX:USDCAD"},{"description":"AUD/USD","proName":"FX:AUDUSD"},{"description":" NZD/USD","proName":"FX:NZDUSD"},{"description":"XAU/USD","proName":"OANDA:XAUUSD"}],
-                                    "showSymbolLogo": true,
-                                    "colorTheme": "dark",
-                                    "width": "200px",
-                                    "height": "640",
-                                    "locale": "in"
-                                }
-                                  </script> -->
-                                  <iframe scrolling="no" allowtransparency="true" frameborder="0" src="https://www.tradingview-widget.com/embed-widget/market-overview/?locale=en#%7B%22colorTheme%22%3A%22dark%22%2C%22dateRange%22%3A%221D%22%2C%22showChart%22%3Afalse%2C%22width%22%3A%22100%25%22%2C%22height%22%3A361%2C%22largeChartUrl%22%3A%22%22%2C%22isTransparent%22%3Atrue%2C%22showSymbolLogo%22%3Atrue%2C%22showFloatingTooltip%22%3Afalse%2C%22plotLineColorGrowing%22%3A%22rgba(41%2C%2098%2C%20255%2C%201)%22%2C%22plotLineColorFalling%22%3A%22rgba(41%2C%2098%2C%20255%2C%201)%22%2C%22gridLineColor%22%3A%22rgba(240%2C%20243%2C%20250%2C%200)%22%2C%22scaleFontColor%22%3A%22rgba(120%2C%20123%2C%20134%2C%201)%22%2C%22belowLineFillColorGrowing%22%3A%22rgba(41%2C%2098%2C%20255%2C%200.12)%22%2C%22belowLineFillColorFalling%22%3A%22rgba(41%2C%2098%2C%20255%2C%200.12)%22%2C%22belowLineFillColorGrowingBottom%22%3A%22rgba(41%2C%2098%2C%20255%2C%200)%22%2C%22belowLineFillColorFallingBottom%22%3A%22rgba(41%2C%2098%2C%20255%2C%200)%22%2C%22symbolActiveColor%22%3A%22rgba(41%2C%2098%2C%20255%2C%200.10)%22%2C%22tabs%22%3A%5B%7B%22title%22%3A%22Instruments%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22FX%3AEURUSD%22%7D%2C%7B%22s%22%3A%22FX%3AGBPUSD%22%7D%2C%7B%22s%22%3A%22FX%3AUSDJPY%22%7D%2C%7B%22s%22%3A%22FX%3AUSDCHF%22%7D%2C%7B%22s%22%3A%22FX%3AAUDUSD%22%7D%2C%7B%22s%22%3A%22FX%3AUSDCAD%22%7D%5D%2C%22originalTitle%22%3A%22Instruments%22%7D%5D%2C%22utm_source%22%3A%22www.indonez.com%22%2C%22utm_medium%22%3A%22widget%22%2C%22utm_campaign%22%3A%22market-overview%22%2C%22page-uri%22%3A%22www.indonez.com%2Fhtml-demo%2Fequity%2F%22%7D" title="market overview TradingView widget" lang="en" class="cus_market_tradingview"></iframe>
-                                  
+                                <iframe scrolling="no" allowtransparency="true" frameborder="0" src="https://www.tradingview-widget.com/embed-widget/market-overview/?locale=en#%7B%22colorTheme%22%3A%22dark%22%2C%22dateRange%22%3A%221D%22%2C%22showChart%22%3Afalse%2C%22width%22%3A%22100%25%22%2C%22height%22%3A361%2C%22largeChartUrl%22%3A%22%22%2C%22isTransparent%22%3Atrue%2C%22showSymbolLogo%22%3Atrue%2C%22showFloatingTooltip%22%3Afalse%2C%22plotLineColorGrowing%22%3A%22rgba%2841%2C%2098%2C%20255%2C%201%29%22%2C%22plotLineColorFalling%22%3A%22rgba%2841%2C%2098%2C%20255%2C%201%29%22%2C%22gridLineColor%22%3A%22rgba%28240%2C%20243%2C%20250%2C%200%29%22%2C%22scaleFontColor%22%3A%22rgba%28120%2C%20123%2C%20134%2C%201%29%22%2C%22belowLineFillColorGrowing%22%3A%22rgba%2841%2C%2098%2C%20255%2C%200.12%29%22%2C%22belowLineFillColorFalling%22%3A%22rgba%2841%2C%2098%2C%20255%2C%200.12%29%22%2C%22belowLineFillColorGrowingBottom%22%3A%22rgba%2841%2C%2098%2C%20255%2C%200%29%22%2C%22belowLineFillColorFallingBottom%22%3A%22rgba%2841%2C%2098%2C%20255%2C%200%29%22%2C%22symbolActiveColor%22%3A%22rgba%2841%2C%2098%2C%20255%2C%200.10%29%22%2C%22tabs%22%3A%5B%7B%22title%22%3A%22Stocks%20%26%20ETFs%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NASDAQ%3AAAPL%22%7D%2C%7B%22s%22%3A%22NASDAQ%3AMSFT%22%7D%2C%7B%22s%22%3A%22NASDAQ%3AGOOGL%22%7D%2C%7B%22s%22%3A%22NASDAQ%3AAMZN%22%7D%2C%7B%22s%22%3A%22NASDAQ%3ATSLA%22%7D%2C%7B%22s%22%3A%22NYSE%3ASPY%22%7D%2C%7B%22s%22%3A%22NASDAQ%3AQQQ%22%7D%2C%7B%22s%22%3A%22AMEX%3AVOO%22%7D%5D%2C%22originalTitle%22%3A%22Stocks%20%26%20ETFs%22%7D%5D%2C%22utm_source%22%3A%22yieldatlastrend.com%22%2C%22utm_medium%22%3A%22widget%22%2C%22utm_campaign%22%3A%22market-overview%22%2C%22page-uri%22%3A%22yieldatlastrend.com%2Fmarket%22%7D" title="market overview TradingView widget" lang="en" class="cus_market_tradingview"></iframe>
                             </div>
-                            <!-- TradingView Widget END -->
+                            <!-- Market Widget END -->
                         </div>
                         <div class="nb3-bg cus-rounded-1 p-4 p-lg-6">
                             <h5 class="pb-5 mb-5 border-bottom border-color four">Market News</h5>
@@ -139,7 +128,7 @@
                                         <img src="/tradez/assets/images/market_news.png" class="cus-rounded-1" alt="image">
                                     </div>
                                     <div class="recent-posts__title">
-                                        <a href="/market"><h5>The Crypto Revolution</h5></a>
+                                        <a href="/market"><h5>The Index Fund Revolution</h5></a>
                                         <p class="author__submit-time mt-3">October 07,2023</p>
                                     </div>
                                 </div>
@@ -148,7 +137,7 @@
                                         <img src="/tradez/assets/images/market_news2.png" class="cus-rounded-1" alt="image">
                                     </div>
                                     <div class="recent-posts__title">
-                                        <a href="/market"><h5>Building Your Trading Plan</h5></a>
+                                        <a href="/market"><h5>Building Your Investment Plan</h5></a>
                                         <p class="author__submit-time mt-3">September 20,2023</p>
                                     </div>
                                 </div>
@@ -157,7 +146,7 @@
                                         <img src="/tradez/assets/images/market_news3.png" class="cus-rounded-1" alt="image">
                                     </div>
                                     <div class="recent-posts__title">
-                                        <a href="/market"><h5>The Psychology of Trading</h5></a>
+                                        <a href="/market"><h5>The Psychology of Investing</h5></a>
                                         <p class="author__submit-time mt-3">August 28,2023</p>
                                     </div>
                                 </div>
@@ -166,7 +155,7 @@
                                         <img src="/tradez/assets/images/market_news4.png" class="cus-rounded-1" alt="image">
                                     </div>
                                     <div class="recent-posts__title">
-                                        <a href="/market"><h5>The Crypto Revolution</h5></a>
+                                        <a href="/market"><h5>The Index Fund Revolution</h5></a>
                                         <p class="author__submit-time mt-3">October 07,2023</p>
                                     </div>
                                 </div>
@@ -175,7 +164,7 @@
                                         <img src="/tradez/assets/images/market_news5.png" class="cus-rounded-1" alt="image">
                                     </div>
                                     <div class="recent-posts__title">
-                                        <a href="/market"><h5>Building Your Trading Plan</h5></a>
+                                        <a href="/market"><h5>Building Your Investment Plan</h5></a>
                                         <p class="author__submit-time mt-3">September 20,2023</p>
                                     </div>
                                 </div>
@@ -184,7 +173,7 @@
                                         <img src="/tradez/assets/images/market_news6.png" class="cus-rounded-1" alt="image">
                                     </div>
                                     <div class="recent-posts__title">
-                                        <a href="/market"><h5>The Psychology of Trading</h5></a>
+                                        <a href="/market"><h5>The Psychology of Investing</h5></a>
                                         <p class="author__submit-time mt-3">August 20,2023</p>
                                     </div>
                                 </div>
@@ -193,7 +182,7 @@
                                         <img src="/tradez/assets/images/market_news7.png" class="cus-rounded-1" alt="image">
                                     </div>
                                     <div class="recent-posts__title">
-                                        <a href="/market"><h5>Building Your Trading Plan</h5></a>
+                                        <a href="/market"><h5>Building Your Investment Plan</h5></a>
                                         <p class="author__submit-time mt-3">August 25,2023</p>
                                     </div>
                                 </div>

@@ -28,7 +28,7 @@
                 <div class="col-lg-7 col-xxl-6">
                     <div class="heading__content mb-10 mb-lg-15 text-center">
                         <h3 class="mb-5 mb-lg-6">Company legal docs</h3>
-                        <p class="fs-six-up mx-ch mx-auto">We're constantly improving our trading platform, trying to make it the best on the market.</p>
+                        <p class="fs-six-up mx-ch mx-auto">We're constantly improving our investment platform to make it the best place to invest in stocks, ETFs, and mutual funds.</p>
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
                             <i class="ti ti-file fs-three p1-color"></i>
                         </span>
                        <h4 class="mt-5 mb-5">Terms of Service</h4>
-                       <p>Trading is not without its challenges, as markets can be highly volatile and unpredictable. It requires discipline</p>
+                       <p>Investing requires discipline and a long-term perspective. Our terms outline how we help you access stocks, ETFs, and mutual funds.</p>
                        <a href="/terms-conditions" class="cmn-btn link third-link fs-five  gap-2 gap-lg-3 align-items-center mt-5">Learn More<i class="ti ti-arrow-narrow-right"></i></a>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                             <i class="ti ti-world fs-three p1-color"></i>
                         </span>
                        <h4 class="mt-5 mb-5">Policies</h4>
-                       <p>Trading is not without its challenges, as markets can be highly volatile and unpredictable. It requires discipline</p>
+                       <p>We are committed to protecting your data and explaining how we handle the information needed to operate your investment account.</p>
                        <a href="/privacy-policy" class="cmn-btn link third-link fs-five  gap-2 gap-lg-3 align-items-center mt-5">Learn More<i class="ti ti-arrow-narrow-right"></i></a>
                     </div>
                 </div>
@@ -59,8 +59,8 @@
                             <i class="ti ti-shield-lock-filled fs-three p1-color"></i>
                         </span>
                        <h4 class="mt-5 mb-5">Security</h4>
-                       <p>Trading is not without its challenges, as markets can be highly volatile and unpredictable. It requires discipline</p>
-                        <a href="/terms-conditions" class="cmn-btn link third-link fs-five  gap-2 gap-lg-3 align-items-center mt-5">Learn More<i class="ti ti-arrow-narrow-right"></i></a>
+                       <p>Your assets and personal information are safeguarded with industry-standard security practices and encryption.</p>
+                         <a href="/terms-conditions" class="cmn-btn link third-link fs-five  gap-2 gap-lg-3 align-items-center mt-5">Learn More<i class="ti ti-arrow-narrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -92,11 +92,11 @@
                         <div class="accordion-section d-grid gap-6">
                             <div class="accordion-single  cus-rounded-1 nb3-bg box-shadow py-3 py-md-4 px-4 px-md-5">
                                 <h5 class="header-area">
-                                    <button class="accordion-btn transition fw-semibold text-start d-flex position-relative w-100" type="button"> What is trading?</button>
+                                    <button class="accordion-btn transition fw-semibold text-start d-flex position-relative w-100" type="button"> What is investing?</button>
                                 </h5>
                                 <div class="content-area">
                                     <div class="content-body pt-5">
-                                        <p>Trading involves buying and selling financial instruments like stocks  advantage of price fluctuations in these assets.</p>
+                                        <p>Investing means allocating money into assets such as stocks, ETFs, and mutual funds with the goal of building wealth over time.</p>
                                     </div>
                                 </div>
                             </div>
@@ -104,12 +104,12 @@
                                 <h5 class="header-area">
                                     <button class="accordion-btn transition fw-semibold text-start d-flex position-relative w-100"
                                         type="button">
-                                        How can I get started with trading?
+                                        How can I get started with investing?
                                     </button>
                                 </h5>
                                 <div class="content-area">
                                     <div class="content-body pt-5">
-                                        <p>Trading involves buying and selling financial instruments like stocks  advantage of price fluctuations in these assets.</p>
+                                        <p>Open an account, complete verification, fund your account, and choose from our selection of stocks, ETFs, and mutual funds.</p>
                                     </div>
                                 </div>
                             </div>
@@ -122,19 +122,19 @@
                                 </h5>
                                 <div class="content-area">
                                     <div class="content-body pt-5">
-                                        <p>Trading involves buying and selling financial instruments like stocks  advantage of price fluctuations in these assets.</p>
+                                        <p>Visit our Education and Blog sections for market insights, investment guides, and portfolio tips.</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="accordion-single cus-rounded-1 nb3-bg box-shadow py-3 py-md-4 px-4 px-md-5">
                                 <h5 class="header-area">
                                     <button class="accordion-btn transition fw-semibold text-start d-flex position-relative w-100" type="button">
-                                        What are the different types of trading?
+                                        What are the different types of investments?
                                     </button>
                                 </h5>
                                 <div class="content-area">
                                     <div class="content-body pt-5">
-                                        <p>Trading involves buying and selling financial instruments like stocks  advantage of price fluctuations in these assets.</p>
+                                        <p>Our platform focuses on three core asset classes: individual stocks, exchange-traded funds (ETFs), and mutual funds.</p>
                                     </div>
                                 </div>
                             </div>
@@ -146,11 +146,11 @@
                         <div class="accordion-section d-grid gap-6">
                             <div class="accordion-single  cus-rounded-1 nb3-bg box-shadow py-3 py-md-4 px-4 px-md-5">
                                 <h5 class="header-area">
-                                    <button class="accordion-btn transition fw-semibold text-start d-flex position-relative w-100" type="button"> How can I get started in Forex trading?</button>
+                                    <button class="accordion-btn transition fw-semibold text-start d-flex position-relative w-100" type="button"> How can I get started in stock investing?</button>
                                 </h5>
                                 <div class="content-area">
                                     <div class="content-body pt-5">
-                                        <p>Trading involves buying and selling financial instruments like stocks  advantage of price fluctuations in these assets.</p>
+                                        <p>Start by researching companies, diversify across sectors, and invest amounts aligned with your risk tolerance and goals.</p>
                                     </div>
                                 </div>
                             </div>
@@ -158,12 +158,12 @@
                                 <h5 class="header-area">
                                     <button class="accordion-btn transition fw-semibold text-start d-flex position-relative w-100"
                                         type="button">
-                                        What is fundamental analysis in Forex trading?
+                                        What is fundamental analysis in stock investing?
                                     </button>
                                 </h5>
                                 <div class="content-area">
                                     <div class="content-body pt-5">
-                                        <p>Trading involves buying and selling financial instruments like stocks  advantage of price fluctuations in these assets.</p>
+                                        <p>Fundamental analysis evaluates a company's financial health, earnings, and growth potential to guide long-term investment decisions.</p>
                                     </div>
                                 </div>
                             </div>
@@ -171,24 +171,24 @@
                                 <h5 class="header-area">
                                     <button class="accordion-btn transition fw-semibold text-start d-flex position-relative w-100"
                                         type="button">
-                                        What are the risks involved in Forex trading?
+                                        What are the risks involved in investing?
                                     </button>
                                 </h5>
                                 <div class="content-area">
                                     <div class="content-body pt-5">
-                                        <p>Trading involves buying and selling financial instruments like stocks  advantage of price fluctuations in these assets.</p>
+                                        <p>All investments carry risk, including market volatility and potential loss of capital. Diversification and a long-term outlook can help manage risk.</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="accordion-single cus-rounded-1 nb3-bg box-shadow py-3 py-md-4 px-4 px-md-5">
                                 <h5 class="header-area">
                                     <button class="accordion-btn transition fw-semibold text-start d-flex position-relative w-100" type="button">
-                                        How can I learn more about Forex trading?
+                                        How can I learn more about investing?
                                     </button>
                                 </h5>
                                 <div class="content-area">
                                     <div class="content-body pt-5">
-                                        <p>Trading involves buying and selling financial instruments like stocks  advantage of price fluctuations in these assets.</p>
+                                        <p>Explore our Education section for articles, tutorials, and guides on stocks, ETFs, mutual funds, and portfolio building.</p>
                                     </div>
                                 </div>
                             </div>

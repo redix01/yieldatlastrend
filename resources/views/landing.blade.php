@@ -1,4 +1,4 @@
-@extends('layouts.tradez', ['pageTitle' => ($brandName ?? config('app.name')) . ' - Trade Forex & Stocks'])
+@extends('layouts.tradez', ['pageTitle' => ($brandName ?? config('app.name')) . ' - Invest in Stocks, ETFs & Mutual Funds'])
 
 @section('active-home', 'active')
 
@@ -15,16 +15,16 @@
                         <div class="pt-xxl-10 pb-xxl-10">
                             <div class="circle-text first d-center cus-z1 position-absolute end-0 top-0 d-none d-xxl-flex  me-lg-10 mt-lg-10">
                                 <div class="text d-center">
-                                    <p class="fs-six">Trading Unlocking Diversified</p>
+                                    <p class="fs-six">Investing Unlocking Diversified Growth</p>
                                 </div>
                                 <img src="/tradez/assets/images/circle_star.png" alt="star" class="push_animat">
                             </div>
-                            <span class="heading p1-max-xxl nb4-xxl-color fs-five mb-3">Trading platforms </span>
-                            <h1 class="display-two nb4-xxl-color mb-5 mb-lg-6">Trade Abundance</h1>
-                            <p class="fs-six-up fw_500 nb4-xxl-color">Covesting allows you to automatically copy top performing traders and achieve the returns</p>
+                            <span class="heading p1-max-xxl nb4-xxl-color fs-five mb-3">Investment platform </span>
+                            <h1 class="display-two nb4-xxl-color mb-5 mb-lg-6">Invest Abundance</h1>
+                            <p class="fs-six-up fw_500 nb4-xxl-color">Build a diversified portfolio with stocks, ETFs, and mutual funds designed for long-term growth.</p>
                             <div class="d-inline-flex flex-wrap gap-4 gap-lg-10 align-items-center mt-8 mt-lg-10">
-                                <a href="/signup" class="cmn-btn alt-xxl-bg fs-five nb4-xxl-bg gap-2 gap-lg-3 align-items-center py-2 px-5 py-lg-3 px-lg-6">Start Trading <i class="ti ti-trending-up"></i></a>
-                                <a href="/login" class="cmn-btn link link-xxl-color fs-five  gap-2 gap-lg-3 align-items-center "><i class="ti ti-arrow-narrow-right fs-four"></i> Try demo account</a>
+                                <a href="/signup" class="cmn-btn alt-xxl-bg fs-five nb4-xxl-bg gap-2 gap-lg-3 align-items-center py-2 px-5 py-lg-3 px-lg-6">Start Investing <i class="ti ti-trending-up"></i></a>
+                                <a href="/login" class="cmn-btn link link-xxl-color fs-five  gap-2 gap-lg-3 align-items-center "><i class="ti ti-arrow-narrow-right fs-four"></i> Open an account</a>
                             </div>
                         </div>
                     </div>
@@ -41,15 +41,15 @@
                     </li>
                     <li class="d-flex gap-3 align-items-center">
                         <span class="d-center s1-bg p-3 p-lg-4 rounded-circle"><i class="ti ti-trending-up fs-three nb4-color"></i></span>
-                        <h4 class="nw1-color">Trading Guides</h4>
+                        <h4 class="nw1-color">Investment Guides</h4>
                     </li>
                     <li class="d-flex gap-3 align-items-center">
                         <span class="d-center s1-bg p-3 p-lg-4 rounded-circle"><i class="ti ti-broadcast fs-three nb4-color"></i></span>
-                        <h4 class="nw1-color">Fast Execution</h4>
+                        <h4 class="nw1-color">Smart Execution</h4>
                     </li>
                     <li class="d-flex gap-3 align-items-center">
                         <span class="d-center s1-bg p-3 p-lg-4 rounded-circle"><i class="ti ti-percentage fs-three nb4-color"></i></span>
-                        <h4 class="nw1-color">0% Commission</h4>
+                        <h4 class="nw1-color">Low-Cost Investing</h4>
                     </li>
                 </ul>
             </div>
@@ -57,7 +57,7 @@
     </section>
     <!-- hero section end -->
 
-    <!-- Why Trade start-->
+    <!-- Why Invest start-->
     <section class="why-trade s1-bg alt-color position-relative z-0">
         <div class="animation position-absolute top-0 left-0 w-100 h-100 z-n1">
             <img src="/tradez/assets/images/sun.png" alt="vector" class="position-absolute push_animat">
@@ -74,9 +74,9 @@
                     <div class="row pt-120 pb-120">
                         <div class="col-xxl-6 offset-xxl-2">
                             <div class="why-trade__part">
-                                <span class="heading fs-five">Why Trade With</span>
-                                <h3 class="mb-3 mt-5">Trade Genius</h3>
-                                <p>Trading is the art and science of buying and selling financial instruments, such as stocks bonds currencies. </p>
+                                <span class="heading fs-five">Why Invest With</span>
+                                <h3 class="mb-3 mt-5">Invest Genius</h3>
+                                <p>Investing is the practice of building wealth by allocating capital into assets such as stocks, ETFs, and mutual funds for long-term growth.</p>
                                 <a href="/about" class="cmn-btn link secondary-link fs-six-up  gap-2 gap-lg-3 align-items-center mt-5"> Learn more <i class="ti ti-arrow-narrow-right fs-four"></i></a>
                             </div>
                         </div>
@@ -86,8 +86,8 @@
                                     <img src="/tradez/assets/images/trade_vector.png" alt="Image" class="max-xxl-un">
                                 </div>
                                 <div class="content">
-                                    <h3 class="mb-3">Trade Apex</h3>
-                                    <p>Trading is the art and science of buying and selling financial instruments, such as stocks, bonds, currencies and commodities, with the aim of making a profit. It's a dynamic and multifaceted profession attracting participants from around the world.</p>
+                                    <h3 class="mb-3">Invest Apex</h3>
+                                    <p>Successful investing combines disciplined planning, diversified allocation, and consistent contributions. From index funds to actively managed mutual funds, our platform gives you access to the building blocks of financial growth.</p>
                                     <a href="/about" class="cmn-btn link secondary-link fs-six-up  gap-2 gap-lg-3 align-items-center mt-5"> Learn more <i class="ti ti-arrow-narrow-right fs-four"></i></a>
                                 </div>
                             </div>
@@ -97,7 +97,7 @@
             </div>
         </div>
     </section>
-    <!-- Why Trade end -->
+    <!-- Why Invest end -->
 
     <!--provide-world start-->
     <section class="provide-world bg nb4-bg pt-120 pb-120  position-relative z-0">
@@ -109,8 +109,8 @@
                 <div class="col-lg-8 col-xxl-7">
                     <div class="heading__content mb-10 mb-lg-15 text-center">
                         <span class="heading p1-color fs-five mb-5">We Provide World's</span>
-                        <h3 class="mb-5 mb-lg-6">Join a club of more than <span class="s1-color">480,000</span> traders</h3>
-                        <p class="fs-six-up mx-ch mx-auto">Trading is the art and science of buying and selling financial instruments, such as stocks bonds currencies commodities</p>
+                        <h3 class="mb-5 mb-lg-6">Join a community of more than <span class="s1-color">480,000</span> investors</h3>
+                        <p class="fs-six-up mx-ch mx-auto">Investing is the practice of building wealth by allocating capital into assets such as stocks, ETFs, and mutual funds.</p>
                     </div>
                 </div>
             </div>
@@ -121,7 +121,7 @@
                             <i class="ti ti-award-filled fs-three p1-color"></i>
                         </span>
                        <h4 class="mt-5 mb-5">Best Reputation</h4>
-                       <p>transformed the trading landscape. Online trading platforms and mobile apps have made it easier than ever for individuals</p>
+                       <p>Our investment platform has transformed how individuals access financial markets. Online tools and mobile apps make it easier than ever to build a portfolio.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-xxl-4">
@@ -130,7 +130,7 @@
                             <i class="ti ti-users fs-three p1-color"></i>
                         </span>
                        <h4 class="mt-5 mb-5">480,000+ Clients</h4>
-                       <p>One of the fundamental principles of trading is risk management. Successful traders carefully manage their capital,</p>
+                       <p>Risk management is fundamental to investing. Successful investors carefully manage their capital, diversify holdings, and stay focused on long-term goals.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-xxl-4">
@@ -139,7 +139,7 @@
                             <i class="ti ti-shield-check-filled fs-three p1-color"></i>
                         </span>
                        <h4 class="mt-5 mb-5">Trusted and Secure</h4>
-                       <p>Trading is not without its challenges, as markets can be highly volatile and unpredictable. It requires discipline</p>
+                       <p>Investing requires discipline and patience. Markets can be unpredictable, but a diversified strategy helps smooth the journey toward your financial goals.</p>
                     </div>
                 </div>
             </div>
@@ -147,7 +147,7 @@
     </section>
     <!-- provide-world end -->
 
-    <!--Trade On start-->
+    <!--Invest On start-->
     <section class="trade_on a2-bg pt-120 pb-120 position-relative z-0">
         <div class="animation position-absolute top-0 left-0 w-100 h-100 z-n1">
             <img src="/tradez/assets/images/coin.png" alt="vector" class="position-absolute d-none d-md-flex previewShapeRevX">
@@ -158,14 +158,14 @@
             <div class="row gy-10 gy-xxl-0 justify-content-center justify-content-xxl-between align-items-center">
                 <div class="col-lg-6 col-xxl-5">
                     <div class="trade_on__content">
-                        <span class="heading s1-color fs-five mb-5">Trade On Our</span>
-                        <h3 class="mb-4 mb-lg-5">World Class Platform</h3>
-                        <p class="fs-six mx-ch">Trading in financial markets involves a wide range of strategies that traders employ to make informed decisions. From trading to swing trading and long-term investing, each strategy has its own set of principles and risk factors.</p>
+                        <span class="heading s1-color fs-five mb-5">Invest On Our</span>
+                        <h3 class="mb-4 mb-lg-5">World Class Investment Platform</h3>
+                        <p class="fs-six mx-ch">Investing in financial markets involves a wide range of strategies, from passive index investing to actively managed mutual funds. Each approach has its own principles, risk profile, and growth potential.</p>
                         <ul class="d-flex gap-4 flex-column mt-6">
-                            <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Charts trading</li>
-                            <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Understanding Trading Strategies </li>
-                            <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Risk Management in Trading </li>
-                            <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Technical vs. Fundamental Analysis </li>
+                            <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Portfolio tracking</li>
+                            <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Understanding Investment Strategies</li>
+                            <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Risk Management in Investing</li>
+                            <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Technical vs. Fundamental Analysis</li>
                         </ul>
                         <a href="/signup" class="cmn-btn secondary-alt fs-six-up nb4-xxl-bg gap-2 gap-lg-3 align-items-center py-2 px-5 py-lg-3 px-lg-6 mt-7 mt-xxl-8">Sign up Now <i class="ti ti-arrow-right fs-four"></i></a>
                     </div>
@@ -178,7 +178,7 @@
             </div>
         </div>
     </section>
-    <!-- Trade On end -->
+    <!-- Invest On end -->
 
     <!--People Trust start-->
     <section class="people_trust pt-120 pb-120 position-relative z-0">
@@ -193,7 +193,7 @@
                     <div class="heading__content mb-8 mb-lg-10 text-center">
                         <span class="heading p1-color fs-five mb-5">People Trust Us</span>
                         <h3 class="mb-4 mb-lg-6">Millions of Users Worldwide</h3>
-                        <p class="fs-six-up mx-ch mx-auto">The rise of modern trading platforms has opened up new opportunities for traders worldwide. This beginner's guide to stock and forex trading,</p>
+                        <p class="fs-six-up mx-ch mx-auto">The rise of modern investment platforms has opened up new opportunities for investors worldwide. This beginner's guide to stocks, ETFs, and mutual funds helps you start your wealth-building journey.</p>
                     </div>
                 </div>
             </div>
@@ -225,12 +225,12 @@
                                     <div class="col-xl-6 col-xxl-5">
                                         <div class="trade_on__content">
                                             <h4 class="mb-4">What you will learn</h4>
-                                            <p class="mx-ch">Modern trading platforms have opened up new opportunities. In this beginner's guide to stock and forex trading we demystify the world of financial markets.</p>
+                                            <p class="mx-ch">Modern investment platforms have opened up new opportunities. In this beginner's guide to stocks, ETFs, and mutual funds, we demystify the world of financial markets.</p>
                                             <ul class="list_divided d-flex flex-wrap gap-5 mt-5 mt-xxl-6">
-                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Charts trading</li>
-                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Supreme Authority</li>
-                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Worldly Power</li>
-                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Global Dominance</li>
+                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Portfolio tracking</li>
+                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Asset Allocation</li>
+                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Diversified Growth</li>
+                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Long-Term Wealth</li>
                                             </ul>
                                             <div class="mt-8 mt-xxl-10">
                                                 <div class="counter-area d-flex gap-8 gap-xxl-10 ">
@@ -259,12 +259,12 @@
                                     <div class="col-xl-6 col-xxl-5">
                                         <div class="trade_on__content">
                                             <h4 class="mb-4">What you will learn</h4>
-                                            <p class="mx-ch">Modern trading platforms have opened up new opportunities. In this beginner's guide to stock and forex trading we demystify the world of financial markets.</p>
+                                            <p class="mx-ch">Modern investment platforms have opened up new opportunities. In this beginner's guide to stocks, ETFs, and mutual funds, we demystify the world of financial markets.</p>
                                             <ul class="list_divided d-flex flex-wrap gap-5 mt-5 mt-xxl-6">
-                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color"></i>Charts trading</li>
-                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color"></i>Supreme Authority</li>
-                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color"></i>Worldly Power</li>
-                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color"></i>Global Dominance</li>
+                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color"></i>Portfolio tracking</li>
+                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color"></i>Asset Allocation</li>
+                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color"></i>Diversified Growth</li>
+                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color"></i>Long-Term Wealth</li>
                                             </ul>
                                             <div class="mt-8 mt-xxl-10">
                                                 <div class="counter-area d-flex gap-8 gap-xxl-10 ">
@@ -309,12 +309,12 @@
                                     <div class="col-xl-6 col-xxl-5">
                                         <div class="trade_on__content">
                                             <h4 class="mb-4">What you will learn</h4>
-                                            <p class="mx-ch">Modern trading platforms have opened up new opportunities. In this beginner's guide to stock and forex trading we demystify the world of financial markets.</p>
+                                            <p class="mx-ch">Modern investment platforms have opened up new opportunities. In this beginner's guide to stocks, ETFs, and mutual funds, we demystify the world of financial markets.</p>
                                             <ul class="list_divided d-flex flex-wrap gap-5 mt-5 mt-xxl-6">
-                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Charts trading</li>
-                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Supreme Authority</li>
-                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Worldly Power</li>
-                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Global Dominance</li>
+                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Portfolio tracking</li>
+                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Asset Allocation</li>
+                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Diversified Growth</li>
+                                                <li class="d-flex align-items-center gap-3 fs-six-up"><i class="ti ti-circle-check s1-color fs-four"></i>Long-Term Wealth</li>
                                             </ul>
                                             <div class="mt-8 mt-xxl-10">
                                                 <div class="counter-area d-flex gap-8 gap-xxl-10 ">
@@ -374,7 +374,7 @@
                                     <div class="testimonial__content p-4 px-lg-7 px-xxl-8 py-lg-6 py-xxl-7">
                                         <div class="content__part">
                                             <img src="/tradez/assets/images/icon/quote_left.png" alt="icon">
-                                            <p class=" fs-six-up mt-5 mt-xxl-6">"Trading has always been a passion, but it wasn't management that began to see consistent profits. The journey was not without its ups and downs, but the lessons I learned along the way have been embraced riskinvaluable.</p>
+                                            <p class=" fs-six-up mt-5 mt-xxl-6">"Investing has always been a passion, but it wasn't until I refined my strategy and embraced risk management that I began to see consistent growth. The journey was not without its ups and downs, but the lessons I learned along the way have been invaluable.</p>
                                             <h5 class="heading p1-color mt-4">Brooklyn Simmons</h5>
                                             <span class="fs-seven fw_500 mt-2">Marketing Director</span>
                                         </div>
@@ -389,7 +389,7 @@
                                     <div class="testimonial__content p-4 p-lg-7 p-xxl-8">
                                         <div class="content__part">
                                             <img src="/tradez/assets/images/icon/quote_left.png" alt="icon">
-                                            <p class=" fs-six-up mt-5 mt-xxl-6">"Trading has always been a passion, but it wasn't management that began to see consistent profits. The journey was not without its ups and downs, but the lessons I learned along the way have been embraced riskinvaluable.</p>
+                                            <p class=" fs-six-up mt-5 mt-xxl-6">"Investing has always been a passion, but it wasn't until I refined my strategy and embraced risk management that I began to see consistent growth. The journey was not without its ups and downs, but the lessons I learned along the way have been invaluable.</p>
                                             <h5 class="heading p1-color mt-4">Chris Moore</h5>
                                             <span class="fs-seven fw_500 mt-2">President of Sales</span>
                                         </div>
@@ -404,7 +404,7 @@
                                     <div class="testimonial__content p-4 p-lg-7 p-xxl-8">
                                         <div class="content__part">
                                             <img src="/tradez/assets/images/icon/quote_left.png" alt="icon">
-                                            <p class=" fs-six-up mt-5 mt-xxl-6">"Trading has always been a passion, but it wasn't management that began to see consistent profits. The journey was not without its ups and downs, but the lessons I learned along the way have been embraced riskinvaluable.</p>
+                                            <p class=" fs-six-up mt-5 mt-xxl-6">"Investing has always been a passion, but it wasn't until I refined my strategy and embraced risk management that I began to see consistent growth. The journey was not without its ups and downs, but the lessons I learned along the way have been invaluable.</p>
                                             <h5 class="heading p1-color mt-4">Balogh Imre</h5>
                                             <span class="fs-seven fw_500 mt-2">Account Executive</span>
                                         </div>
@@ -452,9 +452,9 @@
                             <a href="#" class="border border-color second nw1-color fs-seven rounded-3 position-absolute top-0 end-0 py-1 px-3 mt-5 me-5">News</a>
                         </div>
                         <div class="blog_news__content py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
-                           <a href="/blog"><h5 class="mb-4 mb-lg-5">Trading Psychology: Mastering Your Mind for Profit</h5></a>
+                           <a href="/blog"><h5 class="mb-4 mb-lg-5">Investment Psychology: Mastering Your Mind for Growth</h5></a>
                            <div class="fs-seven fw_500 d-flex row-gap-0 flex-wrap gap-3 mb-4 mb-lg-5">August 17,2023 <span>|</span> Written by Jason Turner</div>
-                           <p>Trading in financial markets involves a wide employ to make informed decisions.</p>
+                           <p>Investing in financial markets involves a wide range of strategies to make informed decisions and build long-term wealth.</p>
                            <a href="/blog" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6  mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
                        </div>
                     </div>
@@ -466,9 +466,9 @@
                             <a href="#" class="border border-color second nw1-color fs-seven rounded-3 position-absolute top-0 end-0 py-1 px-3 mt-5 me-5">Features</a>
                         </div>
                         <div class="blog_news__content py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
-                           <a href="/blog"><h5 class="mb-4 mb-lg-5">Trading Pitfalls Common Mistakes and How to Avoid Them...</h5></a>
+                           <a href="/blog"><h5 class="mb-4 mb-lg-5">Investment Pitfalls: Common Mistakes and How to Avoid Them...</h5></a>
                            <div class="fs-seven fw_500 d-flex flex-wrap row-gap-0 gap-3 mb-4 mb-lg-5">August 17,2023 <span>|</span> Written by Jason Turner</div>
-                           <p>Trading in financial markets involves a wide employ to make informed decisions.</p>
+                           <p>Investing in financial markets involves a wide range of strategies to make informed decisions and build long-term wealth.</p>
                            <a href="/blog" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6  mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
                        </div>
                     </div>
@@ -480,9 +480,9 @@
                             <a href="#" class="border border-color second nw1-color fs-seven rounded-3 position-absolute top-0 end-0 py-1 px-3 mt-5 me-5">News</a>
                         </div>
                         <div class="blog_news__content py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
-                           <a href="/blog"><h5 class="mb-4 mb-lg-5">Trading Platforms: Tools for Success in Financial Markets</h5></a>
+                           <a href="/blog"><h5 class="mb-4 mb-lg-5">Investment Platforms: Tools for Success in Financial Markets</h5></a>
                            <div class="fs-seven fw_500 d-flex flex-wrap row-gap-0 gap-3 mb-4 mb-lg-5">August 17,2023 <span>|</span> Written by Jason Turner</div>
-                           <p>Trading in financial markets involves a wide employ to make informed decisions.</p>
+                           <p>Investing in financial markets involves a wide range of strategies to make informed decisions and build long-term wealth.</p>
                            <a href="/blog" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6  mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
                        </div>
                     </div>

@@ -42,7 +42,7 @@
                             <div class="company-story__part">
                                 <span class="heading p1-color fs-five">Our Company Story</span>
                                 <h3 class="mb-3 mt-5">What We Do</h3>
-                                <p>Trading is the art and science of buying and selling financial instruments, such as stocks bonds currencies.</p>
+                                <p>We empower people to build long-term wealth through disciplined investing in stocks, ETFs, and mutual funds.</p>
                             </div>  
                         </div>  
                         <div class="col-xxl-12 mt-8 mt-md-10 mt-xxl-13">
@@ -55,7 +55,7 @@
                                 </div>
                                 <div class="content">
                                     <h3 class="mb-3">Who We Are</h3>
-                                    <p>Trading in financial markets involves a wide range of strategies that traders employ to make informed decisions. From trading to swing trading and long-term investing, each strategy has its own set of principles and risk factors.</p>
+                                    <p>Investing in financial markets is about building long-term value. From passive index funds to actively managed mutual funds, our platform helps investors make informed decisions and stay focused on their goals.</p>
                                 </div>
                             </div>  
                         </div>
@@ -119,7 +119,7 @@
                             <i class="ti ti-currency-dollar-brunei  fs-three p1-color"></i>
                         </span>
                        <h4 class="mt-5 mb-5">Client-first approach</h4>
-                       <p>Transformed the trading landscape. Online trading platforms and mobile apps have made it easier than ever for individuals</p>
+                       <p>We put investors first. Our platform makes it easy to research, allocate, and manage a portfolio of stocks, ETFs, and mutual funds.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-xxl-4">
@@ -128,7 +128,7 @@
                             <i class="ti ti-brand-cakephp fs-three p1-color"></i>
                         </span>
                        <h4 class="mt-5 mb-5">Integrity and Compliance</h4>
-                       <p>One of the fundamental principles of trading is risk management. Successful traders carefully manage their capital,</p>
+                       <p>Risk management is fundamental to successful investing. We help our clients diversify their capital and stay aligned with their long-term objectives.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-xxl-4">
@@ -136,8 +136,8 @@
                         <span class="provide-card__icon d-center nb4-bg p-4 rounded-circle mx-auto">
                             <i class="ti ti-broadcast fs-three p1-color"></i>
                         </span>
-                       <h4 class="mt-5 mb-5">Fast Execution</h4>
-                       <p>Trading is not without its challenges, as markets can be highly volatile and unpredictable. It requires discipline</p>
+                       <h4 class="mt-5 mb-5">Reliable Execution</h4>
+                       <p>Investing requires discipline and patience. Markets can be unpredictable, but a diversified strategy helps smooth the path toward your financial goals.</p>
                     </div>
                 </div>
             </div>
@@ -155,7 +155,7 @@
                 <div class="heading__content text-center mb-10 mb-lg-15 ">
                     <span class="heading p1-color fs-five mb-5">Team</span>
                     <h3>Our Leaders</h3>
-                    <p class="mt-5 mt-xxl-6 mx-ch mx-auto">Trading has always been a passion, but it wasn't until I refined my strategy and embraced risk management.</p>
+                    <p class="mt-5 mt-xxl-6 mx-ch mx-auto">Investing has always been our passion. Our leadership team is dedicated to helping clients build long-term wealth with clarity and confidence.</p>
                 </div>
             </div>
             <div class="row gy-6">
@@ -166,7 +166,7 @@
                         </div>
                         <div class="team__content pseudo_element_after transition text-center py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
                             <a href="/team-details"><h5 class="team__title d-center pb-4 mb-4 pseudo_element_after">Wade Warren</h5></a>
-                            <p class="mb-3">When I first started trading But with time and experience.</p>
+                            <p class="mb-3">Passionate about helping clients build diversified, long-term portfolios.</p>
                             <div class="social-area alt">
                                 <ul class="d-flex align-items-center justify-content-center gap-2 gap-md-3">
                                     <li>
@@ -193,7 +193,7 @@
                         </div>
                         <div class="team__content pseudo_element_after transition text-center py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
                             <a href="/team-details"><h5 class="team__title d-center pb-4 mb-4 pseudo_element_after">Alice Stone</h5></a>
-                            <p class="mb-3">When I first started trading But with time and experience.</p>
+                            <p class="mb-3">Passionate about helping clients build diversified, long-term portfolios.</p>
                             <div class="social-area alt">
                                 <ul class="d-flex align-items-center justify-content-center gap-2 gap-md-3">
                                     <li>
@@ -220,7 +220,7 @@
                         </div>
                         <div class="team__content pseudo_element_after transition text-center py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
                             <a href="/team-details"><h5 class="team__title d-center pb-4 mb-4 pseudo_element_after">Jessica Jones</h5></a>
-                            <p class="mb-3">When I first started trading But with time and experience.</p>
+                            <p class="mb-3">Passionate about helping clients build diversified, long-term portfolios.</p>
                             <div class="social-area alt">
                                 <ul class="d-flex align-items-center justify-content-center gap-2 gap-md-3">
                                     <li>
@@ -247,7 +247,7 @@
                         </div>
                         <div class="team__content pseudo_element_after transition text-center py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
                             <a href="/team-details"><h5 class="team__title d-center pb-4 mb-4 pseudo_element_after">Chris Moore</h5></a>
-                            <p class="mb-3">When I first started trading But with time and experience.</p>
+                            <p class="mb-3">Passionate about helping clients build diversified, long-term portfolios.</p>
                             <div class="social-area alt">
                                 <ul class="d-flex align-items-center justify-content-center gap-2 gap-md-3">
                                     <li>
@@ -301,7 +301,7 @@
                                             <img src="/tradez/assets/images/author10.png" alt="icon" class="rounded-circle">
                                         </div>
                                         <div class="author_content">
-                                            <p class=" fs-six-up mt-5 mt-xxl-6">"Trading has always been a passion, but it wasn't the lessons I learned along the way have been embraced riskinvaluable.</p>
+                                            <p class=" fs-six-up mt-5 mt-xxl-6">"Investing has always been a passion, and the lessons I learned along the way have been invaluable.</p>
                                             <h5 class="heading p1-color mt-5">Brooklyn Simmons</h5>
                                             <span class="fs-eight fw_500 mt-2">Marketing Director</span>
                                         </div>
@@ -315,7 +315,7 @@
                                             <img src="/tradez/assets/images/author11.png" alt="icon" class="rounded-circle">
                                         </div>
                                         <div class="author_content">
-                                            <p class=" fs-six-up mt-5 mt-xxl-6">"Trading has always been a passion, but it wasn't the lessons I learned along the way have been embraced riskinvaluable.</p>
+                                            <p class=" fs-six-up mt-5 mt-xxl-6">"Investing has always been a passion, and the lessons I learned along the way have been invaluable.</p>
                                             <h5 class="heading p1-color mt-5">Cody Fisher</h5>
                                             <span class="fs-eight fw_500 mt-2">Account Executive</span>
                                         </div>
@@ -329,7 +329,7 @@
                                             <img src="/tradez/assets/images/author12.png" alt="icon" class="rounded-circle">
                                         </div>
                                         <div class="author_content">
-                                            <p class=" fs-six-up mt-5 mt-xxl-6">"Trading has always been a passion, but it wasn't the lessons I learned along the way have been embraced riskinvaluable.</p>
+                                            <p class=" fs-six-up mt-5 mt-xxl-6">"Investing has always been a passion, and the lessons I learned along the way have been invaluable.</p>
                                             <h5 class="heading p1-color mt-5">Wade Warren</h5>
                                             <span class="fs-eight fw_500 mt-2">Medical Assistant</span>
                                         </div>
@@ -343,7 +343,7 @@
                                             <img src="/tradez/assets/images/author13.png" alt="icon" class="rounded-circle">
                                         </div>
                                         <div class="author_content">
-                                            <p class=" fs-six-up mt-5 mt-xxl-6">"Trading has always been a passion, but it wasn't the lessons I learned along the way have been embraced riskinvaluable.</p>
+                                            <p class=" fs-six-up mt-5 mt-xxl-6">"Investing has always been a passion, and the lessons I learned along the way have been invaluable.</p>
                                             <h5 class="heading p1-color mt-5">Esther Howard</h5>
                                             <span class="fs-eight fw_500 mt-2">Marketing Director</span>
                                         </div>
@@ -357,7 +357,7 @@
                                             <img src="/tradez/assets/images/author14.png" alt="icon" class="rounded-circle">
                                         </div>
                                         <div class="author_content">
-                                            <p class=" fs-six-up mt-5 mt-xxl-6">"Trading has always been a passion, but it wasn't the lessons I learned along the way have been embraced riskinvaluable.</p>
+                                            <p class=" fs-six-up mt-5 mt-xxl-6">"Investing has always been a passion, and the lessons I learned along the way have been invaluable.</p>
                                             <h5 class="heading p1-color mt-5">Brooklyn Simmons</h5>
                                             <span class="fs-eight fw_500 mt-2">President of Sales</span>
                                         </div>

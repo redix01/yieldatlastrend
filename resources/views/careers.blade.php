@@ -27,14 +27,14 @@
             <div class="row justify-content-center text-center mb-10 mb-lg-15">
                 <div class="col-md-8 col-xl-5">
                     <h3>Apply Today</h3>
-                    <p class="mt-5">We're constantly improving our trading platform, trying to make it the best on the market.</p>
+                    <p class="mt-5">We're constantly improving our investment platform to make it the best place to invest in stocks, ETFs, and mutual funds.</p>
                 </div>
             </div>
             <div class="row gy-6">
                 <div class="col-lg-6 col-xxl-6">
                     <div class="apply-card nb3-bg cus-rounded-1 py-5 py-lg-10 px-4 px-lg-9">
                        <h3 class="mb-4">Software Developer</h3>
-                       <p>Trading doesn't have to be a solitary adventure. Join online trading communities, forums, and social media groups to connect with experienced traders, share insights, and learn from others.</p>
+                       <p>Join a collaborative team building tools that help people invest in stocks, ETFs, and mutual funds with confidence and clarity.</p>
                        <div class="d-flex flex-wrap align-items-center gap-5 gap-lg-6 row-gap-2 mt-4">
                         <span>Job Type:  <span class="p1-color">Remote</span> </span>
                         <span>Experience:   <span class="p1-color">2-3years</span> </span>
@@ -45,7 +45,7 @@
                 <div class="col-lg-6 col-xxl-6">
                     <div class="apply-card nb3-bg cus-rounded-1 py-5 py-lg-10 px-4 px-lg-9">
                        <h3 class="mb-4">Flutter Developer</h3>
-                       <p>Trading doesn't have to be a solitary adventure. Join online trading communities, forums, and social media groups to connect with experienced traders, share insights, and learn from others.</p>
+                       <p>Join a collaborative team building tools that help people invest in stocks, ETFs, and mutual funds with confidence and clarity.</p>
                        <div class="d-flex flex-wrap align-items-center gap-5 gap-lg-6 row-gap-2 mt-4">
                         <span>Job Type:  <span class="p1-color">Remote</span> </span>
                         <span>Experience:   <span class="p1-color">2-3years</span> </span>
@@ -55,8 +55,8 @@
                 </div>
                 <div class="col-lg-6 col-xxl-6">
                     <div class="apply-card nb3-bg cus-rounded-1 py-5 py-lg-10 px-4 px-lg-9">
-                       <h3 class="mb-4">Crypto marketer</h3>
-                       <p>Trading doesn't have to be a solitary adventure. Join online trading communities, forums, and social media groups to connect with experienced traders, share insights, and learn from others.</p>
+                       <h3 class="mb-4">Growth Marketer</h3>
+                       <p>Join a collaborative team building tools that help people invest in stocks, ETFs, and mutual funds with confidence and clarity.</p>
                        <div class="d-flex flex-wrap align-items-center gap-5 gap-lg-6 row-gap-2 mt-4">
                         <span>Job Type:  <span class="p1-color">Remote</span> </span>
                         <span>Experience:   <span class="p1-color">2-3years</span> </span>
@@ -67,7 +67,7 @@
                 <div class="col-lg-6 col-xxl-6">
                     <div class="apply-card nb3-bg cus-rounded-1 py-5 py-lg-10 px-4 px-lg-9">
                        <h3 class="mb-4">Data Analysist</h3>
-                       <p>Trading doesn't have to be a solitary adventure. Join online trading communities, forums, and social media groups to connect with experienced traders, share insights, and learn from others.</p>
+                       <p>Join a collaborative team building tools that help people invest in stocks, ETFs, and mutual funds with confidence and clarity.</p>
                        <div class="d-flex flex-wrap align-items-center gap-5 gap-lg-6 row-gap-2 mt-4">
                         <span>Job Type:  <span class="p1-color">Remote</span> </span>
                         <span>Experience:   <span class="p1-color">2-3years</span> </span>
@@ -98,7 +98,7 @@
                             <i class="ti ti-brand-apple-arcade fs-three p1-color"></i>
                         </span>
                        <h4 class="mt-5 mb-5">Apply</h4>
-                       <p>Trading is not without its challenges, as markets can be highly volatile and unpredictable. It requires discipline</p>
+                       <p>Investing requires discipline and a long-term perspective. We look for people who are passionate about helping others build financial futures.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-xxl-4">
@@ -107,7 +107,7 @@
                             <i class="ti ti-users fs-three p1-color"></i>
                         </span>
                        <h4 class="mt-5 mb-5">Interview</h4>
-                       <p>Trading is not without its challenges, as markets can be highly volatile and unpredictable. It requires discipline</p>
+                       <p>Investing requires discipline and a long-term perspective. We look for people who are passionate about helping others build financial futures.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-xxl-4">
@@ -116,7 +116,7 @@
                             <i class="ti ti-wash-dry-hang fs-three p1-color"></i>
                         </span>
                        <h4 class="mt-5 mb-5">Assessment</h4>
-                       <p>Trading is not without its challenges, as markets can be highly volatile and unpredictable. It requires discipline</p>
+                       <p>Investing requires discipline and a long-term perspective. We look for people who are passionate about helping others build financial futures.</p>
                     </div>
                 </div>
             </div>
@@ -141,7 +141,7 @@
                             <div class="accordion-single  cus-rounded-1 nb3-bg box-shadow py-3 py-md-4 px-4 px-md-5">
                                 <h5 class="header-area">
                                     <button class="accordion-btn transition text-start d-flex position-relative w-100" type="button"> HR Recruiter</button>
-                                    <span class="accordion_sub_cont fs-6 mt-1 w-100 fw-normal">Full-time | Cyprus | Tradez</span>
+                                    <span class="accordion_sub_cont fs-6 mt-1 w-100 fw-normal">Full-time | Cyprus | {{ config('app.name') }}</span>
                                 </h5>
                                 <div class="content-area">
                                     <div class="content-body pt-5">
@@ -166,7 +166,7 @@
                             <div class="accordion-single  cus-rounded-1 nb3-bg box-shadow py-3 py-md-4 px-4 px-md-5">
                                 <h5 class="header-area">
                                     <button class="accordion-btn transition text-start d-flex position-relative w-100" type="button"> Relationship Manager</button>
-                                    <span class="accordion_sub_cont fs-6 mt-1 w-100 fw-normal">Full-time | Cyprus | Tradez</span>
+                                    <span class="accordion_sub_cont fs-6 mt-1 w-100 fw-normal">Full-time | Cyprus | {{ config('app.name') }}</span>
                                 </h5>
                                 <div class="content-area">
                                     <div class="content-body pt-5">
@@ -197,7 +197,7 @@
                             <div class="accordion-single  cus-rounded-1 nb3-bg box-shadow py-3 py-md-4 px-4 px-md-5">
                                 <h5 class="header-area">
                                     <button class="accordion-btn transition text-start d-flex position-relative w-100" type="button"> Affiliate Manager</button>
-                                    <span class="accordion_sub_cont fs-6 mt-1 w-100 fw-normal">Full-time | Cyprus | Tradez</span>
+                                    <span class="accordion_sub_cont fs-6 mt-1 w-100 fw-normal">Full-time | Cyprus | {{ config('app.name') }}</span>
                                 </h5>
                                 <div class="content-area">
                                     <div class="content-body pt-5">
@@ -222,7 +222,7 @@
                             <div class="accordion-single  cus-rounded-1 nb3-bg box-shadow py-3 py-md-4 px-4 px-md-5">
                                 <h5 class="header-area">
                                     <button class="accordion-btn transition text-start d-flex position-relative w-100" type="button"> Senior Accountant</button>
-                                    <span class="accordion_sub_cont fs-6 mt-1 w-100 fw-normal">Full-time | Cyprus | Tradez</span>
+                                    <span class="accordion_sub_cont fs-6 mt-1 w-100 fw-normal">Full-time | Cyprus | {{ config('app.name') }}</span>
                                 </h5>
                                 <div class="content-area">
                                     <div class="content-body pt-5">

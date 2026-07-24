@@ -32,11 +32,10 @@
                             <a href="#" class="border border-color second nw1-color fs-seven rounded-3 position-absolute top-0 end-0 py-1 px-3 mt-5 me-5">News</a>
                         </div>
                         <div class="blog_news__content py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
-                           <a href="/blog-details"><h5 class="mb-4 mb-lg-5">Trading Psychology: Mastering Your Mind for Profit</h5></a>
+                           <a href="/blog-details"><h5 class="mb-4 mb-lg-5">Investment Psychology: Mastering Your Mind for Long-Term Growth</h5></a>
                            <div class="fs-seven fw_500 d-flex row-gap-0 flex-wrap gap-3 mb-4 mb-lg-5">August 17,2023 <span>|</span> Written by jason Turner</div>
-                           <p>Trading in financial markets involves a wide 
-                            employ to make informed decisions.</p>
-                            <a href="/blog-details" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6 mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
+                           <p>Investing in financial markets involves a wide range of strategies to make informed decisions and build long-term wealth.</p>
+                           <a href="/blog-details" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6 mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
                        </div>
                     </div>
                 </div>
@@ -47,11 +46,10 @@
                             <a href="#" class="border border-color second nw1-color fs-seven rounded-3 position-absolute top-0 end-0 py-1 px-3 mt-5 me-5">Features</a>
                         </div>
                         <div class="blog_news__content py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
-                           <a href="/blog-details"><h5 class="mb-4 mb-lg-5">Trading Pitfalls Common Mistakes and How to Avoid Them</h5></a>
+                           <a href="/blog-details"><h5 class="mb-4 mb-lg-5">Investment Pitfalls: Common Mistakes and How to Avoid Them</h5></a>
                            <div class="fs-seven fw_500 d-flex flex-wrap row-gap-0 gap-3 mb-4 mb-lg-5">August 17,2023 <span>|</span> Written by jason Turner</div>
-                           <p>Trading in financial markets involves a wide 
-                            employ to make informed decisions.</p>
-                            <a href="/blog-details" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6 mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
+                           <p>Investing in financial markets involves a wide range of strategies to make informed decisions and build long-term wealth.</p>
+                           <a href="/blog-details" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6 mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
                        </div>
                     </div>
                 </div>
@@ -62,11 +60,10 @@
                             <a href="#" class="border border-color second nw1-color fs-seven rounded-3 position-absolute top-0 end-0 py-1 px-3 mt-5 me-5">News</a>
                         </div>
                         <div class="blog_news__content py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
-                           <a href="/blog-details"><h5 class="mb-4 mb-lg-5">Trading Platforms: Tools for Success in Financial Markets</h5></a>
+                           <a href="/blog-details"><h5 class="mb-4 mb-lg-5">Investment Platforms: Tools for Success in Financial Markets</h5></a>
                            <div class="fs-seven fw_500 d-flex flex-wrap row-gap-0 gap-3 mb-4 mb-lg-5">August 17,2023 <span>|</span> Written by jason Turner</div>
-                           <p>Trading in financial markets involves a wide 
-                            employ to make informed decisions.</p>
-                            <a href="/blog-details" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6 mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
+                           <p>Investing in financial markets involves a wide range of strategies to make informed decisions and build long-term wealth.</p>
+                           <a href="/blog-details" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6 mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
                        </div>
                     </div>
                 </div>
@@ -77,11 +74,10 @@
                             <a href="#" class="border border-color second nw1-color fs-seven rounded-3 position-absolute top-0 end-0 py-1 px-3 mt-5 me-5">News</a>
                         </div>
                         <div class="blog_news__content py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
-                           <a href="/blog-details"><h5 class="mb-4 mb-lg-5">Options vs. Futures: Understanding Derivatives Trading</h5></a>
+                           <a href="/blog-details"><h5 class="mb-4 mb-lg-5">ETFs vs. Mutual Funds: Choosing the Right Investment Vehicle</h5></a>
                            <div class="fs-seven fw_500 d-flex row-gap-0 flex-wrap gap-3 mb-4 mb-lg-5">August 17,2023 <span>|</span> Written by jason Turner</div>
-                           <p>Trading in financial markets involves a wide 
-                            employ to make informed decisions.</p>
-                            <a href="/blog-details" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6 mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
+                           <p>Investing in financial markets involves a wide range of strategies to make informed decisions and build long-term wealth.</p>
+                           <a href="/blog-details" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6 mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
                        </div>
                     </div>
                 </div>
@@ -92,11 +88,10 @@
                             <a href="#" class="border border-color second nw1-color fs-seven rounded-3 position-absolute top-0 end-0 py-1 px-3 mt-5 me-5">Features</a>
                         </div>
                         <div class="blog_news__content py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
-                           <a href="/blog-details"><h5 class="mb-4 mb-lg-5">The Psychology of Trading: Emotions and Decision-Making</h5></a>
+                           <a href="/blog-details"><h5 class="mb-4 mb-lg-5">The Psychology of Investing: Emotions and Decision-Making</h5></a>
                            <div class="fs-seven fw_500 d-flex flex-wrap row-gap-0 gap-3 mb-4 mb-lg-5">August 17,2023 <span>|</span> Written by jason Turner</div>
-                           <p>Trading in financial markets involves a wide 
-                            employ to make informed decisions.</p>
-                            <a href="/blog-details" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6 mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
+                           <p>Investing in financial markets involves a wide range of strategies to make informed decisions and build long-term wealth.</p>
+                           <a href="/blog-details" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6 mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
                        </div>
                     </div>
                 </div>
@@ -107,11 +102,10 @@
                             <a href="#" class="border border-color second nw1-color fs-seven rounded-3 position-absolute top-0 end-0 py-1 px-3 mt-5 me-5">News</a>
                         </div>
                         <div class="blog_news__content py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
-                           <a href="/blog-details"><h5 class="mb-4 mb-lg-5">Swing Trading Secrets: Profiting from Market Swings</h5></a>
+                           <a href="/blog-details"><h5 class="mb-4 mb-lg-5">Building a Diversified Portfolio: Stocks, ETFs, and Mutual Funds</h5></a>
                            <div class="fs-seven fw_500 d-flex flex-wrap row-gap-0 gap-3 mb-4 mb-lg-5">August 17,2023 <span>|</span> Written by jason Turner</div>
-                           <p>Trading in financial markets involves a wide 
-                            employ to make informed decisions.</p>
-                            <a href="/blog-details" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6 mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
+                           <p>Investing in financial markets involves a wide range of strategies to make informed decisions and build long-term wealth.</p>
+                           <a href="/blog-details" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6 mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
                        </div>
                     </div>
                 </div>

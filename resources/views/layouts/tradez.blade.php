@@ -12,8 +12,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="Trading, Forex, Stocks">
-    <meta name="description" content="Trade forex and stocks on a world-class platform.">
+    <meta name="keywords" content="Investing, Stocks, ETFs, Mutual Funds">
+    <meta name="description" content="Invest in stocks, ETFs, and mutual funds on a world-class investment platform.">
     <title>{{ $pageTitle }}</title>
     <link rel="shortcut icon" href="/tradez/assets/images/fav.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.36.0/tabler-icons.min.css">
@@ -120,8 +120,8 @@
                 </div>
                 <div class="row gy-6 w-100 text-center text-sm-start align-items-center justify-content-sm-between">
                     <div class="col-sm-8">
-                        <h2>Start earning with only $20</h2>
-                        <p class="fs-six-up fw_500 mt-5">Try our super easy portal for free</p>
+                        <h2>Start investing with only $20</h2>
+                        <p class="fs-six-up fw_500 mt-5">Build your portfolio with stocks, ETFs, and mutual funds</p>
                     </div>
                     <div class="col-sm-4 text-sm-end">
                         <a href="/signup" class="cmn-btn secondary-alt ms-auto fs-five nb4-xxl-bg gap-2 align-items-center py-2 px-4 py-lg-3 px-lg-5">Register <i class="ti ti-arrow-right fs-four"></i></a>
