@@ -217,9 +217,7 @@
                                     <div class="col-xl-6 col-xxl-7 ">
                                         <div class="people_trust_thumb d-center p-2 p-lg-5 pseudo_element_after overflow-hidden">
                                             <img src="/tradez/assets/images/people_trust_video.png" class="w-100 max-xxl-un cus-rounded-2" alt="video">
-                                            <a href="https://www.youtube.com/watch?v=BHACKCNDMW8" class="popup-video box_10 btn-popup-animation position-absolute d-center rounded-circle">
-                                                <i class="fa-solid fa-play fs-four"></i>
-                                            </a>
+
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-xxl-5">
@@ -289,9 +287,7 @@
                                     <div class="col-xl-6 col-xxl-7 ">
                                         <div class="people_trust_thumb d-center p-2 p-lg-5 pseudo_element_after overflow-hidden">
                                             <img src="/tradez/assets/images/people_trust_video.png" class="w-100 max-xxl-un cus-rounded-2" alt="video">
-                                            <a href="https://www.youtube.com/watch?v=BHACKCNDMW8" class="popup-video box_10 btn-popup-animation position-absolute d-center rounded-circle">
-                                                <i class="fa-solid fa-play fs-four"></i>
-                                            </a>
+
                                         </div>
                                     </div>
                                 </div>
@@ -301,9 +297,7 @@
                                     <div class="col-xl-6 col-xxl-7 ">
                                         <div class="people_trust_thumb d-center p-2 p-lg-5 pseudo_element_after overflow-hidden">
                                             <img src="/tradez/assets/images/people_trust_video.png" class="w-100 max-xxl-un cus-rounded-2" alt="video">
-                                            <a href="https://www.youtube.com/watch?v=BHACKCNDMW8" class="popup-video box_10 btn-popup-animation position-absolute d-center rounded-circle">
-                                                <i class="fa-solid fa-play fs-four"></i>
-                                            </a>
+
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-xxl-5">
@@ -427,8 +421,8 @@
     </section>
     <!-- Testimonial end -->
 
-    <!--blog_news start-->
-    <section class="blog_news pt-120 pb-120 position-relative z-0">
+    <!--market widget start-->
+    <section class="market_widget pt-120 pb-120 position-relative z-0">
         <div class="animation position-absolute top-0 left-0 w-100 h-100 z-n1">
             <img src="/tradez/assets/images/star.png" alt="vector" class="position-absolute">
             <img src="/tradez/assets/images/vector2.png" alt="vector" class="position-absolute bottom-0 start-0">
@@ -436,59 +430,24 @@
         </div>
         <div class="container">
             <div class="row justify-content-center">
-                <div class="heading__content d-flex row-gap-7 gap-20 flex-wrap justify-content-between align-items-center mb-10 mb-lg-15 ">
-                    <div class="heading__part">
-                        <span class="heading s1-color fs-five mb-5">Blog</span>
-                        <h3>News & Analysis</h3>
-                    </div>
-                    <a href="/blog" class="cmn-btn link fs-six-up  gap-2 gap-lg-3 align-items-center"> See All <i class="ti ti-arrow-right fs-four"></i></a>
+                <div class="heading__content text-center mb-10 mb-lg-15">
+                    <span class="heading s1-color fs-five mb-5">Markets</span>
+                    <h3>Stocks, ETFs & Mutual Funds</h3>
+                    <p class="fs-six-up mx-ch mx-auto mt-5">Track popular stocks, ETFs, and mutual funds in real time.</p>
                 </div>
             </div>
-            <div class="row gy-6">
-                <div class="col-md-6 col-xxl-4">
-                    <div class="blog_news__card nb3-bg cus-rounded-1 overflow-hidden">
-                        <div class="blog_news__thumbs position-relative">
-                            <img src="/tradez/assets/images/blog_news.png" alt="Image" class="w-100">
-                            <a href="#" class="border border-color second nw1-color fs-seven rounded-3 position-absolute top-0 end-0 py-1 px-3 mt-5 me-5">News</a>
+            <div class="row">
+                <div class="col-12">
+                    <div class="nb3-bg cus-rounded-1 p-3 p-lg-5">
+                        <!-- Market Widget BEGIN -->
+                        <div class="tradingview-widget-container">
+                            <iframe scrolling="no" allowtransparency="true" frameborder="0" src="https://www.tradingview-widget.com/embed-widget/market-overview/?locale=en#%7B%22colorTheme%22%3A%22dark%22%2C%22dateRange%22%3A%221D%22%2C%22showChart%22%3Afalse%2C%22width%22%3A%22100%25%22%2C%22height%22%3A450%2C%22largeChartUrl%22%3A%22%22%2C%22isTransparent%22%3Atrue%2C%22showSymbolLogo%22%3Atrue%2C%22showFloatingTooltip%22%3Afalse%2C%22plotLineColorGrowing%22%3A%22rgba%2841%2C%2098%2C%20255%2C%201%29%22%2C%22plotLineColorFalling%22%3A%22rgba%2841%2C%2098%2C%20255%2C%201%29%22%2C%22gridLineColor%22%3A%22rgba%28240%2C%20243%2C%20250%2C%200%29%22%2C%22scaleFontColor%22%3A%22rgba%28120%2C%20123%2C%20134%2C%201%29%22%2C%22belowLineFillColorGrowing%22%3A%22rgba%2841%2C%2098%2C%20255%2C%200.12%29%22%2C%22belowLineFillColorFalling%22%3A%22rgba%2841%2C%2098%2C%20255%2C%200.12%29%22%2C%22belowLineFillColorGrowingBottom%22%3A%22rgba%2841%2C%2098%2C%20255%2C%200%29%22%2C%22belowLineFillColorFallingBottom%22%3A%22rgba%2841%2C%2098%2C%20255%2C%200%29%22%2C%22symbolActiveColor%22%3A%22rgba%2841%2C%2098%2C%20255%2C%200.10%29%22%2C%22tabs%22%3A%5B%7B%22title%22%3A%22Stocks%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NASDAQ%3AAAPL%22%7D%2C%7B%22s%22%3A%22NASDAQ%3AMSFT%22%7D%2C%7B%22s%22%3A%22NASDAQ%3AGOOGL%22%7D%2C%7B%22s%22%3A%22NASDAQ%3AAMZN%22%7D%2C%7B%22s%22%3A%22NASDAQ%3ATSLA%22%7D%2C%7B%22s%22%3A%22NYSE%3AJPM%22%7D%2C%7B%22s%22%3A%22NYSE%3AJNJ%22%7D%2C%7B%22s%22%3A%22NYSE%3AV%22%7D%5D%2C%22originalTitle%22%3A%22Stocks%22%7D%2C%7B%22title%22%3A%22ETFs%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22NYSE%3ASPY%22%7D%2C%7B%22s%22%3A%22NASDAQ%3AQQQ%22%7D%2C%7B%22s%22%3A%22AMEX%3AVOO%22%7D%2C%7B%22s%22%3A%22AMEX%3AVTI%22%7D%2C%7B%22s%22%3A%22AMEX%3AIWM%22%7D%2C%7B%22s%22%3A%22NYSE%3AAGG%22%7D%2C%7B%22s%22%3A%22AMEX%3AGLD%22%7D%2C%7B%22s%22%3A%22NASDAQ%3AXLK%22%7D%5D%2C%22originalTitle%22%3A%22ETFs%22%7D%2C%7B%22title%22%3A%22Mutual%20Funds%22%2C%22symbols%22%3A%5B%7B%22s%22%3A%22MUTF%3AVFIAX%22%7D%2C%7B%22s%22%3A%22MUTF%3AVTSAX%22%7D%2C%7B%22s%22%3A%22MUTF%3AFXAIX%22%7D%2C%7B%22s%22%3A%22MUTF%3AVWUSX%22%7D%2C%7B%22s%22%3A%22MUTF%3ATRBCX%22%7D%2C%7B%22s%22%3A%22MUTF%3APRGFX%22%7D%2C%7B%22s%22%3A%22MUTF%3ADODGX%22%7D%2C%7B%22s%22%3A%22MUTF%3AAGTHX%22%7D%5D%2C%22originalTitle%22%3A%22Mutual%20Funds%22%7D%5D%2C%22utm_source%22%3A%22yieldatlastrend.com%22%2C%22utm_medium%22%3A%22widget%22%2C%22utm_campaign%22%3A%22market-overview%22%2C%22page-uri%22%3A%22yieldatlastrend.com%2F%22%7D" title="market overview widget" lang="en" class="cus_market_tradingview" style="width: 100%; height: 450px;"></iframe>
                         </div>
-                        <div class="blog_news__content py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
-                           <a href="/blog"><h5 class="mb-4 mb-lg-5">Investment Psychology: Mastering Your Mind for Growth</h5></a>
-                           <div class="fs-seven fw_500 d-flex row-gap-0 flex-wrap gap-3 mb-4 mb-lg-5">August 17,2023 <span>|</span> Written by Jason Turner</div>
-                           <p>Investing in financial markets involves a wide range of strategies to make informed decisions and build long-term wealth.</p>
-                           <a href="/blog" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6  mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
-                       </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-xxl-4">
-                    <div class="blog_news__card nb3-bg cus-rounded-1 overflow-hidden">
-                        <div class="blog_news__thumbs position-relative">
-                            <img src="/tradez/assets/images/blog_news2.png" alt="Image" class="w-100">
-                            <a href="#" class="border border-color second nw1-color fs-seven rounded-3 position-absolute top-0 end-0 py-1 px-3 mt-5 me-5">Features</a>
-                        </div>
-                        <div class="blog_news__content py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
-                           <a href="/blog"><h5 class="mb-4 mb-lg-5">Investment Pitfalls: Common Mistakes and How to Avoid Them...</h5></a>
-                           <div class="fs-seven fw_500 d-flex flex-wrap row-gap-0 gap-3 mb-4 mb-lg-5">August 17,2023 <span>|</span> Written by Jason Turner</div>
-                           <p>Investing in financial markets involves a wide range of strategies to make informed decisions and build long-term wealth.</p>
-                           <a href="/blog" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6  mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
-                       </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-xxl-4">
-                    <div class="blog_news__card nb3-bg cus-rounded-1 overflow-hidden">
-                        <div class="blog_news__thumbs position-relative">
-                            <img src="/tradez/assets/images/blog_news3.png" alt="Image" class="w-100">
-                            <a href="#" class="border border-color second nw1-color fs-seven rounded-3 position-absolute top-0 end-0 py-1 px-3 mt-5 me-5">News</a>
-                        </div>
-                        <div class="blog_news__content py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
-                           <a href="/blog"><h5 class="mb-4 mb-lg-5">Investment Platforms: Tools for Success in Financial Markets</h5></a>
-                           <div class="fs-seven fw_500 d-flex flex-wrap row-gap-0 gap-3 mb-4 mb-lg-5">August 17,2023 <span>|</span> Written by Jason Turner</div>
-                           <p>Investing in financial markets involves a wide range of strategies to make informed decisions and build long-term wealth.</p>
-                           <a href="/blog" class="link fs-five fw-semibold d-flex gap-2 gap-lg-3 align-items-center mt-6  mt-lg-8"> Continue Reading <i class="ti ti-arrow-right"></i></a>
-                       </div>
+                        <!-- Market Widget END -->
                     </div>
                 </div>
             </div>
         </div>
     </section>
-     <!-- blog_news end -->
+    <!-- market widget end -->
 @endsection

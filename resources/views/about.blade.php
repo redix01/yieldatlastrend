@@ -31,9 +31,7 @@
                 <div class="col-sm-10 col-lg-6 col-xxl-5 order-2 order-lg-0">
                     <div class="company-story__thumbs d-center">
                         <img src="/tradez/assets/images/company_story.png" class="cus-rounded-1 w-100" alt="Imgae">
-                        <a href="https://www.youtube.com/watch?v=BHACKCNDMW8" class="popup-video btn-popup-animation position-absolute d-center rounded-circle">
-                            <i class="fa-solid fa-play fs-four"></i>
-                        </a>
+
                     </div>
                 </div>
                 <div class="col-lg-6 col-xxl-7">
