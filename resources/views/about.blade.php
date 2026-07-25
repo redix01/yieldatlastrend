@@ -36,25 +36,16 @@
                 </div>
                 <div class="col-lg-6 col-xxl-7">
                     <div class="row ms-xl-3 ms-xxl-10">
-                        <div class="col-xxl-6">
+                        <div class="col-xxl-12">
                             <div class="company-story__part">
                                 <span class="heading p1-color fs-five">Our Company Story</span>
-                                <h3 class="mb-3 mt-5">What We Do</h3>
-                                <p>We empower people to build long-term wealth through disciplined investing in stocks, ETFs, and mutual funds.</p>
-                            </div>  
-                        </div>  
-                        <div class="col-xxl-12 mt-8 mt-md-10 mt-xxl-13">
-                            <div class="company-story__part d-flex align-items-sm-center flex-column flex-sm-row">
-                                <div class="btn-area mt-8 mt-sm-0 me-2 me-sm-6 me-xxl-10 order-2 order-sm-0">
-                                    <a href="/signup" class="cmn-btn cmn-btn-circle d-center flex-column fw_500"> 
-                                        <i class="ti ti-arrow-up-right fs-three"></i>
-                                        Start Now 
-                                    </a>
-                                </div>
-                                <div class="content">
-                                    <h3 class="mb-3">Who We Are</h3>
-                                    <p>Investing in financial markets is about building long-term value. From passive index funds to actively managed mutual funds, our platform helps investors make informed decisions and stay focused on their goals.</p>
-                                </div>
+                                <h3 class="mb-3 mt-5">About YieldAtlasTrend</h3>
+                                <p>YieldAtlasTrend is an investment platform built and developed by a group of experienced Wall Street professionals with extensive knowledge of the U.S. financial markets. With years of experience in investing, market analysis, and financial technology, our team is dedicated to providing investors with access to reliable tools and resources designed to support informed investment decisions.</p>
+                                <p class="mt-4">The platform provides investors with access to a broad range of U.S. investment products, including individual stocks, exchange-traded funds (ETFs), and mutual funds. YieldAtlasTrend is designed to help investors research opportunities, manage portfolios, and pursue their financial goals through a secure and efficient investing experience.</p>
+                                <p class="mt-4">Our platform combines professional market expertise with advanced technology, offering portfolio management tools, market insights, and investment resources to help clients better understand and navigate the U.S. financial markets.</p>
+                                <p class="mt-4">Investment services and account infrastructure are supported through established financial service partners, including Charles Schwab, providing reliable account management, trade processing, and operational support.</p>
+                                <p class="mt-4">At YieldAtlasTrend, we are committed to delivering a transparent, professional, and investor-focused platform built on experience, technology, and a dedication to helping clients make confident investment decisions.</p>
+                                <a href="/signup" class="cmn-btn secondary-alt fs-six-up nb4-xxl-bg gap-2 gap-lg-3 align-items-center py-2 px-5 py-lg-3 px-lg-6 mt-7 mt-xxl-8">Start Investing <i class="ti ti-arrow-right fs-four"></i></a>
                             </div>  
                         </div>
                     </div>  
@@ -143,137 +134,7 @@
     </section>
     <!-- Our Mission end -->   
 
-    <!--team start-->
-    <section class="team pb-120 pt-120 pt-xxl-0 a2-bg position-relative z-0">
-        <div class="animation position-absolute top-0 left-0 w-100 h-100 z-n1">
-            <img src="/tradez/assets/images/vector.png" alt="vector" class="position-absolute jello d-none d-lg-flex top-0 pt-10 pt-xxl-0 ">
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="heading__content text-center mb-10 mb-lg-15 ">
-                    <span class="heading p1-color fs-five mb-5">Team</span>
-                    <h3>Our Leaders</h3>
-                    <p class="mt-5 mt-xxl-6 mx-ch mx-auto">Investing has always been our passion. Our leadership team is dedicated to helping clients build long-term wealth with clarity and confidence.</p>
-                </div>
-            </div>
-            <div class="row gy-6">
-                <div class="col-sm-6 col-lg-4 col-xxl-3">
-                    <div class="team__card nb3-bg cus-rounded-1 overflow-hidden">
-                        <div class="team__thumbs position-relative">
-                            <img src="/tradez/assets/images/team.png" alt="Image" class="w-100">
-                        </div>
-                        <div class="team__content pseudo_element_after transition text-center py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
-                            <a href="/team-details"><h5 class="team__title d-center pb-4 mb-4 pseudo_element_after">Wade Warren</h5></a>
-                            <p class="mb-3">Passionate about helping clients build diversified, long-term portfolios.</p>
-                            <div class="social-area alt">
-                                <ul class="d-flex align-items-center justify-content-center gap-2 gap-md-3">
-                                    <li>
-                                        <a class="d-center fs-four" href="#"><i class="ti ti-brand-facebook"></i></a>
-                                    </li>
-                                    <li>
-                                        <a class="d-center fs-four" href="#"><i class="ti ti-brand-twitch"></i></a>
-                                    </li>
-                                    <li>
-                                        <a class="d-center fs-four" href="#"><i class="ti ti-brand-instagram"></i></a>
-                                    </li>
-                                    <li>
-                                        <a class="d-center fs-four" href="#"><i class="ti ti-brand-discord-filled"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-                       </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-4 col-xxl-3">
-                    <div class="team__card nb3-bg cus-rounded-1 overflow-hidden">
-                        <div class="team__thumbs position-relative">
-                            <img src="/tradez/assets/images/team2.png" alt="Image" class="w-100">
-                        </div>
-                        <div class="team__content pseudo_element_after transition text-center py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
-                            <a href="/team-details"><h5 class="team__title d-center pb-4 mb-4 pseudo_element_after">Alice Stone</h5></a>
-                            <p class="mb-3">Passionate about helping clients build diversified, long-term portfolios.</p>
-                            <div class="social-area alt">
-                                <ul class="d-flex align-items-center justify-content-center gap-2 gap-md-3">
-                                    <li>
-                                        <a class="d-center fs-four" href="#"><i class="ti ti-brand-facebook"></i></a>
-                                    </li>
-                                    <li>
-                                        <a class="d-center fs-four" href="#"><i class="ti ti-brand-twitch"></i></a>
-                                    </li>
-                                    <li>
-                                        <a class="d-center fs-four" href="#"><i class="ti ti-brand-instagram"></i></a>
-                                    </li>
-                                    <li>
-                                        <a class="d-center fs-four" href="#"><i class="ti ti-brand-discord-filled"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-                       </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-4 col-xxl-3">
-                    <div class="team__card nb3-bg cus-rounded-1 overflow-hidden">
-                        <div class="team__thumbs position-relative">
-                            <img src="/tradez/assets/images/team3.png" alt="Image" class="w-100">
-                        </div>
-                        <div class="team__content pseudo_element_after transition text-center py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
-                            <a href="/team-details"><h5 class="team__title d-center pb-4 mb-4 pseudo_element_after">Jessica Jones</h5></a>
-                            <p class="mb-3">Passionate about helping clients build diversified, long-term portfolios.</p>
-                            <div class="social-area alt">
-                                <ul class="d-flex align-items-center justify-content-center gap-2 gap-md-3">
-                                    <li>
-                                        <a class="d-center fs-four" href="#"><i class="ti ti-brand-facebook"></i></a>
-                                    </li>
-                                    <li>
-                                        <a class="d-center fs-four" href="#"><i class="ti ti-brand-twitch"></i></a>
-                                    </li>
-                                    <li>
-                                        <a class="d-center fs-four" href="#"><i class="ti ti-brand-instagram"></i></a>
-                                    </li>
-                                    <li>
-                                        <a class="d-center fs-four" href="#"><i class="ti ti-brand-discord-filled"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-                       </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-4 col-xxl-3">
-                    <div class="team__card nb3-bg cus-rounded-1 overflow-hidden">
-                        <div class="team__thumbs position-relative">
-                            <img src="/tradez/assets/images/team4.png" alt="Image" class="w-100">
-                        </div>
-                        <div class="team__content pseudo_element_after transition text-center py-6 py-lg-7 py-xxl-8 px-4 px-lg-5 px-xxl-6">
-                            <a href="/team-details"><h5 class="team__title d-center pb-4 mb-4 pseudo_element_after">Chris Moore</h5></a>
-                            <p class="mb-3">Passionate about helping clients build diversified, long-term portfolios.</p>
-                            <div class="social-area alt">
-                                <ul class="d-flex align-items-center justify-content-center gap-2 gap-md-3">
-                                    <li>
-                                        <a class="d-center fs-four" href="#"><i class="ti ti-brand-facebook"></i></a>
-                                    </li>
-                                    <li>
-                                        <a class="d-center fs-four" href="#"><i class="ti ti-brand-twitch"></i></a>
-                                    </li>
-                                    <li>
-                                        <a class="d-center fs-four" href="#"><i class="ti ti-brand-instagram"></i></a>
-                                    </li>
-                                    <li>
-                                        <a class="d-center fs-four" href="#"><i class="ti ti-brand-discord-filled"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-                       </div>
-                    </div>
-                </div>
-                <div class="col-12 mt-10 mt-lg-15  d-flex justify-content-center">
-                    <a href="/team" class="cmn-btn py-2 py-lg-3 px-4 px-lg-6 gap-2 gap-lg-3 align-items-center"> View More</a>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- team end -->  
-
-    <!--Testimonial start-->
+<!--Testimonial start-->
     <section class="testimonial-secondary te pt-120 pb-120 position-relative z-0">
         <div class="animation position-absolute top-0 left-0 w-100 h-100 z-n1">
             <img src="/tradez/assets/images/icon/quote_bg.png" alt="vector" class="position-absolute push_animat d-none d-md-flex">

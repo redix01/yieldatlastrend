@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import { Menu, X, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { resolveBrandInitial, resolveBrandName } from '../../lib/branding';
+import { resolveBrandInitial, resolveBrandName, resolveSupportEmail } from '../../lib/branding';
 
 interface LayoutProps {
   brandName?: string;
@@ -12,6 +12,7 @@ export default function Layout({ brandName }: LayoutProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const resolvedBrandName = resolveBrandName(brandName);
   const brandInitial = resolveBrandInitial(brandName);
+  const supportEmail = resolveSupportEmail(brandName);
 
   return (
     <div className="min-h-screen bg-[#050B14] text-white font-sans selection:bg-[#064E3B]/30">
@@ -157,8 +158,8 @@ export default function Layout({ brandName }: LayoutProps) {
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Email</p>
-                  <a href="mailto:support@prologezprime.com" className="mt-1 inline-block text-white transition-colors hover:text-[#34D399]">
-                    support@prologezprime.com
+                  <a href={`mailto:${supportEmail}`} className="mt-1 inline-block text-white transition-colors hover:text-[#34D399]">
+                    {supportEmail}
                   </a>
                 </div>
                 <div>
