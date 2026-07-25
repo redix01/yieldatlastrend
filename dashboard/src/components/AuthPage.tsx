@@ -256,9 +256,9 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, authError, view, brandName
       <div className="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-6 py-12">
         <div className="w-full max-w-md rounded-[40px] border border-white/10 bg-[#0A0F1A] p-8 shadow-2xl md:p-12">
           <div className="mb-8 flex items-center justify-between">
-            <Link to="/" className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 hover:text-[#059669]">
+            <a href="/" className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 hover:text-[#059669]">
               Back Home
-            </Link>
+            </a>
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#059669] text-white shadow-lg shadow-[0_0_10px_rgba(5,150,105,0.3)]">
                 <TrendingUp size={16} strokeWidth={2.5} />
@@ -273,7 +273,7 @@ const AuthPage: React.FC<AuthPageProps> = ({ onLogin, authError, view, brandName
             {view === 'verify' && <h1 className="text-2xl font-black uppercase tracking-tight">Verify Email OTP</h1>}
             {view === 'forgot' && <h1 className="text-2xl font-black uppercase tracking-tight">Forgot Password</h1>}
             {view === 'reset' && <h1 className="text-2xl font-black uppercase tracking-tight">Reset Password</h1>}
-            <p className="mt-2 text-sm font-bold text-zinc-500">Secure access to your trading dashboard.</p>
+            <p className="mt-2 text-sm font-bold text-zinc-500">Secure access to your investment dashboard.</p>
           </div>
 
           {isSubmitting ? (

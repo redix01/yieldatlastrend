@@ -78,7 +78,7 @@ Route::view('/team', 'team')->name('team');
 Route::view('/blog', 'blog')->name('blog');
 Route::view('/careers', 'careers')->name('careers');
 Route::view('/contact', 'contact')->name('contact');
-Route::view('/education', 'education')->name('education');
+Route::view('/faq', 'education')->name('faq');
 Route::view('/support', 'support')->name('support');
 Route::view('/terms-conditions', 'terms-conditions')->name('terms-conditions');
 Route::view('/privacy-policy', 'privacy-policy')->name('privacy-policy');
@@ -92,6 +92,7 @@ Route::redirect('/about-us', '/about', 301);
 Route::redirect('/products', '/market', 301);
 Route::redirect('/privacy', '/privacy-policy', 301);
 Route::redirect('/terms', '/terms-conditions', 301);
+Route::redirect('/education', '/faq', 301);
 
 Route::middleware([HandleDashboardInertiaRequests::class])->group(function () {
     Route::get('/dashboard/{any?}', [WebDashboardController::class, 'index'])

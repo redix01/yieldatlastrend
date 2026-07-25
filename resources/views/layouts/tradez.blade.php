@@ -58,12 +58,8 @@
                         <li>
                             <a class="dropdown-item @yield('active-home', '')" href="/">Home</a>
                         </li>
-                        <li class="dropdown show-dropdown">
-                            <button type="button" aria-label="Navbar Dropdown Button"
-                                class="dropdown-toggle dropdown-nav @yield('active-markets', '')">Markets</button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/dashboard/market">Markets</a></li>
-                            </ul>
+                        <li>
+                            <a class="dropdown-item @yield('active-markets', '')" href="/market">Markets</a>
                         </li>
                         <li class="dropdown show-dropdown">
                             <button type="button" aria-label="Navbar Dropdown Button"
@@ -73,13 +69,11 @@
                                 <li><a class="dropdown-item" href="/contact">Contact</a></li>
                             </ul>
                         </li>
-                        <li>
-                            <a class="dropdown-item @yield('active-education', '')" href="/education">Education</a>
-                        </li>
                         <li class="dropdown show-dropdown">
                             <button type="button" aria-label="Navbar Dropdown Button"
                                 class="dropdown-toggle dropdown-nav @yield('active-resources', '')">Resources</button>
                             <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/faq">FAQ</a></li>
                                 <li><a class="dropdown-item" href="/terms-conditions">Terms & Conditions</a></li>
                                 <li><a class="dropdown-item" href="/privacy-policy">Privacy Policy</a></li>
                                 <li><a class="dropdown-item" href="/risk-disclosure">Risk Disclosure</a></li>
@@ -131,8 +125,8 @@
                     <div class="footer__part">
                         <h4 class="mb-6 mb-lg-8">Quick Link</h4>
                         <ul class="footer_list d-flex flex-column gap-2 gap-sm-3 gap-md-4">
-                            <li><a class="n2-color d-flex align-items-center" href="/dashboard/market">Markets</a></li>
-                            <li><a class="n2-color" href="/education">Education</a></li>
+                            <li><a class="n2-color d-flex align-items-center" href="/market">Markets</a></li>
+                            <li><a class="n2-color" href="/faq">FAQ</a></li>
                             <li><a class="n2-color" href="/support">Support</a></li>
                             <li><a class="n2-color" href="/terms-conditions">Legal docs</a></li>
                         </ul>
