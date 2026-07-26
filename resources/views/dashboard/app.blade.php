@@ -1,6 +1,6 @@
 @php
     $siteSettings = \App\Support\SiteSettings::get();
-    $brandName = (string) ($siteSettings['brand_name'] ?? \App\Support\SiteSettings::defaults()['brand_name']);
+    $brandName = config('app.name');
 @endphp
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-brand="{{ $brandName }}">

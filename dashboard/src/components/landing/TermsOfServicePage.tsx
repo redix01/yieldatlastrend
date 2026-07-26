@@ -1,12 +1,15 @@
 import React from 'react';
 import LandingLegalPage from './LandingLegalPage';
+import { resolveBrandName } from '../../lib/branding';
 
 const TermsOfServicePage: React.FC = () => {
+  const brandName = resolveBrandName(document.documentElement?.dataset?.brand);
+
   return (
     <LandingLegalPage
       eyebrow="Legal Terms"
       title="Terms of Service"
-      summary="These terms govern access to and use of PrologezPrime services. By using the platform, you agree to comply with these conditions."
+      summary={`These terms govern access to and use of ${brandName} services. By using the platform, you agree to comply with these conditions.`}
       lastUpdated="February 17, 2026"
       sections={[
         {
@@ -20,14 +23,14 @@ const TermsOfServicePage: React.FC = () => {
           heading: 'Platform Use',
           paragraphs: [
             'You agree to use the platform lawfully and not attempt unauthorized access, manipulation, or abuse of platform systems.',
-            'PrologezPrime may suspend or terminate access for policy violations, security risks, or legal obligations.',
+            `${brandName} may suspend or terminate access for policy violations, security risks, or legal obligations.`,
           ],
         },
         {
           heading: 'Service Scope and Liability',
           paragraphs: [
             'Platform information is provided for operational use and does not constitute investment, tax, or legal advice.',
-            'PrologezPrime is not responsible for trading losses resulting from market conditions, user decisions, or external service disruptions.',
+            `${brandName} is not responsible for investment losses resulting from market conditions, user decisions, or external service disruptions.`,
           ],
         },
       ]}

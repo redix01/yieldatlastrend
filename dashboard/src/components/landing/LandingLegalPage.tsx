@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, FileText, TrendingUp } from 'lucide-react';
+import { resolveBrandName } from '../../lib/branding';
 
 interface LandingLegalSection {
   heading: string;
@@ -23,6 +24,8 @@ const legalLinks = [
 ];
 
 const LandingLegalPage: React.FC<LandingLegalPageProps> = ({ eyebrow, title, summary, lastUpdated, sections }) => {
+  const brandName = resolveBrandName(document.documentElement?.dataset?.brand);
+
   return (
     <div className="min-h-screen bg-[#050505] text-white overflow-x-hidden">
       <div className="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 overflow-hidden">
@@ -44,7 +47,7 @@ const LandingLegalPage: React.FC<LandingLegalPageProps> = ({ eyebrow, title, sum
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500 text-black text-xs font-black uppercase tracking-widest hover:bg-emerald-400 transition-colors"
           >
             <TrendingUp size={14} />
-            Open PrologezPrime
+            Open {brandName}
           </Link>
         </div>
 

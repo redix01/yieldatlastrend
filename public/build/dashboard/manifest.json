@@ -1,6 +1,6 @@
 {
   "src/Pages/Dashboard/Index.tsx": {
-    "file": "assets/Index-CNhQ0nx5.js",
+    "file": "assets/Index-BMIPvVVl.js",
     "name": "Index",
     "src": "src/Pages/Dashboard/Index.tsx",
     "isDynamicEntry": true,
@@ -9,7 +9,7 @@
     ]
   },
   "src/app.tsx": {
-    "file": "assets/app-DTuhd3eV.js",
+    "file": "assets/app-DejyyG5Y.js",
     "name": "app",
     "src": "src/app.tsx",
     "isEntry": true,

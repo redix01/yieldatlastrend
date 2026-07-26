@@ -1,12 +1,15 @@
 import React from 'react';
 import LandingLegalPage from './LandingLegalPage';
+import { resolveBrandName } from '../../lib/branding';
 
 const PrivacyPolicyPage: React.FC = () => {
+  const brandName = resolveBrandName(document.documentElement?.dataset?.brand);
+
   return (
     <LandingLegalPage
       eyebrow="Privacy"
       title="Privacy Policy"
-      summary="This policy explains how PrologezPrime collects, uses, stores, and protects personal and account data when you use the platform."
+      summary={`This policy explains how ${brandName} collects, uses, stores, and protects personal and account data when you use the platform.`}
       lastUpdated="February 17, 2026"
       sections={[
         {

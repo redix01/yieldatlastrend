@@ -19,7 +19,7 @@ import {
   Award,
   User,
 } from 'lucide-react';
-import { resolveBrandName } from '../../lib/branding';
+import { resolveBrandName, resolveSupportEmail } from '../../lib/branding';
 import type { AuthView } from './types';
 
 interface LandingMarketingProps {
@@ -103,6 +103,7 @@ const TradingViewMarketsWidget: React.FC = () => {
 
 const LandingMarketing: React.FC<LandingMarketingProps> = ({ onOpenAuth, brandName }) => {
   const resolvedBrandName = resolveBrandName(brandName);
+  const supportEmail = resolveSupportEmail(brandName);
 
   return (
     <>
@@ -511,8 +512,8 @@ const LandingMarketing: React.FC<LandingMarketingProps> = ({ onOpenAuth, brandNa
             </div>
             <div>
               <p className="mb-2 text-[10px] font-black uppercase tracking-widest text-white">Email</p>
-              <a href="mailto:support@prologezprime.com" className="text-emerald-500 transition-colors hover:text-emerald-400">
-                support@prologezprime.com
+              <a href={`mailto:${supportEmail}`} className="text-emerald-500 transition-colors hover:text-emerald-400">
+                {supportEmail}
               </a>
             </div>
             <div>

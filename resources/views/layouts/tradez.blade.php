@@ -1,6 +1,6 @@
 @php
     $siteSettings = \App\Support\SiteSettings::get();
-    $brandName = (string) ($siteSettings['brand_name'] ?? \App\Support\SiteSettings::defaults()['brand_name']);
+    $brandName = config('app.name');
     $brandNameCompact = preg_replace('/\s+/', '', $brandName);
     $supportEmail = (string) ($siteSettings['support_email'] ?? 'support@example.com');
     $supportPhone = (string) ($siteSettings['support_phone'] ?? '+0123 456 789');

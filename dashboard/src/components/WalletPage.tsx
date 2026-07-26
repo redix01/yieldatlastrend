@@ -3,6 +3,7 @@ import { Shield, Plus, ArrowUpRight, History, X, Copy, Check, Loader2, Sparkles,
 import { useMarket } from '../context/MarketContext';
 import type { DepositMethodItem, DepositRequestItem, WalletSummaryData, WalletTransactionItem } from '../types';
 import WithdrawalStatusStepper from './WithdrawalStatusStepper';
+import { resolveBrandName } from '../lib/branding';
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -97,6 +98,7 @@ function buildBankInstructionCopyText(method: DepositMethodItem | null | undefin
 }
 
 const WalletPage: React.FC = () => {
+  const brandName = resolveBrandName(document.documentElement?.dataset?.brand);
   const {
     fetchWalletSummary,
     fetchCopyFollowing,
@@ -887,7 +889,7 @@ const WalletPage: React.FC = () => {
                     <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Bank Instructions</label>
                     <div className="rounded-2xl border border-yellow-500/30 bg-yellow-500/12 p-4">
                       <p className="text-sm font-bold leading-relaxed text-yellow-100">
-                        Kindly transfer the funds you wish to deposit into your Prologezprime account to our segregated account or through our designated funding agent using the details provided below. Once this is done, your Prologezprime account will be credited with the deposited funds.
+                        Kindly transfer the funds you wish to deposit into your {brandName} account to our segregated account or through our designated funding agent using the details provided below. Once this is done, your {brandName} account will be credited with the deposited funds.
                       </p>
                     </div>
                     <div className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-4 space-y-3">
