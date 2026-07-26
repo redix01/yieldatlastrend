@@ -13,7 +13,7 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        $email = strtolower((string) env('ADMIN_EMAIL', 'admin@runwayalgo.test'));
+        $email = strtolower((string) env('ADMIN_EMAIL', 'admin@yieldatlastrend.com'));
         $password = (string) env('ADMIN_PASSWORD', 'password');
 
         $notificationsEnabled = filter_var(
@@ -25,8 +25,8 @@ class AdminUserSeeder extends Seeder
         User::query()->updateOrCreate(
             ['email' => $email],
             [
-                'username' => (string) env('ADMIN_USERNAME', 'runwayadmin'),
-                'name' => (string) env('ADMIN_NAME', 'Runway Admin'),
+                'username' => (string) env('ADMIN_USERNAME', 'yieldadmin'),
+                'name' => (string) env('ADMIN_NAME', 'Yield Admin'),
                 'password' => Hash::make($password),
                 'phone' => (string) env('ADMIN_PHONE', '+1 (555) 010-0000'),
                 'country' => (string) env('ADMIN_COUNTRY', 'United States'),
@@ -38,5 +38,8 @@ class AdminUserSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
+
+        $this->command?->info("Admin user seeded: {$email}");
+        $this->command?->info("Password: {$password}");
     }
 }
