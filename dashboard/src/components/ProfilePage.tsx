@@ -721,12 +721,6 @@ const ProfilePage: React.FC = () => {
             </a>
           </div>
 
-          <div className="bg-[#121212] border border-white/5 rounded-2xl p-6">
-            <h4 className="text-base font-black text-white">Live Chat</h4>
-            <p className="text-xs text-zinc-500 font-bold mt-2">
-              The Chaport widget is available across the dashboard. Open it from the chat button at the bottom-right of the screen.
-            </p>
-          </div>
         </div>
       </div>
     );

@@ -324,9 +324,6 @@ function mapPublicSettings(raw: any): PublicSettings {
     requireKycForWithdrawals: Boolean(raw.require_kyc_for_withdrawals),
     sessionTimeoutMinutes: toNumber(raw.session_timeout_minutes),
     supportEmail: String(raw.support_email ?? ''),
-    livechatEnabled: Boolean(raw.livechat_enabled),
-    livechatProvider: raw.livechat_provider ?? null,
-    livechatEmbedCode: raw.livechat_embed_code ?? null,
   };
 }
 

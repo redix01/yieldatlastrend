@@ -123,9 +123,6 @@ export interface PublicSettings {
   requireKycForWithdrawals: boolean;
   sessionTimeoutMinutes: number;
   supportEmail: string;
-  livechatEnabled: boolean;
-  livechatProvider?: string | null;
-  livechatEmbedCode?: string | null;
 }
 
 export interface BankAccountDetails {

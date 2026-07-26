@@ -22,6 +22,9 @@ class PublicSettingsController extends Controller
                 'require_kyc_for_withdrawals' => (bool) $settings['require_kyc_for_withdrawals'],
                 'session_timeout_minutes' => (int) $settings['session_timeout_minutes'],
                 'support_email' => $settings['support_email'],
+                'livechat_enabled' => (bool) $settings['livechat_enabled'],
+                'livechat_provider' => $settings['livechat_provider'],
+                'livechat_embed_code' => $settings['livechat_embed_code'],
             ],
         ]);
     }
