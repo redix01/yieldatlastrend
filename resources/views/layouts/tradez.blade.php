@@ -111,7 +111,7 @@
                 </div>
                 <div class="row gy-6 w-100 text-center text-sm-start align-items-center justify-content-sm-between">
                     <div class="col-sm-8">
-                        <h2>Start investing with only $20</h2>
+                        <h2>Start investing</h2>
                         <p class="fs-six-up fw_500 mt-5">Build your portfolio with stocks, ETFs, and mutual funds</p>
                     </div>
                     <div class="col-sm-4 text-sm-end">

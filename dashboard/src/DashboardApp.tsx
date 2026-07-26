@@ -16,7 +16,6 @@ import ProfilePage from './components/ProfilePage';
 import WatchlistPage from './components/WatchlistPage';
 import LandingPage from './components/LandingPage';
 import AuthPage from './components/AuthPage';
-import ChaportLiveChat from './components/ChaportLiveChat';
 import SiteLayout from './components/site/Layout';
 import SiteHome from './components/site/pages/Home';
 import SiteAbout from './components/site/pages/About';
@@ -257,7 +256,6 @@ const AppContent: React.FC = () => {
           <Route path="/terms-of-service" element={<Navigate to="/terms" replace />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
-        <ChaportLiveChat />
       </>
     );
   }
