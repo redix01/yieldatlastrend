@@ -155,8 +155,7 @@
                     <div class="footer__part">
                         <h4 class="mb-6 mb-lg-8">Contact Us</h4>
                         <div class="d-flex flex-column gap-2 gap-sm-3 gap-md-4">
-                            <a href="mailto:{{ $supportEmail }}">{{ $supportEmail }}</a>
-                            <a href="tel:{{ $supportPhone }}">{{ $supportPhone }}</a>
+                            <a href="mailto:support@yieldatlastrend.com">support@yieldatlastrend.com</a>
                         </div>
                     </div>
                 </div>
