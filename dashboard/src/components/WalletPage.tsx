@@ -97,6 +97,18 @@ function buildBankInstructionCopyText(method: DepositMethodItem | null | undefin
   ].join('\n');
 }
 
+const WITHDRAWAL_METHOD_OPTIONS = [
+  { id: 'bank_transfer', label: 'Bank Transfer' },
+  { id: 'crypto', label: 'Crypto Wallet' },
+  { id: 'paypal', label: 'PayPal' },
+] as const;
+
+const WITHDRAWAL_CURRENCY_OPTIONS: Record<(typeof WITHDRAWAL_METHOD_OPTIONS)[number]['id'], string[]> = {
+  bank_transfer: ['USD', 'EUR', 'GBP'],
+  crypto: ['USDT', 'USDC', 'BTC', 'ETH', 'SOL', 'XRP', 'BNB'],
+  paypal: ['USD', 'EUR', 'GBP'],
+};
+
 const WalletPage: React.FC = () => {
   const brandName = resolveBrandName(document.documentElement?.dataset?.brand);
   const {
@@ -127,7 +139,9 @@ const WalletPage: React.FC = () => {
   const [quotedTransferSymbol, setQuotedTransferSymbol] = useState<string>('');
   const [activeWithdrawal, setActiveWithdrawal] = useState<WalletTransactionItem | null>(null);
   const [withdrawalAmount, setWithdrawalAmount] = useState('0.00');
-  const [withdrawalMethod, setWithdrawalMethod] = useState<'bank_transfer'>('bank_transfer');
+  const [withdrawalMethod, setWithdrawalMethod] = useState<'bank_transfer' | 'crypto' | 'paypal'>('bank_transfer');
+  const [withdrawalCurrency, setWithdrawalCurrency] = useState('USD');
+  const [withdrawalNetwork, setWithdrawalNetwork] = useState('');
   const [withdrawalDestination, setWithdrawalDestination] = useState('');
   const [withdrawalBankName, setWithdrawalBankName] = useState('');
   const [withdrawalAccountName, setWithdrawalAccountName] = useState('');
@@ -297,8 +311,18 @@ const WalletPage: React.FC = () => {
       return;
     }
 
-    if (!withdrawalBankName.trim() || !withdrawalAccountName.trim() || !withdrawalAccountNumber.trim()) {
+    if (withdrawalMethod === 'bank_transfer' && (!withdrawalBankName.trim() || !withdrawalAccountName.trim() || !withdrawalAccountNumber.trim())) {
       setError('Bank name, account name, and account number are required for bank withdrawals.');
+      return;
+    }
+
+    if (withdrawalMethod === 'crypto' && !withdrawalDestination.trim()) {
+      setError('Wallet address is required for crypto withdrawals.');
+      return;
+    }
+
+    if (withdrawalMethod === 'paypal' && !withdrawalDestination.trim()) {
+      setError('PayPal email is required for PayPal withdrawals.');
       return;
     }
 
@@ -308,19 +332,23 @@ const WalletPage: React.FC = () => {
     try {
       const transaction = await createWithdrawal({
         amount: parsedAmount,
-        currency: 'USD',
-        payoutMethod: 'bank_transfer',
-        bankName: withdrawalBankName.trim(),
-        accountName: withdrawalAccountName.trim(),
-        accountNumber: withdrawalAccountNumber.trim(),
-        routingNumber: withdrawalRoutingNumber.trim(),
-        swiftCode: withdrawalSwiftCode.trim(),
-        bankAddress: withdrawalBankAddress.trim(),
+        currency: withdrawalCurrency,
+        payoutMethod: withdrawalMethod,
+        network: withdrawalMethod === 'crypto' ? withdrawalNetwork.trim() || undefined : undefined,
+        destination: withdrawalMethod === 'bank_transfer' ? undefined : withdrawalDestination.trim(),
+        bankName: withdrawalMethod === 'bank_transfer' ? withdrawalBankName.trim() : undefined,
+        accountName: withdrawalMethod === 'bank_transfer' ? withdrawalAccountName.trim() : undefined,
+        accountNumber: withdrawalMethod === 'bank_transfer' ? withdrawalAccountNumber.trim() : undefined,
+        routingNumber: withdrawalMethod === 'bank_transfer' ? withdrawalRoutingNumber.trim() : undefined,
+        swiftCode: withdrawalMethod === 'bank_transfer' ? withdrawalSwiftCode.trim() : undefined,
+        bankAddress: withdrawalMethod === 'bank_transfer' ? withdrawalBankAddress.trim() : undefined,
       });
 
       setActiveWithdrawal(transaction);
       setWithdrawalStatus('success');
       setWithdrawalAmount('0.00');
+      setWithdrawalCurrency('USD');
+      setWithdrawalNetwork('');
       setWithdrawalDestination('');
       setWithdrawalBankName('');
       setWithdrawalAccountName('');
@@ -347,6 +375,9 @@ const WalletPage: React.FC = () => {
     setIsDepositFormOpen(false);
     setWithdrawalStatus('input');
     setWithdrawalMethod('bank_transfer');
+    setWithdrawalCurrency('USD');
+    setWithdrawalNetwork('');
+    setWithdrawalDestination('');
     setIsWithdrawalFormOpen(true);
   };
 
@@ -363,6 +394,8 @@ const WalletPage: React.FC = () => {
     setQuotedTransferSymbol('');
     setActiveWithdrawal(null);
     setWithdrawalMethod('bank_transfer');
+    setWithdrawalCurrency('USD');
+    setWithdrawalNetwork('');
     setWithdrawalDestination('');
     setWithdrawalBankName('');
     setWithdrawalAccountName('');
@@ -405,6 +438,7 @@ const WalletPage: React.FC = () => {
   const cashBalance = summary?.wallet.cashBalance ?? 0;
   const profitBalance = summary?.wallet.profitLoss ?? 0;
   const buyingPowerBalance = cashBalance + profitBalance;
+  const withdrawalCurrencyOptions = WITHDRAWAL_CURRENCY_OPTIONS[withdrawalMethod];
 
   const depositCurrency = selectedDepositMethod?.currency ?? '';
   const depositNetwork = selectedDepositMethod?.network ?? '';
@@ -728,7 +762,7 @@ const WalletPage: React.FC = () => {
                 <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Withdrawal Request</p>
                 <h3 className="text-xl font-black text-white mb-2 leading-snug">Withdraw from your available balance.</h3>
                 <p className="text-sm text-zinc-600 font-bold">
-                  Profit is applied first, then your main balance. Receive your payout by bank transfer.
+                  Profit is applied first, then your main balance. Choose bank transfer, crypto wallet, or PayPal for payout.
                 </p>
               </header>
 
@@ -769,7 +803,50 @@ const WalletPage: React.FC = () => {
                   )}
                 </div>
 
-                <>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Payout Method</label>
+                  <div className="relative">
+                    <select
+                      value={withdrawalMethod}
+                      onChange={(event) => {
+                        const nextMethod = event.target.value as 'bank_transfer' | 'crypto' | 'paypal';
+                        setWithdrawalMethod(nextMethod);
+                        setWithdrawalCurrency(WITHDRAWAL_CURRENCY_OPTIONS[nextMethod][0]);
+                        setWithdrawalNetwork('');
+                        setWithdrawalDestination('');
+                      }}
+                      className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white appearance-none focus:outline-none focus:border-orange-500/50 transition-all"
+                    >
+                      {WITHDRAWAL_METHOD_OPTIONS.map((method) => (
+                        <option key={method.id} value={method.id}>
+                          {method.label}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Currency</label>
+                  <div className="relative">
+                    <select
+                      value={withdrawalCurrency}
+                      onChange={(event) => setWithdrawalCurrency(event.target.value)}
+                      className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white appearance-none focus:outline-none focus:border-orange-500/50 transition-all"
+                    >
+                      {withdrawalCurrencyOptions.map((currency) => (
+                        <option key={currency} value={currency}>
+                          {currency}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
+                  </div>
+                </div>
+
+                {withdrawalMethod === 'bank_transfer' && (
+                  <>
                     <div className="rounded-2xl border border-yellow-500/20 bg-yellow-500/8 p-4">
                       <p className="text-xs font-bold leading-relaxed text-yellow-100">
                         Submit your bank payout details below. Admin will review and process the withdrawal to the account you provide.
@@ -843,7 +920,61 @@ const WalletPage: React.FC = () => {
                         className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white focus:outline-none focus:border-orange-500/50 transition-all placeholder:text-zinc-700"
                       />
                     </div>
-                </>
+                  </>
+                )}
+
+                {withdrawalMethod === 'crypto' && (
+                  <>
+                    <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/8 p-4">
+                      <p className="text-xs font-bold leading-relaxed text-cyan-100">
+                        Enter the wallet network and destination address exactly as you want to receive the payout. Admin will review the request before release.
+                      </p>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Network</label>
+                      <input
+                        type="text"
+                        value={withdrawalNetwork}
+                        onChange={(event) => setWithdrawalNetwork(event.target.value)}
+                        placeholder="ERC20, TRC20, BEP20, Solana..."
+                        className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white focus:outline-none focus:border-orange-500/50 transition-all placeholder:text-zinc-700"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Wallet Address</label>
+                      <input
+                        type="text"
+                        value={withdrawalDestination}
+                        onChange={(event) => setWithdrawalDestination(event.target.value)}
+                        placeholder="Enter destination wallet address"
+                        className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white focus:outline-none focus:border-orange-500/50 transition-all placeholder:text-zinc-700"
+                      />
+                    </div>
+                  </>
+                )}
+
+                {withdrawalMethod === 'paypal' && (
+                  <>
+                    <div className="rounded-2xl border border-sky-500/20 bg-sky-500/8 p-4">
+                      <p className="text-xs font-bold leading-relaxed text-sky-100">
+                        Enter the PayPal email that should receive the withdrawal. Admin will use this address when the request is approved.
+                      </p>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">PayPal Email</label>
+                      <input
+                        type="email"
+                        value={withdrawalDestination}
+                        onChange={(event) => setWithdrawalDestination(event.target.value)}
+                        placeholder="paypal@example.com"
+                        className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white focus:outline-none focus:border-orange-500/50 transition-all placeholder:text-zinc-700"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="space-y-3">

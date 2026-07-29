@@ -31,12 +31,27 @@ class StoreWithdrawalRequest extends FormRequest
      */
     public function rules(): array
     {
+        $payoutMethod = (string) $this->input('payout_method');
+
         return [
             'amount' => ['required', 'numeric', 'gt:0'],
-            'currency' => ['required', 'string', Rule::in(['USD', 'USDT', 'USDC', 'BTC', 'ETH', 'SOL', 'XRP', 'BNB'])],
-            'payout_method' => ['required', 'string', Rule::in(['crypto', 'bank_transfer'])],
+            'currency' => [
+                'required',
+                'string',
+                Rule::in(match ($payoutMethod) {
+                    'bank_transfer', 'paypal' => ['USD', 'EUR', 'GBP'],
+                    default => ['USDT', 'USDC', 'BTC', 'ETH', 'SOL', 'XRP', 'BNB'],
+                }),
+            ],
+            'payout_method' => ['required', 'string', Rule::in(['crypto', 'bank_transfer', 'paypal'])],
             'network' => ['nullable', 'string', 'max:20'],
-            'destination' => ['nullable', 'string', 'max:255', Rule::requiredIf(fn () => $this->input('payout_method') === 'crypto')],
+            'destination' => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::requiredIf(fn () => in_array($this->input('payout_method'), ['crypto', 'paypal'], true)),
+                ...($payoutMethod === 'paypal' ? ['email'] : []),
+            ],
             'bank_name' => ['nullable', 'string', 'max:120', Rule::requiredIf(fn () => $this->input('payout_method') === 'bank_transfer')],
             'account_name' => ['nullable', 'string', 'max:160', Rule::requiredIf(fn () => $this->input('payout_method') === 'bank_transfer')],
             'account_number' => ['nullable', 'string', 'max:60', Rule::requiredIf(fn () => $this->input('payout_method') === 'bank_transfer')],

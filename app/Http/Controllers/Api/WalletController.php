@@ -367,7 +367,8 @@ class WalletController extends Controller
             'metadata' => [
                 'payout_method' => $payoutMethod,
                 'currency' => $validated['currency'],
-                'destination' => $payoutMethod === 'crypto' ? ($validated['destination'] ?? null) : null,
+                'destination' => in_array($payoutMethod, ['crypto', 'paypal'], true) ? ($validated['destination'] ?? null) : null,
+                'paypal_email' => $payoutMethod === 'paypal' ? ($validated['destination'] ?? null) : null,
                 'bank_details' => $payoutMethod === 'bank_transfer'
                     ? collect(self::WITHDRAWAL_BANK_DETAIL_KEYS)
                         ->mapWithKeys(fn (string $key) => [$key => $validated[$key] ?? null])
@@ -399,11 +400,12 @@ class WalletController extends Controller
         ));
 
         $adminMessage = sprintf(
-            'Withdrawal request from %s (%s) for %s %s.',
+            'Withdrawal request from %s (%s) for %s %s via %s.',
             (string) ($user->name ?? 'User'),
             (string) ($user->email ?? '-'),
             $this->formatNumber((float) $withdrawal->amount),
-            (string) $validated['currency']
+            (string) $validated['currency'],
+            str_replace('_', ' ', $payoutMethod)
         );
         $adminActionUrl = '/admin/transactions?tab=withdrawal';
         AdminActionNotificationRouter::send(new AdminApprovalNotification(

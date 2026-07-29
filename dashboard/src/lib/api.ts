@@ -758,7 +758,7 @@ export async function apiCreateDeposit(input: {
 export async function apiCreateWithdrawal(input: {
   amount: number;
   currency: string;
-  payoutMethod?: 'crypto' | 'bank_transfer';
+  payoutMethod?: 'crypto' | 'bank_transfer' | 'paypal';
   network?: string;
   destination?: string;
   bankName?: string;

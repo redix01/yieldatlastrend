@@ -138,4 +138,40 @@ class WalletWithdrawalFlowTest extends TestCase
         $this->assertSame('Jane Customer', data_get($withdrawal->metadata, 'bank_details.account_name'));
         $this->assertSame('0123456789', data_get($withdrawal->metadata, 'bank_details.account_number'));
     }
+
+    public function test_user_can_submit_paypal_withdrawal_request(): void
+    {
+        $user = User::factory()->create([
+            'kyc_status' => 'verified',
+        ]);
+
+        $wallet = Wallet::query()->create([
+            'user_id' => $user->id,
+            'cash_balance' => 450,
+            'investing_balance' => 0,
+            'profit_loss' => 75,
+            'currency' => 'USD',
+        ]);
+
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson('/api/v1/wallet/withdrawals', [
+            'amount' => 120,
+            'currency' => 'USD',
+            'payout_method' => 'paypal',
+            'destination' => 'paypal-customer@example.com',
+        ]);
+
+        $response
+            ->assertCreated()
+            ->assertJsonPath('data.type', 'withdrawal')
+            ->assertJsonPath('data.status', 'pending');
+
+        $withdrawal = WalletTransaction::query()->where('wallet_id', $wallet->id)->firstOrFail();
+
+        $this->assertSame('paypal', data_get($withdrawal->metadata, 'payout_method'));
+        $this->assertSame('paypal-customer@example.com', data_get($withdrawal->metadata, 'destination'));
+        $this->assertSame('paypal-customer@example.com', data_get($withdrawal->metadata, 'paypal_email'));
+        $this->assertNull(data_get($withdrawal->metadata, 'bank_details'));
+    }
 }
