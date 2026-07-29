@@ -34,7 +34,7 @@ HTML;
             'require_kyc_for_deposits' => false,
             'require_kyc_for_withdrawals' => true,
             'session_timeout_minutes' => 60,
-            'support_email' => env('SUPPORT_EMAIL', 'support@' . strtolower(preg_replace('/[^a-zA-Z0-9]/', '', env('APP_NAME', 'yieldatlastrend'))) . '.com'),
+            'support_email' => env('SUPPORT_EMAIL', 'support@yieldatlastrend.com'),
             'admin_notification_email' => null,
             'livechat_enabled' => false,
             'livechat_provider' => self::DEFAULT_LIVECHAT_PROVIDER,

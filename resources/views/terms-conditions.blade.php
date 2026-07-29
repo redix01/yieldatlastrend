@@ -3,6 +3,10 @@
 @section('active-resources', 'active')
 
 @section('content')
+@php
+    $siteSettings = \App\Support\SiteSettings::get();
+    $supportEmail = (string) ($siteSettings['support_email'] ?? 'support@yieldatlastrend.com');
+@endphp
 <!--Privacy & Policy start-->
     <section class="privacy-policy mt-20 pt-120 pb-120 ">
         <div class="container">
@@ -121,7 +125,7 @@
                                 <h5 class="mb-4">15. Contact Information</h5>
                                 <p class="mt-3">Questions regarding these Terms may be directed to:</p>
                                 <p class="mt-3"><strong>YieldAtlasTrend</strong></p>
-                                <p class="mt-3">Email: <a href="mailto:support@yieldatlastrend.com">support@yieldatlastrend.com</a></p>
+                                <p class="mt-3">Email: <a href="mailto:{{ $supportEmail }}">{{ $supportEmail }}</a></p>
                                 <p class="mt-3">Website: <a href="https://www.yieldatlastrend.com" target="_blank">www.yieldatlastrend.com</a></p>
                                 <p class="mt-3">Business Address: 424 Main Street Buffalo, NY 14202 United State</p>
                             </div>

@@ -5,7 +5,7 @@
 @section('content')
 @php
     $siteSettings = \App\Support\SiteSettings::get();
-    $supportEmail = (string) ($siteSettings['support_email'] ?? 'support@example.com');
+    $supportEmail = (string) ($siteSettings['support_email'] ?? 'support@yieldatlastrend.com');
     $supportPhone = (string) ($siteSettings['support_phone'] ?? '+1 329-205-9032');
 @endphp
 <!-- banner section start-->

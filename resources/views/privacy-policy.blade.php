@@ -5,7 +5,7 @@
 @section('content')
 @php
     $siteSettings = \App\Support\SiteSettings::get();
-    $supportEmail = (string) ($siteSettings['support_email'] ?? 'support@example.com');
+    $supportEmail = (string) ($siteSettings['support_email'] ?? 'support@yieldatlastrend.com');
 @endphp
 <!--Privacy & Policy start-->
     <section class="privacy-policy mt-20 pt-120 pb-120 ">
