@@ -77,7 +77,6 @@
                                 <li><a class="dropdown-item" href="/legal-docs">Legal Docs</a></li>
                                 <li><a class="dropdown-item" href="/terms-conditions">Terms & Conditions</a></li>
                                 <li><a class="dropdown-item" href="/privacy-policy">Privacy Policy</a></li>
-                                <li><a class="dropdown-item" href="/risk-disclosure">Risk Disclosure</a></li>
                                 <li><a class="dropdown-item" href="/support">Support</a></li>
                             </ul>
                         </li>
