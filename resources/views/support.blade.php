@@ -6,7 +6,7 @@
 @php
     $siteSettings = \App\Support\SiteSettings::get();
     $supportEmail = (string) ($siteSettings['support_email'] ?? 'support@yieldatlastrend.com');
-    $supportPhone = (string) ($siteSettings['support_phone'] ?? '+1 329-205-9032');
+    $supportPhone = trim((string) ($siteSettings['support_phone'] ?? ''));
 @endphp
 <!-- banner section start-->
     <section class="banner-section  pt-120 pb-120">
@@ -204,16 +204,18 @@
                         <a href="mailto:{{ $supportEmail }}" class="link fs-five fw-semibold d-flex gap-2 align-items-center">{{ $supportEmail }}<i class="ti ti-arrow-up-right"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="provide-world__card nb3-bg cus-rounded-1 py-5 py-lg-10 px-4 px-lg-9 h-100">
-                        <span class="provide-card__icon d-center nb4-bg p-4 rounded-circle">
-                            <i class="ti ti-phone fs-three p1-color"></i>
-                        </span>
-                        <h4 class="mt-5 mb-4">Phone Support</h4>
-                        <p class="mb-5">Speak with the team for time-sensitive account questions during active support hours.</p>
-                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $supportPhone) }}" class="link fs-five fw-semibold d-flex gap-2 align-items-center">{{ $supportPhone }}<i class="ti ti-arrow-up-right"></i></a>
+                @if ($supportPhone !== '')
+                    <div class="col-lg-4">
+                        <div class="provide-world__card nb3-bg cus-rounded-1 py-5 py-lg-10 px-4 px-lg-9 h-100">
+                            <span class="provide-card__icon d-center nb4-bg p-4 rounded-circle">
+                                <i class="ti ti-phone fs-three p1-color"></i>
+                            </span>
+                            <h4 class="mt-5 mb-4">Phone Support</h4>
+                            <p class="mb-5">Speak with the team for time-sensitive account questions during active support hours.</p>
+                            <a href="tel:{{ preg_replace('/[^0-9+]/', '', $supportPhone) }}" class="link fs-five fw-semibold d-flex gap-2 align-items-center">{{ $supportPhone }}<i class="ti ti-arrow-up-right"></i></a>
+                        </div>
                     </div>
-                </div>
+                @endif
                 <div class="col-lg-4">
                     <div class="provide-world__card nb3-bg cus-rounded-1 py-5 py-lg-10 px-4 px-lg-9 h-100">
                         <span class="provide-card__icon d-center nb4-bg p-4 rounded-circle">

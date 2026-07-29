@@ -3,7 +3,7 @@
     $brandName = config('app.name');
     $brandNameCompact = preg_replace('/\s+/', '', $brandName);
     $supportEmail = (string) ($siteSettings['support_email'] ?? 'support@yieldatlastrend.com');
-    $supportPhone = (string) ($siteSettings['support_phone'] ?? '+1 329-205-9032');
+    $supportPhone = trim((string) ($siteSettings['support_phone'] ?? ''));
     $pageTitle = $pageTitle ?? $brandName;
 @endphp
 <!doctype html>
@@ -157,7 +157,9 @@
                         <h4 class="mb-6 mb-lg-8">Contact Us</h4>
                         <div class="d-flex flex-column gap-2 gap-sm-3 gap-md-4">
                             <a class="n2-color" href="mailto:{{ $supportEmail }}">{{ $supportEmail }}</a>
-                            <a class="n2-color" href="tel:{{ preg_replace('/[^0-9+]/', '', $supportPhone) }}">{{ $supportPhone }}</a>
+                            @if ($supportPhone !== '')
+                                <a class="n2-color" href="tel:{{ preg_replace('/[^0-9+]/', '', $supportPhone) }}">{{ $supportPhone }}</a>
+                            @endif
                         </div>
                     </div>
                 </div>

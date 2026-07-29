@@ -6,7 +6,7 @@
 @php
     $siteSettings = \App\Support\SiteSettings::get();
     $supportEmail = (string) ($siteSettings['support_email'] ?? 'support@yieldatlastrend.com');
-    $supportPhone = (string) ($siteSettings['support_phone'] ?? '+1 329-205-9032');
+    $supportPhone = trim((string) ($siteSettings['support_phone'] ?? ''));
 @endphp
 <!-- banner section start-->
     <section class="banner-section  pt-120 pb-120">
@@ -42,10 +42,12 @@
                                 <span class="box_12 p1-bg rounded-circle d-center"><i class="ti ti-message-2 fs-four-up nb4-color"></i></span>
                                 <span class="fs-six-up"><a href="mailto:{{ $supportEmail }}">{{ $supportEmail }}</a></span>
                             </div>
-                            <div class="d-flex align-items-center gap-3">
-                                <span class="box_12 p1-bg rounded-circle d-center"><i class="ti ti-phone fs-four-up nb4-color"></i></span>
-                                <span class="fs-six-up"><a href="tel:{{ preg_replace('/[^0-9+]/', '', $supportPhone) }}">{{ $supportPhone }}</a></span>
-                            </div>
+                            @if ($supportPhone !== '')
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="box_12 p1-bg rounded-circle d-center"><i class="ti ti-phone fs-four-up nb4-color"></i></span>
+                                    <span class="fs-six-up"><a href="tel:{{ preg_replace('/[^0-9+]/', '', $supportPhone) }}">{{ $supportPhone }}</a></span>
+                                </div>
+                            @endif
                             <div class="d-flex align-items-center gap-3">
                                 <span class="box_12 p1-bg rounded-circle d-center"><i class="ti ti-map-pin fs-four-up nb4-color"></i></span>
                                 <span class="fs-six-up">424 Main Street Buffalo, NY 14202 United States</span>
@@ -69,10 +71,12 @@
                                 <h5 class="mb-3">General support</h5>
                                 <p class="fs-six-up">Email <a href="mailto:{{ $supportEmail }}">{{ $supportEmail }}</a> for account questions, document review, password recovery, and transaction status checks.</p>
                             </div>
-                            <div class="single-input">
-                                <h5 class="mb-3">Urgent enquiries</h5>
-                                <p class="fs-six-up">Call <a href="tel:{{ preg_replace('/[^0-9+]/', '', $supportPhone) }}">{{ $supportPhone }}</a> for urgent account-access or funding issues that require same-day attention.</p>
-                            </div>
+                            @if ($supportPhone !== '')
+                                <div class="single-input">
+                                    <h5 class="mb-3">Urgent enquiries</h5>
+                                    <p class="fs-six-up">Call <a href="tel:{{ preg_replace('/[^0-9+]/', '', $supportPhone) }}">{{ $supportPhone }}</a> for urgent account-access or funding issues that require same-day attention.</p>
+                                </div>
+                            @endif
                             <div class="single-input">
                                 <h5 class="mb-3">Before you reach out</h5>
                                 <ul class="ul-dots mt-4 d-flex gap-3 flex-column">
