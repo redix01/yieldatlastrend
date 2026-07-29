@@ -87,28 +87,15 @@
                 <div class="col-md-8 col-lg-6">
                     <div class="trade_on__thumbs d-flex justify-content-end w-100">
                         <div class="tradingview-widget-container w-100">
-                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
-                            {
-                              "symbols": [
-                                ["S&P 500", "SP:SPX|1D"],
-                                ["NASDAQ", "NASDAQ:NDX|1D"],
-                                ["Dow Jones", "DJ:DJI|1D"]
-                              ],
-                              "chartOnly": false,
-                              "width": "100%",
-                              "height": 400,
-                              "colorTheme": "dark",
-                              "isTransparent": true,
-                              "showFloatingTooltip": false,
-                              "showVolume": false,
-                              "gridLineColor": "rgba(240, 243, 250, 0)",
-                              "scaleFontColor": "rgba(120, 123, 134, 1)",
-                              "lineColor": "rgba(41, 98, 255, 1)",
-                              "bottomColor": "rgba(41, 98, 255, 0.12)",
-                              "chartType": "area",
-                              "fontColor": "rgba(255, 255, 255, 1)"
-                            }
-                            </script>
+                            <iframe
+                                scrolling="no"
+                                allowtransparency="true"
+                                frameborder="0"
+                                title="S&P 500 market widget"
+                                class="w-100 cus-rounded-1"
+                                style="height: 400px;"
+                                src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_spx_widget&symbol=SP%3ASPX&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=0&toolbarbg=0A0F1A&studies=%5B%5D&theme=dark&style=3&timezone=Etc%2FUTC&withdateranges=1&hideideas=1&allow_symbol_change=1"
+                            ></iframe>
                         </div>
                     </div>
                 </div>
