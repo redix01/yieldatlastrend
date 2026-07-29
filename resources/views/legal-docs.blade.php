@@ -28,7 +28,7 @@
                 <div class="col-lg-7 col-xxl-6">
                     <div class="heading__content mb-10 mb-lg-15 text-center">
                         <h3 class="mb-5 mb-lg-6">Company legal docs</h3>
-                        <p class="fs-six-up mx-ch mx-auto">We're constantly improving our investment platform to make it the best place to invest in stocks, ETFs, and mutual funds.</p>
+                        <p class="fs-six-up mx-ch mx-auto">Review the documents that govern platform use, data handling, risk communication, and the key policies that apply before you open or fund an account.</p>
                     </div>
                 </div>
             </div>
@@ -59,8 +59,8 @@
                             <i class="ti ti-shield-lock-filled fs-three p1-color"></i>
                         </span>
                        <h4 class="mt-5 mb-5">Security</h4>
-                       <p>Your assets and personal information are safeguarded with industry-standard security practices and encryption.</p>
-                         <a href="/terms-conditions" class="cmn-btn link third-link fs-five  gap-2 gap-lg-3 align-items-center mt-5">Learn More<i class="ti ti-arrow-narrow-right"></i></a>
+                       <p>Understand the platform's risk posture, operational safeguards, and the disclosures that apply to market participation.</p>
+                         <a href="/risk-disclosure" class="cmn-btn link third-link fs-five  gap-2 gap-lg-3 align-items-center mt-5">Learn More<i class="ti ti-arrow-narrow-right"></i></a>
                     </div>
                 </div>
             </div>

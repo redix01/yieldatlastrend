@@ -150,7 +150,7 @@
                         </span>
                        <h4 class="mt-5 mb-5">Beginner Course</h4>
                        <p>Learn the fundamentals of investing, from asset classes to building your first portfolio with stocks, ETFs, and mutual funds.</p>
-                       <a href="/signup" class="cmn-btn link third-link fs-five  gap-2 gap-lg-3 align-items-center mt-5">Enter Course<i class="ti ti-arrow-narrow-right"></i></a>
+                       <a href="/about" class="cmn-btn link third-link fs-five gap-2 gap-lg-3 align-items-center mt-5">Learn the Basics<i class="ti ti-arrow-narrow-right"></i></a>
                     </div>
                 </div>
                 <div class="col-md-6 col-xxl-4">
@@ -160,7 +160,7 @@
                         </span>
                        <h4 class="mt-5 mb-5">Portfolio Tools</h4>
                        <p>Discover tools for tracking allocations, analyzing performance, and staying informed about your investments.</p>
-                       <a href="/signup" class="cmn-btn link third-link fs-five  gap-2 gap-lg-3 align-items-center mt-5">Enter Course<i class="ti ti-arrow-narrow-right"></i></a>
+                       <a href="/market" class="cmn-btn link third-link fs-five gap-2 gap-lg-3 align-items-center mt-5">Explore Markets<i class="ti ti-arrow-narrow-right"></i></a>
                     </div>
                 </div>
                 <div class="col-md-6 col-xxl-4">
@@ -170,7 +170,7 @@
                         </span>
                        <h4 class="mt-5 mb-5">Stocks and ETFs</h4>
                        <p>Understand how to research individual stocks and select ETFs that match your investment goals and risk tolerance.</p>
-                        <a href="/signup" class="cmn-btn link third-link fs-five  gap-2 gap-lg-3 align-items-center mt-5">Enter Course<i class="ti ti-arrow-narrow-right"></i></a>
+                        <a href="/support" class="cmn-btn link third-link fs-five gap-2 gap-lg-3 align-items-center mt-5">Get Guidance<i class="ti ti-arrow-narrow-right"></i></a>
                     </div>
                 </div>
             </div>

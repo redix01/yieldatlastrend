@@ -3,6 +3,11 @@
 @section('active-resources', 'active')
 
 @section('content')
+@php
+    $siteSettings = \App\Support\SiteSettings::get();
+    $supportEmail = (string) ($siteSettings['support_email'] ?? 'support@example.com');
+    $supportPhone = (string) ($siteSettings['support_phone'] ?? '+1 329-205-9032');
+@endphp
 <!-- banner section start-->
     <section class="banner-section  pt-120 pb-120">
         <div class="container mt-10 mt-lg-0 pt-15 pt-lg-20 pb-5 pb-lg-0">
@@ -39,8 +44,8 @@
                             <i class="ti ti-users-group fs-three p1-color"></i>
                         </span>
                        <h4 class="mt-5 mb-5">Getting Started</h4>
-                       <p>New to investing? Our team can help you open an account, verify your profile, and make your first investment.</p>
-                       <a href="/signup" class="cmn-btn link third-link fs-five  gap-2 gap-lg-3 align-items-center mt-5">Learn More<i class="ti ti-arrow-narrow-right"></i></a>
+                       <p>New to the platform? Review our frequently asked questions for onboarding, verification, funding, and account setup guidance.</p>
+                       <a href="/faq" class="cmn-btn link third-link fs-five gap-2 gap-lg-3 align-items-center mt-5">Open FAQ<i class="ti ti-arrow-narrow-right"></i></a>
                     </div>
                 </div>
                 <div class="col-md-6 col-xxl-4">
@@ -49,8 +54,8 @@
                             <i class="ti ti-tool fs-three p1-color"></i>
                         </span>
                        <h4 class="mt-5 mb-5">Portfolio Tools</h4>
-                       <p>Get help using our portfolio tracking, allocation, and analysis tools to manage your investments effectively.</p>
-                       <a href="/signup" class="cmn-btn link third-link fs-five  gap-2 gap-lg-3 align-items-center mt-5">Learn More<i class="ti ti-arrow-narrow-right"></i></a>
+                       <p>Learn how the platform organizes market coverage, product access, and portfolio workflows across our public product pages.</p>
+                       <a href="/market" class="cmn-btn link third-link fs-five gap-2 gap-lg-3 align-items-center mt-5">View Markets<i class="ti ti-arrow-narrow-right"></i></a>
                     </div>
                 </div>
                 <div class="col-md-6 col-xxl-4">
@@ -58,9 +63,9 @@
                         <span class="provide-card__icon d-center nb4-bg p-4 rounded-circle mx-auto">
                             <i class="ti ti-brand-stackshare fs-three p1-color"></i>
                         </span>
-                       <h4 class="mt-5 mb-5">Stocks and ETFs</h4>
-                       <p>Learn how to research individual stocks, compare ETFs, and build a diversified portfolio aligned with your goals.</p>
-                        <a href="/signup" class="cmn-btn link third-link fs-five  gap-2 gap-lg-3 align-items-center mt-5">Learn More<i class="ti ti-arrow-narrow-right"></i></a>
+                       <h4 class="mt-5 mb-5">Contact a Specialist</h4>
+                       <p>For account recovery, deposit support, or document review, reach our team directly through our public contact channels.</p>
+                        <a href="/contact" class="cmn-btn link third-link fs-five gap-2 gap-lg-3 align-items-center mt-5">Contact Us<i class="ti ti-arrow-narrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -185,4 +190,41 @@
         </div>
     </section>
     <!-- FAQ Section Ends -->
+
+    <section class="provide-world pb-120 position-relative z-0">
+        <div class="container">
+            <div class="row gy-6">
+                <div class="col-lg-4">
+                    <div class="provide-world__card nb3-bg cus-rounded-1 py-5 py-lg-10 px-4 px-lg-9 h-100">
+                        <span class="provide-card__icon d-center nb4-bg p-4 rounded-circle">
+                            <i class="ti ti-mail fs-three p1-color"></i>
+                        </span>
+                        <h4 class="mt-5 mb-4">Email Support</h4>
+                        <p class="mb-5">Use our primary support mailbox for verification, account access, and transaction enquiries.</p>
+                        <a href="mailto:{{ $supportEmail }}" class="link fs-five fw-semibold d-flex gap-2 align-items-center">{{ $supportEmail }}<i class="ti ti-arrow-up-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="provide-world__card nb3-bg cus-rounded-1 py-5 py-lg-10 px-4 px-lg-9 h-100">
+                        <span class="provide-card__icon d-center nb4-bg p-4 rounded-circle">
+                            <i class="ti ti-phone fs-three p1-color"></i>
+                        </span>
+                        <h4 class="mt-5 mb-4">Phone Support</h4>
+                        <p class="mb-5">Speak with the team for time-sensitive account questions during active support hours.</p>
+                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $supportPhone) }}" class="link fs-five fw-semibold d-flex gap-2 align-items-center">{{ $supportPhone }}<i class="ti ti-arrow-up-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="provide-world__card nb3-bg cus-rounded-1 py-5 py-lg-10 px-4 px-lg-9 h-100">
+                        <span class="provide-card__icon d-center nb4-bg p-4 rounded-circle">
+                            <i class="ti ti-file-description fs-three p1-color"></i>
+                        </span>
+                        <h4 class="mt-5 mb-4">Policy References</h4>
+                        <p class="mb-5">Review the platform's legal, privacy, and risk disclosures before funding or trading.</p>
+                        <a href="/legal-docs" class="link fs-five fw-semibold d-flex gap-2 align-items-center">Open legal docs<i class="ti ti-arrow-up-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 @endsection

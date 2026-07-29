@@ -3,7 +3,7 @@
     $brandName = config('app.name');
     $brandNameCompact = preg_replace('/\s+/', '', $brandName);
     $supportEmail = (string) ($siteSettings['support_email'] ?? 'support@example.com');
-    $supportPhone = (string) ($siteSettings['support_phone'] ?? '+0123 456 789');
+    $supportPhone = (string) ($siteSettings['support_phone'] ?? '+1 329-205-9032');
     $pageTitle = $pageTitle ?? $brandName;
 @endphp
 <!doctype html>
@@ -74,6 +74,7 @@
                                 class="dropdown-toggle dropdown-nav @yield('active-resources', '')">Resources</button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/faq">FAQ</a></li>
+                                <li><a class="dropdown-item" href="/legal-docs">Legal Docs</a></li>
                                 <li><a class="dropdown-item" href="/terms-conditions">Terms & Conditions</a></li>
                                 <li><a class="dropdown-item" href="/privacy-policy">Privacy Policy</a></li>
                                 <li><a class="dropdown-item" href="/risk-disclosure">Risk Disclosure</a></li>
@@ -128,7 +129,7 @@
                             <li><a class="n2-color d-flex align-items-center" href="/market">Markets</a></li>
                             <li><a class="n2-color" href="/faq">FAQ</a></li>
                             <li><a class="n2-color" href="/support">Support</a></li>
-                            <li><a class="n2-color" href="/terms-conditions">Legal docs</a></li>
+                            <li><a class="n2-color" href="/legal-docs">Legal docs</a></li>
                         </ul>
                     </div>
                 </div>
@@ -155,7 +156,8 @@
                     <div class="footer__part">
                         <h4 class="mb-6 mb-lg-8">Contact Us</h4>
                         <div class="d-flex flex-column gap-2 gap-sm-3 gap-md-4">
-                            <a href="mailto:support@yieldatlastrend.com">support@yieldatlastrend.com</a>
+                            <a class="n2-color" href="mailto:{{ $supportEmail }}">{{ $supportEmail }}</a>
+                            <a class="n2-color" href="tel:{{ preg_replace('/[^0-9+]/', '', $supportPhone) }}">{{ $supportPhone }}</a>
                         </div>
                     </div>
                 </div>
