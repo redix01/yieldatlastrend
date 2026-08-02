@@ -13,6 +13,8 @@ use Inertia\Response;
 
 class PaymentMethodController extends Controller
 {
+    private const FORM_CHANNELS = ['bank_transfer', 'crypto'];
+
     private const BANK_DETAIL_KEYS = [
         'bank_name',
         'account_name',
@@ -227,6 +229,14 @@ class PaymentMethodController extends Controller
     {
         return [
             'channels' => $this->channels(),
+            'form_channels' => self::FORM_CHANNELS,
+            'channel_labels' => [
+                'bank_transfer' => 'Bank Details',
+                'crypto' => 'Crypto Wallet',
+                'card' => 'Card',
+                'wallet' => 'Wallet',
+                'other' => 'Other',
+            ],
             'statuses' => ['active', 'inactive'],
         ];
     }

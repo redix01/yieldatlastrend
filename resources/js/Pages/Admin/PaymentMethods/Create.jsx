@@ -5,9 +5,10 @@ import { useForm, usePage } from '@inertiajs/react';
 
 export default function Create({ options }) {
     const { url } = usePage();
+    const defaultChannel = options.form_channels?.[0] || options.channels?.[0] || 'bank_transfer';
     const form = useForm({
         name: '',
-        channel: options.channels[0] || 'bank_transfer',
+        channel: defaultChannel,
         currency: 'USD',
         network: '',
         wallet_address: '',

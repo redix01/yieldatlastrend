@@ -23,6 +23,13 @@ const methodDetails = (method) => {
         return `${accountName} · ${maskedAccountNumber}`;
     }
 
+    if (method.channel === 'crypto') {
+        const walletName = method.name || 'Crypto wallet';
+        const walletAddress = shortWallet(method.wallet_address);
+
+        return `${walletName} · ${walletAddress}`;
+    }
+
     return '-';
 };
 
@@ -36,9 +43,7 @@ export default function Index({ methods, filters, filter_options, stats, usage }
     const methodsData = Array.isArray(methods?.data) ? methods.data : [];
     const methodsLinks = Array.isArray(methods?.links) ? methods.links : [];
     const usageRows = Array.isArray(usage) ? usage : [];
-    const channels = Array.isArray(filter_options?.channels)
-        ? filter_options.channels.filter((entry) => entry !== 'crypto')
-        : ['all'];
+    const channels = Array.isArray(filter_options?.channels) ? filter_options.channels : ['all'];
     const statuses = Array.isArray(filter_options?.statuses) ? filter_options.statuses : ['all', 'active', 'inactive'];
 
     const applyFilters = (nextSearch, nextChannel, nextStatus) => {

@@ -12,7 +12,34 @@ export default function PaymentMethodForm({
 }) {
     const { url } = usePage();
     const cancelUrl = cancelHref || adminPath(url, 'payment-methods');
+    const supportedChannels = options.form_channels || options.channels || [];
+    const channelLabels = options.channel_labels || {};
     const isBankTransfer = form.data.channel === 'bank_transfer';
+    const isCryptoWallet = form.data.channel === 'crypto';
+    const currencyOptions = isCryptoWallet
+        ? ['USDT', 'BTC', 'ETH', 'SOL', 'XRP', 'BNB']
+        : ['USD', 'EUR', 'GBP'];
+
+    const switchChannel = (nextChannel) => {
+        form.setData('channel', nextChannel);
+
+        if (nextChannel !== 'bank_transfer') {
+            form.setData('bank_name', '');
+            form.setData('account_name', '');
+            form.setData('account_number', '');
+            form.setData('routing_number', '');
+            form.setData('swift_code', '');
+            form.setData('bank_address', '');
+            form.setData('reference_letter', '');
+        }
+
+        if (nextChannel !== 'crypto') {
+            form.setData('wallet_address', '');
+            form.setData('network', '');
+        }
+
+        form.setData('currency', nextChannel === 'crypto' ? 'USDT' : 'USD');
+    };
 
     return (
         <section className="max-w-4xl rounded-2xl border border-slate-800 bg-slate-900/70 p-6">
@@ -22,66 +49,78 @@ export default function PaymentMethodForm({
             </div>
 
             <form onSubmit={onSubmit} className="space-y-5">
+                <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
+                    <div className="mb-4">
+                        <h4 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-200">
+                            Payment Method Type
+                        </h4>
+                        <p className="mt-1 text-sm text-slate-400">
+                            Choose the payout rail first, then fill only the fields needed for that method.
+                        </p>
+                    </div>
+
+                    <div className="grid gap-3 md:grid-cols-2">
+                        {supportedChannels.map((channel) => {
+                            const active = form.data.channel === channel;
+                            const label = channelLabels[channel] || channel;
+
+                            return (
+                                <button
+                                    key={channel}
+                                    type="button"
+                                    onClick={() => switchChannel(channel)}
+                                    className={`rounded-2xl border p-4 text-left transition ${
+                                        active
+                                            ? 'border-cyan-400 bg-cyan-500/10 shadow-[0_0_0_1px_rgba(34,211,238,0.2)]'
+                                            : 'border-slate-800 bg-slate-900 hover:border-slate-700'
+                                    }`}
+                                >
+                                    <p className="text-sm font-semibold text-slate-100">{label}</p>
+                                    <p className="mt-1 text-xs text-slate-400">
+                                        {channel === 'crypto'
+                                            ? 'Store the wallet coin, network, and destination address.'
+                                            : 'Store the bank account instructions users should pay into.'}
+                                    </p>
+                                </button>
+                            );
+                        })}
+                    </div>
+                </section>
+
                 <div className="grid gap-4 md:grid-cols-2">
-                    <Field label="Method Name" error={form.errors.name} required>
+                    <Field label={isCryptoWallet ? 'Wallet Name' : 'Method Name'} error={form.errors.name} required>
                         <input
                             type="text"
                             value={form.data.name}
                             onChange={(event) => form.setData('name', event.target.value)}
                             className={inputClass(form.errors.name)}
                             required
+                            placeholder={isCryptoWallet ? 'USDT Main Wallet' : 'USD Wire Transfer'}
                         />
                     </Field>
 
                     <Field label="Channel" error={form.errors.channel} required>
-                        <select
-                            value={form.data.channel}
-                            onChange={(event) => {
-                                const nextChannel = event.target.value;
-                                form.setData('channel', nextChannel);
-
-                                if (nextChannel !== 'bank_transfer') {
-                                    form.setData('bank_name', '');
-                                    form.setData('account_name', '');
-                                    form.setData('account_number', '');
-                                    form.setData('routing_number', '');
-                                    form.setData('swift_code', '');
-                                    form.setData('bank_address', '');
-                                    form.setData('reference_letter', '');
-                                }
-                            }}
+                        <input
+                            type="text"
+                            value={channelLabels[form.data.channel] || form.data.channel}
                             className={inputClass(form.errors.channel)}
-                            required
-                        >
-                            {options.channels
-                                .filter((channel) => channel !== 'crypto')
-                                .map((channel) => (
-                                    <option key={channel} value={channel}>
-                                        {channel}
-                                    </option>
-                                ))}
-                        </select>
+                            disabled
+                        />
                     </Field>
 
                     <Field label="Currency" error={form.errors.currency} required>
-                        <input
-                            type="text"
+                        <select
                             value={form.data.currency}
                             onChange={(event) => form.setData('currency', event.target.value.toUpperCase())}
                             className={inputClass(form.errors.currency)}
-                            placeholder="USD / EUR / GBP"
                             required
-                        />
-                    </Field>
-
-                    <Field label="Network" error={form.errors.network}>
-                        <input
-                            type="text"
-                            value={form.data.network}
-                            onChange={(event) => form.setData('network', event.target.value)}
-                            className={inputClass(form.errors.network)}
-                            placeholder="SWIFT / SEPA / ACH"
-                        />
+                        >
+                            {currencyOptions.map((currency) => (
+                                <option key={currency} value={currency}>
+                                    {currency}
+                                </option>
+                            ))}
+                        </select>
                     </Field>
 
                     <Field label="Status" error={form.errors.status} required>
@@ -99,6 +138,19 @@ export default function PaymentMethodForm({
                         </select>
                     </Field>
 
+                    <Field
+                        label={isCryptoWallet ? 'Network' : 'Transfer Rail'}
+                        error={form.errors.network}
+                    >
+                        <input
+                            type="text"
+                            value={form.data.network}
+                            onChange={(event) => form.setData('network', event.target.value)}
+                            className={inputClass(form.errors.network)}
+                            placeholder={isCryptoWallet ? 'TRC20 / ERC20 / Bitcoin / Solana' : 'SWIFT / SEPA / ACH'}
+                        />
+                    </Field>
+
                     <Field label="Display Order" error={form.errors.display_order}>
                         <input
                             type="number"
@@ -109,6 +161,30 @@ export default function PaymentMethodForm({
                         />
                     </Field>
                 </div>
+
+                {isCryptoWallet && (
+                    <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
+                        <div className="mb-4">
+                            <h4 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-200">
+                                Crypto Wallet Details
+                            </h4>
+                            <p className="mt-1 text-sm text-slate-400">
+                                Users will see this wallet name, coin, network, and address on the deposit screen.
+                            </p>
+                        </div>
+
+                        <Field label="Wallet Address" error={form.errors.wallet_address} required>
+                            <textarea
+                                value={form.data.wallet_address}
+                                onChange={(event) => form.setData('wallet_address', event.target.value)}
+                                rows={3}
+                                className={inputClass(form.errors.wallet_address)}
+                                placeholder="Enter the receiving wallet address"
+                                required
+                            />
+                        </Field>
+                    </section>
+                )}
 
                 {isBankTransfer && (
                     <section className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
