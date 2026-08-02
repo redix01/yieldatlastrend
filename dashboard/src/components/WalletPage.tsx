@@ -103,9 +103,18 @@ const WITHDRAWAL_METHOD_OPTIONS = [
   { id: 'paypal', label: 'PayPal' },
 ] as const;
 
+const CRYPTO_WITHDRAWAL_ASSETS = [
+  { symbol: 'USDT', label: 'Tether (USDT)', networks: ['TRC20', 'ERC20', 'BEP20'] },
+  { symbol: 'BTC', label: 'Bitcoin (BTC)', networks: ['Bitcoin'] },
+  { symbol: 'ETH', label: 'Ethereum (ETH)', networks: ['ERC20'] },
+  { symbol: 'SOL', label: 'Solana (SOL)', networks: ['Solana'] },
+  { symbol: 'XRP', label: 'Ripple (XRP)', networks: ['XRP Ledger'] },
+  { symbol: 'BNB', label: 'BNB (BNB)', networks: ['BEP20', 'BNB Beacon Chain'] },
+] as const;
+
 const WITHDRAWAL_CURRENCY_OPTIONS: Record<(typeof WITHDRAWAL_METHOD_OPTIONS)[number]['id'], string[]> = {
   bank_transfer: ['USD', 'EUR', 'GBP'],
-  crypto: ['USDT', 'USDC', 'BTC', 'ETH', 'SOL', 'XRP', 'BNB'],
+  crypto: CRYPTO_WITHDRAWAL_ASSETS.map((asset) => asset.symbol),
   paypal: ['USD', 'EUR', 'GBP'],
 };
 
@@ -376,7 +385,7 @@ const WalletPage: React.FC = () => {
     setWithdrawalStatus('input');
     setWithdrawalMethod('bank_transfer');
     setWithdrawalCurrency('USD');
-    setWithdrawalNetwork('');
+    setWithdrawalNetwork(CRYPTO_WITHDRAWAL_ASSETS[0].networks[0]);
     setWithdrawalDestination('');
     setIsWithdrawalFormOpen(true);
   };
@@ -395,7 +404,7 @@ const WalletPage: React.FC = () => {
     setActiveWithdrawal(null);
     setWithdrawalMethod('bank_transfer');
     setWithdrawalCurrency('USD');
-    setWithdrawalNetwork('');
+    setWithdrawalNetwork(CRYPTO_WITHDRAWAL_ASSETS[0].networks[0]);
     setWithdrawalDestination('');
     setWithdrawalBankName('');
     setWithdrawalAccountName('');
@@ -439,6 +448,7 @@ const WalletPage: React.FC = () => {
   const profitBalance = summary?.wallet.profitLoss ?? 0;
   const buyingPowerBalance = cashBalance + profitBalance;
   const withdrawalCurrencyOptions = WITHDRAWAL_CURRENCY_OPTIONS[withdrawalMethod];
+  const selectedCryptoAsset = CRYPTO_WITHDRAWAL_ASSETS.find((asset) => asset.symbol === withdrawalCurrency) ?? CRYPTO_WITHDRAWAL_ASSETS[0];
 
   const depositCurrency = selectedDepositMethod?.currency ?? '';
   const depositNetwork = selectedDepositMethod?.network ?? '';
@@ -812,7 +822,11 @@ const WalletPage: React.FC = () => {
                         const nextMethod = event.target.value as 'bank_transfer' | 'crypto' | 'paypal';
                         setWithdrawalMethod(nextMethod);
                         setWithdrawalCurrency(WITHDRAWAL_CURRENCY_OPTIONS[nextMethod][0]);
-                        setWithdrawalNetwork('');
+                        setWithdrawalNetwork(
+                          nextMethod === 'crypto'
+                            ? CRYPTO_WITHDRAWAL_ASSETS[0].networks[0]
+                            : ''
+                        );
                         setWithdrawalDestination('');
                       }}
                       className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white appearance-none focus:outline-none focus:border-orange-500/50 transition-all"
@@ -927,19 +941,49 @@ const WalletPage: React.FC = () => {
                   <>
                     <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/8 p-4">
                       <p className="text-xs font-bold leading-relaxed text-cyan-100">
-                        Enter the wallet network and destination address exactly as you want to receive the payout. Admin will review the request before release.
+                        Select the wallet coin you want to receive, choose the matching network, and enter the destination address exactly. Admin will review the request before release.
                       </p>
                     </div>
 
                     <div className="space-y-1.5">
+                      <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Wallet Coin</label>
+                      <div className="relative">
+                        <select
+                          value={withdrawalCurrency}
+                          onChange={(event) => {
+                            const nextCurrency = event.target.value;
+                            const asset = CRYPTO_WITHDRAWAL_ASSETS.find((item) => item.symbol === nextCurrency);
+                            setWithdrawalCurrency(nextCurrency);
+                            setWithdrawalNetwork(asset?.networks[0] ?? '');
+                          }}
+                          className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white appearance-none focus:outline-none focus:border-orange-500/50 transition-all"
+                        >
+                          {CRYPTO_WITHDRAWAL_ASSETS.map((asset) => (
+                            <option key={asset.symbol} value={asset.symbol}>
+                              {asset.label}
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
                       <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1">Network</label>
-                      <input
-                        type="text"
+                      <div className="relative">
+                        <select
                         value={withdrawalNetwork}
                         onChange={(event) => setWithdrawalNetwork(event.target.value)}
-                        placeholder="ERC20, TRC20, BEP20, Solana..."
-                        className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white focus:outline-none focus:border-orange-500/50 transition-all placeholder:text-zinc-700"
-                      />
+                        className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white appearance-none focus:outline-none focus:border-orange-500/50 transition-all"
+                        >
+                          {selectedCryptoAsset.networks.map((network) => (
+                            <option key={network} value={network}>
+                              {network}
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
+                      </div>
                     </div>
 
                     <div className="space-y-1.5">
@@ -948,7 +992,7 @@ const WalletPage: React.FC = () => {
                         type="text"
                         value={withdrawalDestination}
                         onChange={(event) => setWithdrawalDestination(event.target.value)}
-                        placeholder="Enter destination wallet address"
+                        placeholder={`Enter your ${selectedCryptoAsset.symbol} wallet address`}
                         className="w-full bg-[#121212] border border-white/5 rounded-xl py-4 px-4 text-sm font-black text-white focus:outline-none focus:border-orange-500/50 transition-all placeholder:text-zinc-700"
                       />
                     </div>
