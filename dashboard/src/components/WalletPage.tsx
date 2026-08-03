@@ -427,7 +427,6 @@ const WalletPage: React.FC = () => {
   const depositMethods = summary?.depositMethods ?? [];
   const keyedDepositMethods = useMemo(
     () => depositMethods
-      .filter((method) => (method.channel ?? '').toLowerCase() !== 'crypto')
       .map((method, index) => ({
         ...method,
         selectionKey: `${method.id || 'payment-method'}:${index}`,
@@ -605,7 +604,7 @@ const WalletPage: React.FC = () => {
               <div className="text-left">
                 <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mb-1">Deposit</p>
                 <h4 className="text-lg font-black text-white">Add funds quickly</h4>
-                <p className="text-xs text-zinc-500 font-bold">Fiat methods</p>
+                <p className="text-xs text-zinc-500 font-bold">Bank and crypto methods</p>
                 <p className="mt-2 inline-flex items-center gap-1 text-[11px] font-black text-emerald-300">
                   Tap to deposit
                   <ChevronRight size={14} className="transition-transform group-hover:translate-x-0.5" />
