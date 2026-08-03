@@ -108,21 +108,6 @@ export default function PaymentMethodForm({
                         />
                     </Field>
 
-                    <Field label="Currency" error={form.errors.currency} required>
-                        <select
-                            value={form.data.currency}
-                            onChange={(event) => form.setData('currency', event.target.value.toUpperCase())}
-                            className={inputClass(form.errors.currency)}
-                            required
-                        >
-                            {currencyOptions.map((currency) => (
-                                <option key={currency} value={currency}>
-                                    {currency}
-                                </option>
-                            ))}
-                        </select>
-                    </Field>
-
                     <Field label="Status" error={form.errors.status} required>
                         <select
                             value={form.data.status}
@@ -137,6 +122,34 @@ export default function PaymentMethodForm({
                             ))}
                         </select>
                     </Field>
+
+                    {isCryptoWallet ? (
+                        <Field label="Wallet Address" error={form.errors.wallet_address} required>
+                            <textarea
+                                value={form.data.wallet_address}
+                                onChange={(event) => form.setData('wallet_address', event.target.value)}
+                                rows={3}
+                                className={inputClass(form.errors.wallet_address)}
+                                placeholder="Enter the receiving wallet address"
+                                required
+                            />
+                        </Field>
+                    ) : (
+                        <Field label="Currency" error={form.errors.currency} required>
+                            <select
+                                value={form.data.currency}
+                                onChange={(event) => form.setData('currency', event.target.value.toUpperCase())}
+                                className={inputClass(form.errors.currency)}
+                                required
+                            >
+                                {currencyOptions.map((currency) => (
+                                    <option key={currency} value={currency}>
+                                        {currency}
+                                    </option>
+                                ))}
+                            </select>
+                        </Field>
+                    )}
 
                     <Field
                         label={isCryptoWallet ? 'Network' : 'Transfer Rail'}
@@ -173,15 +186,19 @@ export default function PaymentMethodForm({
                             </p>
                         </div>
 
-                        <Field label="Wallet Address" error={form.errors.wallet_address} required>
-                            <textarea
-                                value={form.data.wallet_address}
-                                onChange={(event) => form.setData('wallet_address', event.target.value)}
-                                rows={3}
-                                className={inputClass(form.errors.wallet_address)}
-                                placeholder="Enter the receiving wallet address"
+                        <Field label="Wallet Coin" error={form.errors.currency} required>
+                            <select
+                                value={form.data.currency}
+                                onChange={(event) => form.setData('currency', event.target.value.toUpperCase())}
+                                className={inputClass(form.errors.currency)}
                                 required
-                            />
+                            >
+                                {currencyOptions.map((currency) => (
+                                    <option key={currency} value={currency}>
+                                        {currency}
+                                    </option>
+                                ))}
+                            </select>
                         </Field>
                     </section>
                 )}
