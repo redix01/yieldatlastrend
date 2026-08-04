@@ -59,7 +59,7 @@ class MarketController extends Controller
         ]);
     }
 
-    public function show(Asset $asset): JsonResponse
+    public function show(Request $request, Asset $asset): JsonResponse
     {
         $relatedAssets = Asset::query()
             ->where('type', $asset->type)
@@ -69,6 +69,7 @@ class MarketController extends Controller
 
         $recentTrades = Order::query()
             ->with('user:id,name')
+            ->where('user_id', $request->user()->id)
             ->where('asset_id', $asset->id)
             ->where('status', 'filled')
             ->latest('filled_at')
