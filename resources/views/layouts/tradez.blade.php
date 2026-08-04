@@ -155,10 +155,10 @@
                     <div class="footer__part">
                         <h4 class="mb-6 mb-lg-8">Contact Us</h4>
                         <div class="d-flex flex-column gap-2 gap-sm-3 gap-md-4">
-                            <a class="n2-color" href="mailto:{{ $supportEmail }}">{{ $supportEmail }}</a>
-                            @if ($supportPhone !== '')
-                                <a class="n2-color" href="tel:{{ preg_replace('/[^0-9+]/', '', $supportPhone) }}">{{ $supportPhone }}</a>
-                            @endif
+                            <p class="n2-color mb-0">HEAD OFFICE ADDRESS</p>
+                            <p class="n2-color mb-0">424 Main Street Buffalo, NY 14202 United State</p>
+                            <a class="n2-color" href="mailto:support@yieldatlastrend.com">support@yieldatlastrend.com</a>
+                            <p class="n2-color mb-0">Customer Phone Number: <a class="n2-color" href="tel:+13322469478">+1 332-246-9478</a></p>
                         </div>
                     </div>
                 </div>
@@ -167,13 +167,6 @@
                 <div class="col-12 border-top border-color opac-20 py-7 py-xxl-8">
                     <div class="footer__copyright d-center gap-15 flex-wrap justify-content-md-between">
                         <p class="fs-six order-2 order-md-0 text-center text-md-start">Copyright ©<span class="currentYear"></span> {{ $brandName }} <span>|</span> All Rights Reserved</p>
-                        <ul class="social-area d-center gap-2 gap-md-3">
-                            <li><a class="d-center cus-rounded-1 fs-four" href="#"><i class="ti ti-brand-facebook"></i></a></li>
-                            <li><a class="d-center cus-rounded-1 fs-four" href="#"><i class="ti ti-brand-twitch"></i></a></li>
-                            <li><a class="d-center cus-rounded-1 fs-four" href="#"><i class="ti ti-brand-instagram"></i></a></li>
-                            <li><a class="d-center cus-rounded-1 fs-four" href="#"><i class="ti ti-brand-discord-filled"></i></a></li>
-                            <li><a class="d-center cus-rounded-1 fs-four" href="#"><i class="ti ti-brand-youtube"></i></a></li>
-                        </ul>
                     </div>
                 </div>
             </div>
